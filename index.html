@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dream Pages</title>
+<meta name="description" content="A quiet morning ritual for your dreams. Write or speak, then receive their meaning.">
+<meta name="theme-color" content="#0f0e0d">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dream Pages">
+<meta name="application-name" content="Dream Pages">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0f0e0d; --ink2:#171513; --paper:#ece5d8; --soft:#b8afa2; --faint:#6f685f; --hair:rgba(236,229,216,.10);
+  --accent:#c8a97e;
+  --serif:"Cormorant Garamond","EB Garamond","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --navh:64px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{background:var(--ink);color:var(--paper);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+::selection{background:rgba(200,169,126,.3)}
+.app{max-width:620px;margin:0 auto;min-height:100vh;min-height:100dvh;padding:calc(env(safe-area-inset-top) + 28px) 28px calc(var(--navh) + env(safe-area-inset-bottom) + 24px)}
+.view{display:none;opacity:0;transform:translateY(6px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.view.on{display:block}
+.view.in{opacity:1;transform:none}
+.eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--soft);font-weight:400}
+.faint{color:var(--faint)}
+.topbar{display:flex;align-items:center;justify-content:space-between;min-height:24px}
+.topright{display:flex;align-items:center;gap:18px}
+.streak{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.streak b{color:var(--accent);font-weight:400}
+.iconbtn{width:28px;height:28px;display:grid;place-items:center;color:var(--faint);transition:color .3s}
+.iconbtn:hover{color:var(--paper)}
+.done{margin-top:8px;font-size:12px;color:var(--faint);letter-spacing:.04em;min-height:16px}
+.prompt{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(28px,7.4vw,38px);line-height:1.18;margin:56px 0 30px;color:var(--paper);letter-spacing:-.005em;transition:opacity .6s var(--ease)}
+textarea#page{display:block;width:100%;min-height:42vh;background:transparent;border:0;outline:0;resize:none;color:var(--paper);font-family:var(--serif);font-size:22px;line-height:1.6;padding:0;caret-color:var(--accent)}
+textarea#page::placeholder{color:var(--faint);font-style:italic}
+.interim{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--soft);min-height:0;opacity:.7}
+.moods{display:flex;flex-wrap:wrap;gap:6px 18px;margin:26px 0 0;align-items:baseline}
+.moods .lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-right:2px}
+.mood{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--faint);transition:color .3s}
+.mood:hover{color:var(--soft)}
+.mood.sel{color:var(--accent)}
+.more-t{margin-top:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+.more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease)}
+.more.open{grid-template-rows:1fr}
+.more>div{overflow:hidden}
+.more-in{display:flex;flex-wrap:wrap;gap:22px 34px;padding-top:18px}
+.mini{display:flex;flex-direction:column;gap:8px}
+.mini label{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+.mini input[type=date]{background:transparent;border:0;border-bottom:1px solid var(--hair);color:var(--soft);font:inherit;font-size:14px;padding:4px 0;color-scheme:dark;outline:0}
+.dots{display:flex;gap:10px;align-items:center;height:24px}
+.dots button{width:9px;height:9px;border-radius:50%;border:1px solid var(--faint);transition:all .3s}
+.dots button.on{background:var(--accent);border-color:var(--accent)}
+.toggle{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--faint)}
+.toggle.on{color:var(--accent)}
+.actionbar{position:fixed;left:0;right:0;bottom:calc(var(--navh) + env(safe-area-inset-bottom));pointer-events:none;background:linear-gradient(to top,var(--ink) 55%,rgba(15,14,13,0))}
+.actionbar .inner{max-width:620px;margin:0 auto;padding:22px 28px 14px;display:flex;align-items:center;justify-content:space-between;pointer-events:auto}
+.mic{position:relative;width:54px;height:54px;border-radius:50%;border:1px solid rgba(236,229,216,.22);display:grid;place-items:center;color:var(--paper);transition:border-color .3s,background .3s}
+.mic:hover{border-color:rgba(236,229,216,.45)}
+.mic.rec{border-color:var(--accent);color:var(--accent)}
+.mic.rec::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--accent);animation:ring 2s var(--ease) infinite}
+@keyframes ring{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.55);opacity:0}}
+.mic:disabled{opacity:.3;cursor:default}
+.micnote{font-size:12px;color:var(--faint);margin-left:16px;flex:1;line-height:1.4;max-width:200px}
+.reveal{font-family:var(--serif);font-style:italic;font-size:21px;color:var(--accent);opacity:0;transform:translateX(-6px);transition:opacity .5s var(--ease),transform .5s var(--ease);pointer-events:none;white-space:nowrap}
+.reveal.show{opacity:1;transform:none;pointer-events:auto}
+.reveal .arr{display:inline-block;transition:transform .3s var(--ease);font-style:normal;font-family:var(--sans);font-weight:300;margin-left:6px}
+.reveal:hover .arr{transform:translateX(4px)}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;height:calc(var(--navh) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:var(--ink);border-top:1px solid var(--hair);display:flex;justify-content:center;gap:44px;align-items:center;z-index:5}
+nav.tabs button{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);padding:10px 0;position:relative;transition:color .3s}
+nav.tabs button.on{color:var(--paper)}
+nav.tabs button.on::after{content:"";position:absolute;left:50%;bottom:2px;width:3px;height:3px;border-radius:50%;background:var(--accent);transform:translateX(-50%)}
+/* reading / meaning */
+.sheet{position:fixed;inset:0;background:var(--ink);z-index:20;overflow-y:auto;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .55s var(--ease),transform .55s var(--ease),visibility 0s .55s;-webkit-overflow-scrolling:touch}
+.sheet.open{opacity:1;visibility:visible;transform:none;transition:opacity .55s var(--ease),transform .55s var(--ease)}
+.sheet .app{padding-bottom:calc(env(safe-area-inset-bottom) + 60px)}
+.close{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint)}
+.close:hover{color:var(--paper)}
+.m-title{font-family:var(--serif);font-weight:400;font-size:clamp(34px,9vw,46px);line-height:1.08;margin:44px 0 10px;letter-spacing:-.01em}
+.m-sub{font-size:12px;letter-spacing:.06em;color:var(--faint)}
+.dreamtext{font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.6;color:var(--soft);margin:28px 0 0;white-space:pre-wrap}
+.dreamtext.clamp{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.expand{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-top:10px}
+.rule{width:28px;height:1px;background:var(--accent);margin:40px 0;opacity:.7}
+.prose{font-family:var(--serif);font-size:21px;line-height:1.62;color:var(--paper)}
+.prose p{margin:0 0 22px}
+.sym{margin:0 0 22px}
+.sym .n{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;font-weight:400}
+.q{font-family:var(--serif);font-style:italic;font-size:clamp(24px,6.4vw,30px);line-height:1.3;margin:6px 0 0}
+.carry{margin-top:44px;padding-top:26px;border-top:1px solid var(--hair)}
+.carry p{font-family:var(--serif);font-size:20px;line-height:1.55;margin:10px 0 0}
+.m-actions{display:flex;gap:28px;margin-top:56px;flex-wrap:wrap}
+.m-actions button{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);transition:color .3s}
+.m-actions button:hover{color:var(--paper)}
+.m-actions .keep{color:var(--accent)}
+.source{margin-top:30px;font-size:11px;color:var(--faint);letter-spacing:.06em}
+.listening{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--soft);margin-top:60px;animation:breathe 2.4s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.35}50%{opacity:1}}
+/* journal */
+h1.h{font-family:var(--serif);font-weight:400;font-size:clamp(34px,9vw,44px);margin:44px 0 26px;letter-spacing:-.01em}
+.search{width:100%;background:transparent;border:0;border-bottom:1px solid var(--hair);color:var(--paper);font:inherit;font-size:15px;padding:8px 0;outline:0;margin-bottom:12px}
+.search::placeholder{color:var(--faint)}
+.month{margin:34px 0 4px}
+.item{display:block;width:100%;text-align:left;padding:18px 0;border-bottom:1px solid var(--hair);transition:opacity .3s}
+.item:hover{opacity:.75}
+.item .d{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+.item .l{font-family:var(--serif);font-size:20px;line-height:1.4;margin-top:4px;color:var(--paper);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.empty{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--faint);margin-top:40px;line-height:1.5}
+/* reflect */
+.week{display:flex;justify-content:space-between;margin:10px 0 40px;max-width:360px}
+.day{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:10px;letter-spacing:.14em;color:var(--faint)}
+.day i{width:8px;height:8px;border-radius:50%;border:1px solid rgba(236,229,216,.25)}
+.day.on i{background:var(--accent);border-color:var(--accent)}
+.day.today{color:var(--paper)}
+.lines{margin:6px 0 10px}
+.line{display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:baseline;margin:14px 0}
+.line span{font-family:var(--serif);font-size:19px}
+.line em{font-style:normal;font-size:11px;color:var(--faint);letter-spacing:.1em}
+.line .bar{grid-column:1/-1;height:1px;background:var(--hair);position:relative}
+.line .bar b{position:absolute;left:0;top:0;height:1px;background:var(--accent)}
+.stats{display:flex;gap:44px;margin-top:40px;padding-top:24px;border-top:1px solid var(--hair)}
+.stat .v{font-family:var(--serif);font-size:34px;line-height:1}
+.stat .k{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-top:8px}
+/* settings */
+.field{margin:22px 0}
+.field label{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.field input{width:100%;background:transparent;border:0;border-bottom:1px solid var(--hair);color:var(--paper);font:inherit;font-size:16px;padding:8px 0;outline:0;transition:border-color .3s}
+.field input:focus{border-color:var(--accent)}
+.note{font-size:13px;line-height:1.6;color:var(--soft)}
+.textbtn{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--soft);transition:color .3s}
+.textbtn:hover{color:var(--paper)}
+.textbtn.accent{color:var(--accent)}
+.row{display:flex;gap:28px;flex-wrap:wrap;margin-top:22px}
+.section{margin-top:54px}
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 18px);transform:translate(-50%,-8px);font-size:12px;letter-spacing:.06em;color:var(--paper);background:var(--ink2);border:1px solid var(--hair);padding:9px 16px;border-radius:999px;opacity:0;transition:all .4s var(--ease);z-index:50;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.hidden{display:none!important}
+@media (min-width:700px){ .app{padding-top:64px} .prompt{margin-top:80px} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important} }
+</style>
+</head>
+<body>
+<main class="app">
+
+  <!-- TODAY -->
+  <section class="view" id="v-today">
+    <div class="topbar">
+      <div class="eyebrow" id="todayDate"></div>
+      <div class="topright">
+        <div class="streak" id="streak"></div>
+        <button class="iconbtn" id="openSettings" aria-label="Settings">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1"><circle cx="3" cy="8" r="1"/><circle cx="8" cy="8" r="1"/><circle cx="13" cy="8" r="1"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="done" id="doneNote"></div>
+    <h2 class="prompt" id="prompt"></h2>
+    <textarea id="page" placeholder="Begin anywhere…" aria-label="Your dream"></textarea>
+    <div class="interim" id="interim"></div>
+    <div class="moods" id="moods"><span class="lbl">Woke feeling</span></div>
+    <button class="more-t" id="moreT">More</button>
+    <div class="more" id="more"><div><div class="more-in">
+      <div class="mini"><label for="dDate">Date</label><input type="date" id="dDate"></div>
+      <div class="mini"><label>Vividness</label><div class="dots" id="vivid"></div></div>
+      <div class="mini"><label>Lucid</label><button class="toggle" id="lucid">not lucid</button></div>
+    </div></div></div>
+  </section>
+
+  <!-- JOURNAL -->
+  <section class="view" id="v-journal">
+    <div class="topbar"><div class="eyebrow">Archive</div><div class="streak" id="jCount"></div></div>
+    <h1 class="h">Journal</h1>
+    <input class="search" id="search" type="search" placeholder="Search your mornings" aria-label="Search">
+    <div id="list"></div>
+  </section>
+
+  <!-- REFLECT -->
+  <section class="view" id="v-reflect">
+    <div class="topbar"><div class="eyebrow">Weekly check-in</div><div class="streak" id="rRange"></div></div>
+    <h1 class="h">Reflect</h1>
+    <div id="reflect"></div>
+  </section>
+</main>
+
+<div class="actionbar" id="actionbar"><div class="inner">
+  <div style="display:flex;align-items:center;flex:1">
+    <button class="mic" id="mic" aria-label="Speak your dream">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>
+    </button>
+    <div class="micnote" id="micNote"></div>
+  </div>
+  <button class="reveal" id="reveal">Receive meaning<span class="arr">→</span></button>
+</div></div>
+
+<nav class="tabs">
+  <button data-v="today" class="on">Today</button>
+  <button data-v="journal">Journal</button>
+  <button data-v="reflect">Reflect</button>
+</nav>
+
+<!-- MEANING / READING SHEET -->
+<div class="sheet" id="meaning" aria-modal="true" role="dialog">
+  <div class="app">
+    <div class="topbar"><div class="eyebrow" id="mDate"></div><button class="close" id="mClose">Close</button></div>
+    <div id="mBody"></div>
+  </div>
+</div>
+
+<!-- SETTINGS SHEET -->
+<div class="sheet" id="settings" aria-modal="true" role="dialog">
+  <div class="app">
+    <div class="topbar"><div class="eyebrow">Settings</div><button class="close" id="sClose">Close</button></div>
+    <h1 class="h">Quiet settings</h1>
+    <div class="section" style="margin-top:0">
+      <div class="eyebrow" style="color:var(--accent)">Deeper readings · optional</div>
+      <p class="note">Meaning is written by a gentle interpreter that lives inside this page and works offline. If you like, add your own OpenAI-compatible key for richer readings.</p>
+      <p class="note">Your key stays on this device. It is kept only in this browser's local storage and is sent nowhere except directly to the address below when you receive a meaning.</p>
+      <div class="field"><label for="apiKey">API key</label><input id="apiKey" type="password" placeholder="sk-…" autocomplete="off" spellcheck="false"></div>
+      <div class="field"><label for="apiBase">Base URL</label><input id="apiBase" placeholder="https://api.openai.com/v1" spellcheck="false"></div>
+      <div class="field"><label for="apiModel">Model</label><input id="apiModel" placeholder="gpt-4o-mini" spellcheck="false"></div>
+      <div class="row"><button class="textbtn accent" id="saveSettings">Save</button><button class="textbtn" id="clearKey">Remove key</button></div>
+    </div>
+    <div class="section">
+      <div class="eyebrow" style="color:var(--accent)">Your archive</div>
+      <p class="note">Your mornings live only in this browser. Keep a backup now and then, or use one to move to another device.</p>
+      <div class="row"><button class="textbtn" id="exportBtn">Export backup</button><button class="textbtn" id="importBtn">Import backup</button></div>
+      <input type="file" id="importFile" accept="application/json,.json" class="hidden">
+    </div>
+    <p class="note faint section" style="color:var(--faint)">Interpretations are for reflection, not diagnosis. Your dreams, your meaning.</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+"use strict";
+var $ = function(id){ return document.getElementById(id); };
+var K_ENTRIES="dreamPages.entries.v2", K_V1="dreamJournal.entries.v1", K_SETTINGS="dreamJournal.settings.v1", K_DRAFT="dreamPages.draft.v2";
+var MOODS=["serene","tender","luminous","curious","unsettled","heavy"];
+var V1_MOOD={"😊":"luminous","😌":"serene","🤩":"luminous","😕":"curious","😢":"heavy","😰":"unsettled","😱":"unsettled","😠":"heavy"};
+var PROMPTS=[
+"What lingered when you woke?","Where did the night take you?","Who was with you in the dark?","What image is still glowing?","Begin with the last thing you remember.",
+"What did the dream feel like, before it had words?","Was there a place you knew, or one you didn't?","What were you looking for?","Write the colour of the dream.","What was the weather inside it?",
+"What did you leave unfinished in the night?","Which moment would you return to?","What did your body remember on waking?","Write it down before it slips away.","Was anyone speaking? What did they say?",
+"What surprised you?","Where were you trying to go?","What were you holding?","If the dream had a title, what would it be?","What felt true, even if it made no sense?",
+"Start with a single fragment.","What did the night ask of you?","What door opened, or stayed closed?","What were you afraid of, or longing for?","What was ordinary that felt strange?",
+"Describe the light.","What would you like to say to the dreamer you were?","What did you see just before waking?","What returned, as if it had been here before?","Even if nothing remains, write what morning feels like."
+];
+
+/* Symbols: [name, keyword pattern, theme, meaning in the reflective voice] */
+var S=[
+["Falling","\\bfall(ing|s|en)?\\b|\\bfell\\b|\\bdropp(ed|ing)\\b|\\bplummet","loss of control","To fall is to lose the ground you trusted. Perhaps something in your waking life feels less steady than it did, or perhaps some part of you is ready to stop holding on so tightly."],
+["Teeth","\\bteeth\\b|\\btooth\\b","self-image","Teeth that loosen or fall are among the oldest dreams we have. They tend to come when you are thinking about how you are seen, what you said or didn't say, or a quiet fear of losing your bite."],
+["Water","\\bwater\\b|\\bwaves?\\b|\\blake\\b|\\briver\\b","emotions","Water is feeling, moving. Notice whether it was clear or clouded, still or restless. It often tells you the true weather of your heart."],
+["The sea","\\bocean\\b|\\bsea\\b|\\bbeach\\b","emotions","The sea holds everything too large to name. Its presence suggests depth: feelings that are vast and old, and a part of you that is wider than your days."],
+["Flying","\\bfl(y|ying|ew|own|oat|oating|oated)\\b|\\bsoar","freedom","To fly is to be lifted above the ordinary. It speaks of freedom, of perspective, of a self that is lighter than it believes. If it took effort, notice what you are working to keep aloft."],
+["Being chased","\\bchas(e|ed|ing)\\b|\\bpursu|\\brun(ning)? away\\b|\\bran away\\b|\\bhunted\\b","avoidance","What follows us in dreams is usually something we have been walking away from. It may not be dangerous at all; it may simply want to be turned toward and seen."],
+["A house","\\bhouse\\b|\\bhome\\b|\\bmansion\\b","the self","A house is often the self, room by room. Its rooms are the rooms of your life. Unfamiliar ones are parts of you not yet lived in."],
+["Rooms","\\brooms?\\b","the self","A room is a single chamber of your inner life. A hidden or newly found room is a quiet invitation: there is more space in you than you have been using."],
+["Death","\\bdeath\\b|\\bd(ie|ied|ying)\\b|\\bdead\\b|\\bfuneral\\b|\\bkill(ed)?\\b","transformation","In dreams, death is almost never an ending of a life. It is the closing of a chapter, an old shape of you making room for the new."],
+["A snake","\\bsnakes?\\b|\\bserpents?\\b|\\bvipers?\\b","transformation","The snake is a doubled sign, both threat and healer. It sheds its skin to grow. Ask what you are ready to shed."],
+["An exam","\\bexams?\\b|\\btests?\\b|\\bquiz\\b|\\bunprepared\\b","pressure","The unprepared exam returns long after school ends. It visits when you feel measured, or when you are measuring yourself by a standard that may not be kind."],
+["Nakedness","\\bnaked\\b|\\bnude\\b|\\bno clothes\\b|\\bundressed\\b","vulnerability","To be bare before others is to be seen without armour. If it frightened you, notice where you feel exposed. If it didn't, perhaps you are learning to be simply yourself."],
+["A car","\\bcars?\\b|\\bdriv(e|ing|er)\\b|\\bdrove\\b","direction","A car is how you move through your life. Notice who held the wheel, and whether the road felt chosen or simply given."],
+["A baby","\\bbab(y|ies)\\b|\\binfant\\b|\\bnewborn\\b","new beginnings","Something small and new is in your care. A project, a hope, a softer part of you. It asks for patience and tending."],
+["An old love","\\bmy ex\\b|\\bex-?(boyfriend|girlfriend|husband|wife|partner)\\b|\\bformer partner\\b","the past","An old love in a dream is rarely about them. It is about who you were then, and what that time still has to teach you now."],
+["A wedding","\\bwedding\\b|\\bmarr(y|ied|iage|ying)\\b|\\bbride\\b|\\bgroom\\b","commitment","A wedding is a union, two things becoming one. Perhaps you are choosing something, a path, a promise, or a deeper loyalty to yourself."],
+["Pregnancy","\\bpregnan","new beginnings","Something is growing in you before it is ready to be seen. Trust its slow time."],
+["Running late","\\blate\\b|\\bmiss(ed|ing)? (the |a |my )?(train|bus|flight|plane)\\b","pressure","The missed train, the lateness. These come when life seems to move faster than you can, and you fear something will leave without you."],
+["Being lost","\\blost\\b|\\bcan'?t find\\b|\\bcouldn'?t find\\b","uncertainty","To be lost is to be between maps. The old way no longer fits and the new one hasn't yet been drawn. This, too, is a place."],
+["Stairs","\\bstairs?\\b|\\bstaircase\\b|\\bsteps\\b","progress","Stairs carry you between levels of yourself. Climbing speaks of effort and ascent; descending, of going deeper. Endless stairs ask whether the climb is still yours."],
+["A door","\\bdoors?\\b|\\bdoorway\\b","opportunity","A door is a threshold. Open, it invites. Closed, it asks whether you are ready, or whether you are waiting for permission you already have."],
+["A key","\\bkeys?\\b","opportunity","A key is an answer you are holding before you know which lock it fits."],
+["A bridge","\\bbridges?\\b","transition","A bridge is a crossing. You are perhaps between two shores of your life. Notice how sure the bridge felt under your feet."],
+["Fire","\\bfire\\b|\\bburn(ing|ed|t)?\\b|\\bflames?\\b","passion","Fire is heat and change: desire, anger, devotion, renewal. It can warm or consume. Ask which it was."],
+["A storm","\\bstorms?\\b|\\bthunder\\b|\\blightning\\b|\\bhurricane\\b|\\btornado\\b","turmoil","A storm gathers what has been building. It is turbulent, yes, but storms also clear the air."],
+["A great wave","\\bflood(ing|ed)?\\b|\\btsunami\\b","overwhelm","A flood or great wave often arrives when feeling rises faster than you can hold it. It asks for shelter, and for gentleness."],
+["Drowning","\\bdrown(ing|ed)?\\b|\\bunderwater\\b|\\bcan'?t breathe\\b","overwhelm","Beneath the surface, breath is precious. Something may be asking too much of you. Yet some dreamers learn they can breathe there after all."],
+["Swimming","\\bswim(ming)?\\b|\\bswam\\b","emotions","Swimming is how you move through feeling. Ease suggests trust; struggle, that you are carrying a great deal."],
+["Rain","\\brain(ing|ed)?\\b","release","Rain is release, the sky letting go. Something in you may be ready to soften."],
+["A dog","\\bdogs?\\b|\\bpupp(y|ies)\\b","loyalty","A dog is devotion and companionship. Notice whether it guarded you or turned on you; each says something about trust."],
+["A cat","\\bcats?\\b|\\bkittens?\\b","intuition","The cat moves by its own knowing. It invites you to trust your instincts and keep a little of yourself unexplained."],
+["A spider","\\bspiders?\\b|\\bcobwebs?\\b","entanglement","The spider weaves. It can mean entanglement, a web you feel caught in, or patient creation, something you are carefully making."],
+["Small creatures","\\bbugs?\\b|\\binsects?\\b|\\bcockroach|\\bants\\b|\\bworms?\\b","irritation","Insects are the small worries that multiply when left unattended. They ask only to be noticed."],
+["A bird","\\bbirds?\\b|\\bowls?\\b|\\bcrows?\\b|\\beagles?\\b","freedom","Birds are messengers between earth and sky. They carry freedom, perspective, and sometimes a word you needed."],
+["A horse","\\bhorses?\\b","drive","The horse is vitality, the force that carries you. Ridden, it is power you have learned to trust. Wild, it is power still asking for a name."],
+["A wolf","\\bwolf\\b|\\bwolves\\b","instinct","The wolf is instinct and belonging, the wild part of you, and the pack you run with."],
+["A great cat","\\blions?\\b|\\btigers?\\b|\\bleopards?\\b|\\bpanthers?\\b","power","A great cat carries raw strength. Ask whether it was your own power or someone else's that you felt."],
+["A bear","\\bbears?\\b","power","The bear is strength and the need for retreat. It may be telling you to rest, to go inward for a season."],
+["Fish","\\bfish(es)?\\b","the unconscious","Fish rise from the deep like intuitions, quick and silver. Something you half-know is surfacing."],
+["A shark","\\bsharks?\\b","threat","The shark is the fear beneath the surface, the thing you sense but cannot quite see."],
+["A whale","\\bwhales?\\b|\\bdolphins?\\b|\\boctopus\\b","the unconscious","Creatures of the deep bring wisdom from far below. Something old and wise in you is coming closer."],
+["Mice","\\brats?\\b|\\bmice\\b|\\bmouse\\b","anxiety","Small gnawing creatures are small gnawing worries. They are easier to face in the light."],
+["A monster","\\bmonsters?\\b|\\bcreatures?\\b|\\bdemons?\\b","fear","A monster is a fear given a body. Often it is a part of you that has been left alone too long."],
+["A ghost","\\bghosts?\\b|\\bhaunt","the past","A ghost is the past that hasn't quite left the room. Something is still asking to be finished or forgiven."],
+["An intruder","\\bintruders?\\b|\\bburglar|\\bbreak(ing)? in\\b|\\bbroke in\\b","boundaries","Someone uninvited at the door speaks of boundaries, a space of yours that feels crossed."],
+["A struggle","\\battack(ed|ing)?\\b|\\bfight(ing)?\\b|\\bfought\\b|\\bpunch","conflict","A fight in the night often mirrors a quarrel, with someone else, or between two needs inside you."],
+["A weapon","\\bguns?\\b|\\bshoot|\\bshot\\b|\\bknife\\b|\\bknives\\b|\\bsword","conflict","A weapon is defence and aggression made sharp. Notice whose hand it was in."],
+["Being trapped","\\btrapped\\b|\\bstuck\\b|\\blocked in\\b|\\bcage","restriction","To be trapped is to feel the walls of a situation. Perhaps there is a door you haven't yet tried."],
+["Stillness, unwilled","\\bparaly[sz]|\\bcan'?t move\\b|\\bcouldn'?t move\\b","powerlessness","Being unable to move can feel like powerlessness, or simply the body's own sleep holding you still. Be tender with yourself."],
+["A lost voice","\\bscream|\\bno voice\\b|\\bcouldn'?t speak\\b|\\bcan'?t speak\\b|\\bshout","expression","The voice that won't come is something waiting to be said. Perhaps the page is a place to say it."],
+["Mother","\\bmother\\b|\\bmum\\b|\\bmom\\b|\\bmama\\b","nurture","Mother carries care and origin. She may be herself, or the part of you that knows how to hold."],
+["Father","\\bfather\\b|\\bdad\\b|\\bpapa\\b","authority","Father carries structure, protection, the inner voice of authority. Notice how that voice spoke."],
+["Family","\\bfamily\\b|\\bsister\\b|\\bbrother\\b|\\bgrand(ma|pa|mother|father)\\b|\\bcousin\\b","belonging","Family brings the roots you grew from: belonging, inheritance, the patterns you carry."],
+["Childhood","\\bchild(hood|ren)?\\b|\\bkids?\\b|\\bwhen i was (young|little)\\b","inner child","A child in the dream is often the child you were, still curious, still needing something simple."],
+["School","\\bschool\\b|\\bclass(room)?\\b|\\bteacher\\b|\\buniversity\\b|\\bcollege\\b","learning","School returns when you are in the middle of a lesson, often one life is teaching without a syllabus."],
+["Work","\\bwork\\b|\\boffice\\b|\\bboss\\b|\\bjob\\b|\\bcolleague|\\bcoworker","responsibility","Work in dreams is the mind tidying the day's weight, and asking how valued you feel in what you give."],
+["Someone famous","\\bcelebrit|\\bfamous\\b|\\bmovie star\\b","aspiration","A famous face often carries a quality you admire and are quietly growing into."],
+["A stranger","\\bstrangers?\\b|\\bsomeone i didn'?t know\\b|\\bfaceless\\b","the unknown self","The stranger is often you, a version not yet met."],
+["A kiss","\\bkiss(ed|ing)?\\b|\\bromance\\b|\\bin love\\b|\\bcrush\\b","intimacy","Romance in dreams is about closeness, and about drawing near to the qualities the other person holds."],
+["Desire","\\bsex\\b|\\bmade love\\b|\\bsexual\\b","intimacy","Desire in dreams is often about union and creative energy more than any one person."],
+["Betrayal","\\bcheat(ing|ed)?\\b|\\baffair\\b|\\bunfaithful\\b","trust","Dreams of betrayal usually speak of trust and fear of being left, rather than of what is true."],
+["Giving birth","\\bgiv(e|ing) birth\\b|\\bgave birth\\b|\\bin labou?r\\b","new beginnings","To give birth is to bring something real into the world. Something you have carried is ready."],
+["Treasure","\\bmoney\\b|\\bcash\\b|\\bcoins?\\b|\\bgold\\b|\\btreasure\\b|\\brich\\b","self-worth","Money and treasure speak of worth, what you value, and how you value yourself."],
+["Something lost","\\blost my\\b|\\blosing my\\b|\\blose my\\b","loss","To lose something precious is to feel the edges of what matters to you."],
+["A phone","\\bphones?\\b|\\bcall(ed|ing)?\\b|\\btext(ed)?\\b","communication","A phone is a reaching toward someone. If the call wouldn't connect, ask where you feel unheard."],
+["A mirror","\\bmirrors?\\b|\\breflection\\b","self-image","A mirror asks the simplest question: who do you see?"],
+["Hair","\\bhair\\b|\\bbald\\b|\\bhaircut\\b","self-image","Hair is vitality and identity. Changing it is changing how you meet the world."],
+["Blood","\\bblood\\b|\\bbleed","vitality","Blood is life force. Notice what is drawing on your energy, and what restores it."],
+["A wound","\\binjur|\\bhurt\\b|\\bsick\\b|\\bhospital\\b|\\bwound","healing","An injury or a hospital speaks of hurt and of healing. Something wants your care."],
+["Searching for privacy","\\btoilets?\\b|\\bbathroom\\b","release","The search for a private place is the search for room to let go, and to put your own needs first."],
+["Food","\\beat(ing)?\\b|\\bate\\b|\\bfood\\b|\\bfeast\\b|\\bhungry\\b","nourishment","Food is nourishment. Hunger in a dream is a longing worth naming."],
+["A gathering","\\bpart(y|ies)\\b|\\bcelebrat","connection","A gathering speaks of belonging, and how at ease you feel among others."],
+["Flight","\\bplanes?\\b|\\bairport\\b|\\bairplane\\b|\\bflight\\b","journey","A plane is a large journey, a goal in motion. Notice whether it rose, waited, or fell."],
+["A train","\\btrains?\\b|\\brailway\\b|\\bstation\\b","life path","A train runs on a set track. Are you on the line you chose?"],
+["A collision","\\bcrash(ed|ing)?\\b|\\baccident\\b|\\bcollision\\b","loss of control","A crash is the fear that a plan will break, or that two parts of life are on a collision course."],
+["A road","\\broads?\\b|\\bpaths?\\b|\\bstreets?\\b|\\bcrossroads\\b","direction","A road is direction. A crossroads is a choice that is coming."],
+["A mountain","\\bmountains?\\b|\\bhills?\\b|\\bclimb(ing|ed)?\\b|\\bcliffs?\\b","ambition","The mountain is what you are reaching for. The cliff edge is the risk that comes with it."],
+["A great height","\\bbuildings?\\b|\\bskyscrapers?\\b|\\btower\\b|\\broof(top)?\\b|\\bheights?\\b","ambition","High places speak of ambition and view, and of how far there is to fall."],
+["A forest","\\bforest\\b|\\bwoods\\b|\\btrees?\\b|\\bjungle\\b","the unconscious","The forest is the unknown within, a place to lose your way and to find it."],
+["A garden","\\bgarden\\b|\\bflowers?\\b|\\bbloom","growth","A garden is what you are cultivating. Something is in bloom."],
+["Darkness","\\bdark(ness)?\\b|\\bpitch black\\b","the unknown","Darkness is the unknown, not always frightening, sometimes only resting."],
+["Light","\\blight\\b|\\bsun(shine|light)?\\b|\\bglow(ing)?\\b|\\bbright\\b","clarity","Light is understanding arriving. Something is becoming clear."],
+["The night sky","\\bmoon\\b|\\bstars?\\b|\\bgalaxy\\b|\\bouter space\\b|\\bplanets?\\b","wonder","The moon and stars return you to wonder, and to how small and how held you are."],
+["Snow","\\bsnow\\b|\\bice\\b|\\bfrozen\\b","stillness","Snow is stillness and a clean page. Ice can also mean something held too still for too long."],
+["An earthquake","\\bearthquake\\b|\\bground (shook|cracked)\\b","upheaval","When the ground shakes, foundations are shifting. Something you stood on is changing."],
+["The end of a world","\\bapocalyp|\\bend of the world\\b|\\bzombies?\\b","upheaval","When a world ends in a dream, a way of life is ending, so another can begin."],
+["Visitors from elsewhere","\\baliens?\\b|\\bufos?\\b|\\bspaceship\\b","the unknown","Aliens speak of the unfamiliar, or of feeling a stranger in your own setting."],
+["Being held to account","\\bpolice\\b|\\barrest(ed)?\\b|\\bjail\\b|\\bprison\\b|\\bcops?\\b","guilt","Police and prisons speak of judgement and rules, often the inner ones."],
+["Hiding","\\bhid(e|ing|den)?\\b","avoidance","Hiding is a wish for safety before being seen."],
+["Searching","\\bsearch(ing|ed)?\\b|\\blooking for\\b","longing","To search is to long. Ask what you were looking for, and whether it is something you already hold."],
+["Clothing","\\bclothes\\b|\\bdress\\b|\\boutfit\\b|\\bshoes?\\b","identity","Clothes are the self you present. The wrong ones suggest a role that no longer fits."],
+["Music","\\bmusic\\b|\\bsing(ing)?\\b|\\bsang\\b|\\bsong\\b|\\bdanc(e|ing|ed)\\b","harmony","Music and dance are joy moving through the body. Something in you wants expression."],
+["An elevator","\\belevators?\\b","progress","An elevator rises and falls quickly: status, mood, momentum."],
+["A sacred place","\\bchurch\\b|\\btemple\\b|\\bmosque\\b|\\bpray(ing|ed)?\\b|\\bgod\\b|\\bangels?\\b","spirituality","Sacred places speak of meaning, guidance, and what you hold holy."],
+["One who has passed","\\b(passed away|who died|late (grand(ma|pa|mother|father)|mother|father|husband|wife))\\b","grief","When those who are gone visit, it is often love continuing in another form."],
+["Time","\\bclocks?\\b|\\brunning out of time\\b|\\bdeadline\\b","pressure","Clocks speak of time pressing. You may need more spaciousness than you are allowing."],
+["Something broken","\\bbroken\\b|\\bshatter|\\bcrack(ed|ing)?\\b","fragility","Broken things are tender things. Something wants mending, or gentleness."]
+];
+var SYMBOLS=S.map(function(s){return {name:s[0],re:new RegExp(s[1],"i"),theme:s[2],meaning:s[3]};});
+var EMO={
+  fear:/\b(scared|afraid|terrified|fear|panic|horror|frighten|creepy|nightmare)/i,
+  anxiety:/\b(anxious|worried|nervous|stress|rush|unprepared)/i,
+  joy:/\b(happy|joy|laugh|fun|excited|amazing|beautiful|wonderful)/i,
+  peace:/\b(calm|peace|serene|quiet|gentle|safe|relaxed)/i,
+  sadness:/\b(sad|cry|cried|tears|grief|lonely|alone)/i,
+  anger:/\b(angry|furious|rage|mad at|yell|argue|argument)/i,
+  wonder:/\b(magic|wonder|awe|mystical|surreal|glow)/i
+};
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function listJoin(a){if(a.length<2)return a.join("");return a.slice(0,-1).join(", ")+" and "+a[a.length-1];}
+function lc(s){return s.charAt(0).toLowerCase()+s.slice(1);}
+function seedPick(arr,seed){var h=0;for(var i=0;i<seed.length;i++)h=(h*31+seed.charCodeAt(i))>>>0;return arr[h%arr.length];}
+
+var WEAVE={
+ "loss of control":"Some ground gave way in the night.",
+ "freedom":"And yet there was lift, too, a self that could rise.",
+ "self-image":"Underneath, a quiet question about how you are seen.",
+ "emotions":"Water moved through it all, as feeling does.",
+ "overwhelm":"Something rose higher than felt comfortable.",
+ "transformation":"Something is ending so that something else can begin.",
+ "new beginnings":"Something new is asking to be tended.",
+ "avoidance":"There is something you have been keeping at a distance.",
+ "pressure":"There is a pressure here, a sense of being measured.",
+ "the self":"Your dream returned you to the house of yourself.",
+ "the past":"The past came to visit, carrying something unfinished.",
+ "ambition":"Height and reaching run through it: what you want, and what it might cost.",
+ "direction":"It asks, softly, where you are going and who is steering.",
+ "vulnerability":"There was exposure here, and with it the chance to be truly seen.",
+ "the unconscious":"Something from your depths is surfacing.",
+ "wonder":"There was wonder in it, too. Don't let the morning take that from you."
+};
+var INTENT={
+ "loss of control":"Today, notice one thing you can gently let go of, and one thing that is still yours to hold.",
+ "freedom":"Give yourself one small, unhurried freedom today.",
+ "self-image":"Today, let one person see you as you are, without polishing.",
+ "emotions":"Let one feeling move through you today without needing to explain it.",
+ "overwhelm":"Set down one thing today that you do not need to carry.",
+ "transformation":"Honour something that is ending. Make a little room for what's next.",
+ "new beginnings":"Give ten quiet minutes to something new you are growing.",
+ "avoidance":"Turn, gently, toward one thing you have been avoiding.",
+ "pressure":"Today, meet yourself with the kindness you would give a friend.",
+ "the self":"Spend a few minutes in a forgotten room of your life: an old interest, a dusty hope.",
+ "the past":"Let one memory be just a memory today, held lightly.",
+ "ambition":"Take one small step toward the summit, then rest and enjoy the view.",
+ "direction":"Before you act today, ask: is this the road I'd choose?",
+ "vulnerability":"Wear one true thing today, a word, a feeling, a colour.",
+ "uncertainty":"Let not-knowing be enough for today.",
+ "conflict":"Notice where you are quarrelling, outwardly or within, and soften by one degree.",
+ "intimacy":"Reach toward someone you love with one honest sentence.",
+ "grief":"Light a small remembrance for someone you carry.",
+ "expression":"Say one thing today that you have been holding back.",
+ "fear":"Name your fear once, out loud or on paper. Names make things smaller.",
+ "wonder":"Look up at least once today."
+};
+var QUEST={
+ "loss of control":"Where in your life are you holding on so tightly that falling feels like the only way to let go?",
+ "freedom":"What would you do today if you felt as light as you did in the dream?",
+ "self-image":"Whose gaze have you been carrying lately, and is it yours to carry?",
+ "emotions":"What feeling has been waiting at the edge of your days for you to notice it?",
+ "avoidance":"If the thing that followed you could speak, what would it ask of you?",
+ "transformation":"What in your life is quietly ending, and what is it making room for?",
+ "the self":"If the house were you, which room have you not entered in a long time?",
+ "pressure":"Whose standard are you trying to meet, and do you still believe in it?",
+ "the past":"What from that earlier time still wants a word from you?",
+ "vulnerability":"Where would you like to be seen more fully?",
+ "overwhelm":"What would it mean to let yourself be held for a while?",
+ "ambition":"What are you climbing toward, and is the view still the one you want?",
+ "new beginnings":"What small new thing in you needs more care than you've been giving it?",
+ "direction":"Who is driving your life right now?"
+};
+var GENERIC_Q=["Which moment of the dream stays with you, and what in your waking life does it resemble?","If this dream were a letter to you, what would its last line be?","What did the dream know that you have not yet said out loud?"];
+var GENERIC_I=["Carry one image from the night with you today, and see where it appears.","Move a little slower this morning; let the dream finish speaking.","Write one line tonight about what the day showed you."];
+
+function offlineInterpret(e){
+  var text=e.text||"", seed=(e.id||"")+text.length;
+  var found=SYMBOLS.filter(function(s){return s.re.test(text);});
+  var emos=Object.keys(EMO).filter(function(k){return EMO[k].test(text);});
+  var themes=[];found.forEach(function(s){if(themes.indexOf(s.theme)<0)themes.push(s.theme);});
+  var opening;
+  if(!found.length){
+    opening="This dream speaks in a private language, without many of the old shared symbols. That usually means its meaning lives close to home, in the people, places and feelings that are particular to you. Read it back slowly and notice what stirs.";
+  }else{
+    var names=found.slice(0,3).map(function(s){return lc(s.name);});
+    opening="Last night you moved through "+(found.length>3?names.join(", ")+" and more":listJoin(names))+". Dreams rarely speak plainly; they speak in images. These ones circle around "+listJoin(themes.slice(0,3))+".";
+  }
+  var weave=themes.map(function(t){return WEAVE[t];}).filter(Boolean).slice(0,4);
+  if(emos.indexOf("joy")>=0||emos.indexOf("peace")>=0) weave.push("Hold on to the gentler feelings, too. They are as much a message as the fears.");
+  if(emos.indexOf("fear")>=0) weave.push("Fear was present. In dreams, fear is often a signpost rather than a warning.");
+  var moodLine=e.mood?"You woke feeling "+e.mood+". How a dream leaves you is often its truest meaning.":"";
+  if(e.lucid==="yes") moodLine+=(moodLine?" ":"")+"You knew you were dreaming, and that awareness is a quiet kind of power.";
+  var q=null,it=null;
+  for(var i=0;i<themes.length;i++){ if(!q&&QUEST[themes[i]])q=QUEST[themes[i]]; if(!it&&INTENT[themes[i]])it=INTENT[themes[i]]; }
+  if(!q&&emos.indexOf("fear")>=0)q="What in your waking life feels like the fear in this dream?";
+  if(!it&&emos.indexOf("fear")>=0)it=INTENT.fear;
+  return {opening:opening,symbols:found.slice(0,6).map(function(s){return {name:s.name,meaning:s.meaning};}),
+    weave:weave.join(" "),mood:moodLine,question:q||seedPick(GENERIC_Q,seed),intention:it||seedPick(GENERIC_I,seed),
+    symbolNames:found.map(function(s){return s.name;}),themes:themes,source:"offline"};
+}
+
+/* optional AI */
+function getSettings(){try{return JSON.parse(localStorage.getItem(K_SETTINGS))||{};}catch(_){return {};}}
+function aiReady(){var s=getSettings();return !!(s.key&&s.key.trim());}
+function aiInterpret(e,off){
+  var s=getSettings(), base=(s.base||"https://api.openai.com/v1").replace(/\/+$/,""), model=s.model||"gpt-4o-mini";
+  var sys="You are a gentle, wise companion for a morning dream-writing ritual, in the spirit of The Artist's Way. Your voice is warm, reflective and quietly poetic but always clear and grounded. Speak in second person. Never diagnose, never predict the future, never claim certainty; offer possibilities. Reply ONLY with a JSON object with these keys: "+
+    "\"opening\" (2-3 sentences naming what the dream moved through and its overall themes), "+
+    "\"symbols\" (array of up to 5 objects {\"name\": short evocative name like 'The sea', \"meaning\": 1-2 sentences}), "+
+    "\"weave\" (2-4 sentences drawing it together, connecting gently to waking life), "+
+    "\"question\" (one reflective question), "+
+    "\"intention\" (one short, concrete, kind intention to carry into the day, under 22 words).";
+  var user="This morning's dream ("+e.date+"):\n\""+e.text+"\"\n"+(e.mood?"Woke feeling: "+e.mood+".\n":"")+(e.lucid==="yes"?"It was a lucid dream.\n":"")+"Symbols a keyword scan noticed: "+(off.symbolNames.join(", ")||"none")+".";
+  return fetch(base+"/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+s.key.trim()},
+    body:JSON.stringify({model:model,temperature:0.85,messages:[{role:"system",content:sys},{role:"user",content:user}]})
+  }).then(function(r){ if(!r.ok) return r.text().then(function(t){throw new Error(r.status+" "+t.slice(0,120));}); return r.json(); })
+  .then(function(j){
+    var c=j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content;
+    if(!c) throw new Error("empty reply");
+    var m=c.match(/\{[\s\S]*\}/), o;
+    try{ o=JSON.parse(m?m[0]:c); }catch(_){ o={opening:c.trim()}; }
+    var syms=Array.isArray(o.symbols)?o.symbols.filter(function(x){return x&&x.name&&x.meaning;}).slice(0,6).map(function(x){return {name:String(x.name),meaning:String(x.meaning)};}):[];
+    return {opening:String(o.opening||""),symbols:syms,weave:String(o.weave||""),mood:"",question:String(o.question||off.question),intention:String(o.intention||off.intention),
+      symbolNames:off.symbolNames,themes:off.themes,source:"ai",model:model};
+  });
+}
+function interpret(e){
+  var off=offlineInterpret(e);
+  if(!aiReady()) return Promise.resolve(off);
+  return aiInterpret(e,off).catch(function(err){ off.note="The deeper reading couldn't be reached ("+err.message+"), so this one was written here, offline."; return off; });
+}
+
+/* storage + migration from v1 */
+function readJSON(k){try{return JSON.parse(localStorage.getItem(k));}catch(_){return null;}}
+function save(){try{localStorage.setItem(K_ENTRIES,JSON.stringify(entries));return true;}catch(_){toast("Couldn't save in this browser");return false;}}
+function normalize(e){
+  if(!e||typeof e.text!=="string") return null;
+  return {id:String(e.id||Date.now().toString(36)+Math.random().toString(36).slice(2,6)),created:e.created||new Date().toISOString(),date:e.date||(e.created||"").slice(0,10),
+    text:e.text,mood:(V1_MOOD[e.mood]||(MOODS.indexOf(e.mood)>=0?e.mood:"")),vivid:+e.vivid||0,lucid:e.lucid==="yes"?"yes":"no",
+    interpretation:(e.interpretation&&e.interpretation.opening)?e.interpretation:null};
+}
+var entries=readJSON(K_ENTRIES);
+if(!Array.isArray(entries)){
+  var old=readJSON(K_V1); entries=[];
+  if(Array.isArray(old)){ old.forEach(function(e){var n=normalize(e);if(n)entries.push(n);}); save(); }
+}
+function sortEntries(){entries.sort(function(a,b){return ((b.date||"")+(b.created||"")).localeCompare((a.date||"")+(a.created||""));});}
+sortEntries();
+/* helpers */
+var toastT;
+function toast(m){var t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},2400);}
+function ymd(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function parseYmd(s){var p=String(s).split("-");return new Date(+p[0],(+p[1]||1)-1,+p[2]||1);}
+function addDays(d,n){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);return x;}
+function today(){return ymd(new Date());}
+function longDate(s){var d=parseYmd(s);return d.toLocaleDateString(undefined,{weekday:"long"})+" · "+d.toLocaleDateString(undefined,{day:"numeric",month:"long"});}
+function shortDate(s){var d=parseYmd(s);return d.toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"});}
+function dateSet(){var o={};entries.forEach(function(e){o[e.date]=1;});return o;}
+function currentStreak(){var set=dateSet(),d=new Date();if(!set[ymd(d)])d=addDays(d,-1);var n=0;while(set[ymd(d)]){n++;d=addDays(d,-1);}return n;}
+function longestStreak(){var ds=Object.keys(dateSet()).sort(),best=0,run=0,prev=null;ds.forEach(function(s){var d=parseYmd(s);run=(prev&&ymd(addDays(prev,1))===s)?run+1:1;best=Math.max(best,run);prev=d;});return best;}
+function dayIndex(){var d=new Date();return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5);}
+function titleFor(e){var i=e.interpretation||{},n=(i.symbolNames&&i.symbolNames.length)?i.symbolNames:(i.symbols||[]).map(function(s){return s.name;});
+  if(n.length>1)return n[0]+", and "+lc(n[1]);if(n.length)return n[0];var w=e.text.trim().split(/\s+/).slice(0,5).join(" ");return w?w+"…":"A quiet morning";}
+function firstLine(t){var l=t.trim().split(/\n/)[0];return l.length>140?l.slice(0,140)+"…":l;}
+
+/* view switching */
+var curView="today";
+function show(v){
+  curView=v;
+  ["today","journal","reflect"].forEach(function(x){var el=$("v-"+x);if(x===v){el.classList.add("on");requestAnimationFrame(function(){requestAnimationFrame(function(){el.classList.add("in");});});}else{el.classList.remove("in","on");}});
+  document.querySelectorAll("nav.tabs button").forEach(function(b){b.classList.toggle("on",b.dataset.v===v);});
+  $("actionbar").classList.toggle("hidden",v!=="today");
+  if(v==="today")renderToday(); if(v==="journal")renderJournal(); if(v==="reflect")renderReflect();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("nav.tabs button").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.v);});});
+
+/* today */
+var form={mood:"",vivid:0,lucid:"no"};
+function renderToday(){
+  $("todayDate").textContent=longDate(today());
+  var s=currentStreak();
+  $("streak").innerHTML=s>0?"<b>"+s+"</b> "+(s===1?"morning":"mornings"):"";
+  var wrote=dateSet()[today()];
+  $("doneNote").textContent=wrote?"Written this morning. The page is open if more returns.":"";
+  $("prompt").textContent=wrote?"Is there anything more?":PROMPTS[dayIndex()%PROMPTS.length];
+}
+MOODS.forEach(function(m){var b=document.createElement("button");b.className="mood";b.textContent=m;b.addEventListener("click",function(){form.mood=form.mood===m?"":m;syncForm();saveDraft();});$("moods").appendChild(b);});
+for(var vi=1;vi<=5;vi++)(function(n){var b=document.createElement("button");b.setAttribute("aria-label","Vividness "+n);b.addEventListener("click",function(){form.vivid=form.vivid===n?0:n;syncForm();});$("vivid").appendChild(b);})(vi);
+$("lucid").addEventListener("click",function(){form.lucid=form.lucid==="yes"?"no":"yes";syncForm();});
+$("moreT").addEventListener("click",function(){var o=$("more").classList.toggle("open");this.textContent=o?"Less":"More";});
+function syncForm(){
+  document.querySelectorAll("#moods .mood").forEach(function(b){b.classList.toggle("sel",b.textContent===form.mood);});
+  document.querySelectorAll("#vivid button").forEach(function(b,i){b.classList.toggle("on",i<form.vivid);});
+  $("lucid").textContent=form.lucid==="yes"?"lucid":"not lucid";$("lucid").classList.toggle("on",form.lucid==="yes");
+}
+function grow(){var t=$("page");t.style.height="auto";t.style.height=Math.max(t.scrollHeight,window.innerHeight*.42)+"px";}
+function updateReveal(){$("reveal").classList.toggle("show",$("page").value.trim().length>0);}
+function saveDraft(){try{localStorage.setItem(K_DRAFT,JSON.stringify({text:$("page").value,mood:form.mood,day:today()}));}catch(_){}}
+$("page").addEventListener("input",function(){grow();updateReveal();saveDraft();});
+(function(){var d=readJSON(K_DRAFT);if(d&&d.text){$("page").value=d.text;form.mood=d.mood||"";}})();
+$("dDate").value=today();
+function resetPage(){$("page").value="";form={mood:"",vivid:0,lucid:"no"};$("dDate").value=today();syncForm();grow();updateReveal();try{localStorage.removeItem(K_DRAFT);}catch(_){}}
+
+/* meaning sheet */
+var reading=null;
+function openSheet(id){var s=$(id);s.scrollTop=0;s.classList.add("open");document.body.style.overflow="hidden";}
+function closeSheet(id){$(id).classList.remove("open");document.body.style.overflow="";}
+function renderMeaning(e,mode){
+  reading=e;var i=e.interpretation||offlineInterpret(e);
+  $("mDate").textContent=longDate(e.date);
+  var h='<h1 class="m-title">'+esc(titleFor(e))+'</h1><div class="m-sub">'+[e.mood?"woke feeling "+esc(e.mood):"",e.vivid?("vividness "+e.vivid+" of 5"):"",e.lucid==="yes"?"lucid":""].filter(Boolean).join(" · ")+'</div>';
+  h+='<div class="dreamtext clamp" id="dt">'+esc(e.text)+'</div><button class="expand" id="dtx">Read the dream</button>';
+  h+='<div class="rule"></div><div class="prose">';
+  if(i.note)h+='<p style="font-size:15px;color:var(--faint);font-family:var(--sans)">'+esc(i.note)+'</p>';
+  if(i.opening)h+='<p>'+esc(i.opening)+'</p>';
+  (i.symbols||[]).forEach(function(s){h+='<div class="sym"><span class="n">'+esc(s.name)+'</span>'+esc(s.meaning)+'</div>';});
+  if(i.weave)h+='<p>'+esc(i.weave)+'</p>';
+  if(i.mood)h+='<p>'+esc(i.mood)+'</p>';
+  h+='</div><div class="rule"></div><div class="eyebrow">A question to sit with</div><p class="q">'+esc(i.question)+'</p>';
+  h+='<div class="carry"><div class="eyebrow" style="color:var(--accent)">Carry this into your day</div><p>'+esc(i.intention)+'</p></div>';
+  h+='<div class="source">'+(i.source==="ai"?"A deeper reading"+(i.model?" · "+esc(i.model):""):"Written by the quiet interpreter, offline")+'</div>';
+  h+='<div class="m-actions">'+(mode==="new"?'<button class="keep" id="mKeep">Keep this morning</button>':'<button id="mAgain">Read again</button><button id="mDel">Delete</button>')+'</div>';
+  $("mBody").innerHTML=h;
+  var dt=$("dt");$("dtx").addEventListener("click",function(){var c=dt.classList.toggle("clamp");this.textContent=c?"Read the dream":"Fold it away";});
+  requestAnimationFrame(function(){if(dt.scrollHeight<=dt.clientHeight+2)$("dtx").classList.add("hidden");});
+  if(mode==="new")$("mKeep").addEventListener("click",function(){closeSheet("meaning");show("today");});
+  else{
+    $("mAgain").addEventListener("click",function(){var e=reading;$("mBody").innerHTML='<p class="listening">Listening again…</p>';interpret(e).then(function(r){e.interpretation=r;save();renderMeaning(e,"read");});});
+    $("mDel").addEventListener("click",function(){if(!confirm("Let this morning go? It will be deleted."))return;entries=entries.filter(function(x){return x.id!==reading.id;});save();closeSheet("meaning");toast("Deleted");show(curView);});
+  }
+}
+$("mClose").addEventListener("click",function(){closeSheet("meaning");show(curView);});
+function openEntry(id){var e=entries.filter(function(x){return x.id===id;})[0];if(!e)return;if(!e.interpretation){e.interpretation=offlineInterpret(e);save();}renderMeaning(e,"read");openSheet("meaning");}
+
+$("reveal").addEventListener("click",function(){
+  if(recognizing)stopRec();
+  var text=$("page").value.trim();if(!text)return;
+  var e={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),created:new Date().toISOString(),date:$("dDate").value||today(),text:text,mood:form.mood,vivid:form.vivid,lucid:form.lucid,interpretation:null};
+  $("mDate").textContent=longDate(e.date);$("mBody").innerHTML='<p class="listening">Listening for meaning…</p>';openSheet("meaning");
+  var started=Date.now();
+  interpret(e).then(function(r){
+    e.interpretation=r;entries.unshift(e);sortEntries();save();resetPage();
+    setTimeout(function(){renderMeaning(e,"new");renderToday();},Math.max(0,900-(Date.now()-started)));
+  });
+});
+
+/* voice */
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null,recognizing=false;
+function micMsg(m){$("micNote").textContent=m||"";}
+if(SR){
+  rec=new SR();rec.continuous=true;rec.interimResults=true;rec.lang=navigator.language||"en-US";
+  rec.onresult=function(ev){var fin="",inter="";for(var i=ev.resultIndex;i<ev.results.length;i++){if(ev.results[i].isFinal)fin+=ev.results[i][0].transcript;else inter+=ev.results[i][0].transcript;}
+    if(fin.trim()){var t=$("page"),cur=t.value,add=fin.trim();if(!cur.trim())add=add.charAt(0).toUpperCase()+add.slice(1);t.value=cur+(cur&&!/\s$/.test(cur)?" ":"")+add;grow();updateReveal();saveDraft();}
+    $("interim").textContent=inter;};
+  rec.onerror=function(ev){
+    if(ev.error==="not-allowed"||ev.error==="service-not-allowed"){recognizing=false;micMsg("Microphone access is off for this page. Allow it in your browser settings, or simply write.");}
+    else if(ev.error==="network"){recognizing=false;micMsg("Voice needs a connection here. The page is still yours to write.");}
+    else if(ev.error!=="no-speech"&&ev.error!=="aborted")micMsg("Voice paused ("+ev.error+").");};
+  rec.onend=function(){if(recognizing){try{rec.start();}catch(_){recognizing=false;setRec(false);}}else setRec(false);};
+}
+function setRec(on){$("mic").classList.toggle("rec",on);$("mic").setAttribute("aria-label",on?"Stop listening":"Speak your dream");if(on)micMsg("Listening…");else{$("interim").textContent="";if($("micNote").textContent==="Listening…")micMsg("");}}
+function stopRec(){recognizing=false;try{rec.stop();}catch(_){}setRec(false);}
+$("mic").addEventListener("click",function(){
+  if(!rec){micMsg("Voice isn't available in this browser. Try Chrome, Edge or Safari, or your keyboard's dictation.");return;}
+  if(recognizing){stopRec();return;}
+  try{rec.start();recognizing=true;setRec(true);}catch(err){micMsg("The microphone couldn't start.");}
+});
+
+/* journal */
+function renderJournal(){
+  $("jCount").textContent=entries.length?entries.length+(entries.length===1?" morning":" mornings"):"";
+  var q=$("search").value.trim().toLowerCase();
+  if(!entries.length){$("list").innerHTML='<p class="empty">Your first morning is still ahead of you.</p>';return;}
+  var list=entries.filter(function(e){if(!q)return true;var i=e.interpretation||{};return [e.text,e.date,e.mood,(i.symbolNames||[]).join(" "),(i.themes||[]).join(" ")].join(" ").toLowerCase().indexOf(q)>=0;});
+  if(!list.length){$("list").innerHTML='<p class="empty">Nothing here holds “'+esc(q)+'”.</p>';return;}
+  var h="",lastM="";
+  list.forEach(function(e){var m=parseYmd(e.date).toLocaleDateString(undefined,{month:"long",year:"numeric"});
+    if(m!==lastM){h+='<div class="eyebrow month">'+esc(m)+'</div>';lastM=m;}
+    h+='<button class="item" data-id="'+esc(e.id)+'"><div class="d">'+esc(shortDate(e.date))+(e.mood?" · "+esc(e.mood):"")+'</div><div class="l">'+esc(firstLine(e.text))+'</div></button>';});
+  $("list").innerHTML=h;
+  document.querySelectorAll("#list .item").forEach(function(b){b.addEventListener("click",function(){openEntry(b.dataset.id);});});
+}
+$("search").addEventListener("input",renderJournal);
+
+/* reflect */
+function count(a){var c={};a.forEach(function(x){c[x]=(c[x]||0)+1;});return Object.keys(c).map(function(k){return [k,c[k]];}).sort(function(a,b){return b[1]-a[1];});}
+function times(n){return n===1?"once":n===2?"twice":n+" times";}
+function renderReflect(){
+  var end=new Date(),start=addDays(end,-6),set=dateSet();
+  $("rRange").textContent=start.toLocaleDateString(undefined,{day:"numeric",month:"short"})+" – "+end.toLocaleDateString(undefined,{day:"numeric",month:"short"});
+  var dots="";for(var i=0;i<7;i++){var d=addDays(start,i),k=ymd(d);dots+='<div class="day'+(set[k]?" on":"")+(i===6?" today":"")+'"><i></i>'+d.toLocaleDateString(undefined,{weekday:"narrow"})+'</div>';}
+  var wk=entries.filter(function(e){return e.date>=ymd(start)&&e.date<=ymd(end);});
+  var days=Object.keys(wk.reduce(function(o,e){o[e.date]=1;return o;},{})).length;
+  var syms=[],themes=[],moods=[];
+  wk.forEach(function(e){var it=e.interpretation||offlineInterpret(e);syms=syms.concat(it.symbolNames||[]);themes=themes.concat(it.themes||[]);if(e.mood)moods.push(e.mood);});
+  var cs=count(syms),ct=count(themes),cm=count(moods),p=[];
+  if(!days)p.push("The page has been quiet this week. That's all right. Tomorrow morning it will be waiting, blank and patient.");
+  else{
+    p.push("You came to the page "+(days===7?"every morning this week.":days+" of the last seven mornings."));
+    if(cs.length&&cs[0][1]>1){var s=esc(cs[0][0])+" appeared most often, "+times(cs[0][1]);var rest=cs.slice(1,3).map(function(x){return lc(x[0]);});p.push(s+(rest.length?", alongside "+esc(listJoin(rest)):"")+".");}
+    else if(cs.length){var nm=cs.slice(0,3).map(function(x,j){return j?lc(x[0]):x[0];});p.push(esc(listJoin(nm))+(nm.length>1?" each appeared.":" appeared."));}
+    if(ct.length)p.push("Together, your dreams have been circling "+esc(listJoin(ct.slice(0,2).map(function(x){return x[0];})))+".");
+    if(cm.length)p.push(cm.length===1||cm[0][1]>cm[1][1]?"Mostly, you woke feeling "+esc(cm[0][0])+".":"You woke feeling "+esc(listJoin(cm.slice(0,3).map(function(x){return x[0];})))+", in turns.");
+  }
+  var q=(ct.length&&QUEST[ct[0][0]])||"Looking at this week's dreams together, what do you sense they are asking of you?";
+  var h='<div class="week">'+dots+'</div><div class="prose"><p>'+p.join(" ")+'</p></div>';
+  var src=cs.length?cs:count(entries.reduce(function(a,e){return a.concat((e.interpretation||{}).symbolNames||[]);},[]));
+  if(src.length){var max=src[0][1];h+='<div class="eyebrow" style="margin-top:34px">'+(cs.length?"This week's symbols":"Recurring symbols")+'</div><div class="lines">'+src.slice(0,5).map(function(x){return '<div class="line"><span>'+esc(x[0])+'</span><em>'+x[1]+'</em><div class="bar"><b style="width:'+Math.round(x[1]/max*100)+'%"></b></div></div>';}).join("")+'</div>';}
+  if(days)h+='<div class="rule"></div><div class="eyebrow">For the week ahead</div><p class="q">'+esc(q)+'</p>';
+  h+='<div class="stats"><div class="stat"><div class="v">'+currentStreak()+'</div><div class="k">Current run</div></div><div class="stat"><div class="v">'+longestStreak()+'</div><div class="k">Longest run</div></div><div class="stat"><div class="v">'+entries.length+'</div><div class="k">Mornings</div></div></div>';
+  $("reflect").innerHTML=h;
+}
+
+/* settings */
+$("openSettings").addEventListener("click",function(){var s=getSettings();$("apiKey").value=s.key||"";$("apiBase").value=s.base||"https://api.openai.com/v1";$("apiModel").value=s.model||"gpt-4o-mini";openSheet("settings");});
+$("sClose").addEventListener("click",function(){closeSheet("settings");});
+$("saveSettings").addEventListener("click",function(){var s={key:$("apiKey").value.trim(),base:$("apiBase").value.trim()||"https://api.openai.com/v1",model:$("apiModel").value.trim()||"gpt-4o-mini"};try{localStorage.setItem(K_SETTINGS,JSON.stringify(s));toast(s.key?"Saved. Deeper readings are on":"Saved");}catch(_){toast("Couldn't save");}});
+$("clearKey").addEventListener("click",function(){var s=getSettings();delete s.key;try{localStorage.setItem(K_SETTINGS,JSON.stringify(s));}catch(_){}$("apiKey").value="";toast("Key removed from this device");});
+$("exportBtn").addEventListener("click",function(){var b=new Blob([JSON.stringify({app:"dream-pages",version:2,exported:new Date().toISOString(),entries:entries},null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dream-pages-"+today()+".json";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);toast("Backup saved");});
+$("importBtn").addEventListener("click",function(){$("importFile").click();});
+$("importFile").addEventListener("change",function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result),arr=Array.isArray(d)?d:d.entries;if(!Array.isArray(arr))throw 0;var ids={};entries.forEach(function(e){ids[e.id]=1;});var n=0;arr.forEach(function(e){var x=normalize(e);if(x&&!ids[x.id]){entries.push(x);ids[x.id]=1;n++;}});sortEntries();save();toast("Imported "+n+(n===1?" morning":" mornings"));renderToday();}catch(_){toast("That file isn't a Dream Pages backup");}};r.readAsText(f);this.value="";});
+document.addEventListener("keydown",function(ev){if(ev.key==="Escape"){if($("settings").classList.contains("open"))closeSheet("settings");else if($("meaning").classList.contains("open")){closeSheet("meaning");show(curView);}}});
+
+syncForm();grow();updateReveal();show("today");
+window.DreamPages={offlineInterpret:offlineInterpret,symbolCount:SYMBOLS.length,promptCount:PROMPTS.length};
+})();
+</script>
+<script>if("serviceWorker" in navigator && location.protocol!=="file:"){addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}</script>
+</body>
+</html>
