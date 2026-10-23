@@ -20,13 +20,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0f0e0d; --ink2:#171513; --paper:#ece5d8; --soft:#b8afa2; --faint:#6f685f; --hair:rgba(236,229,216,.10);
+  --ink:#0f0e0d; --ink2:#171513; --paper:#ece5d8; --soft:#b8afa2; --faint:#857d72; --hair:rgba(236,229,216,.10);
   --accent:#c8a97e;
   --serif:"Cormorant Garamond","EB Garamond","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
   --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --ease:cubic-bezier(.2,.7,.2,1);
-  --navh:64px;
+  --navh:64px; --kb:0px;
 }
+html{scroll-padding-bottom:calc(var(--navh) + 120px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%}
 body{background:var(--ink);color:var(--paper);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
@@ -36,6 +37,11 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .view{display:none;opacity:0;transform:translateY(6px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
 .view.on{display:block}
 .view.in{opacity:1;transform:none}
+#v-today{padding-bottom:84px}
+:focus{outline:none}
+:focus-visible{outline:1px solid var(--accent);outline-offset:4px;border-radius:3px}
+textarea#page:focus-visible,.field input:focus-visible,.search:focus-visible,.mini input:focus-visible{outline:none}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--soft);font-weight:400}
 .faint{color:var(--faint)}
 .topbar{display:flex;align-items:center;justify-content:space-between;min-height:24px}
@@ -46,7 +52,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .iconbtn:hover{color:var(--paper)}
 .done{margin-top:8px;font-size:12px;color:var(--faint);letter-spacing:.04em;min-height:16px}
 .prompt{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(28px,7.4vw,38px);line-height:1.18;margin:56px 0 30px;color:var(--paper);letter-spacing:-.005em;transition:opacity .6s var(--ease)}
-textarea#page{display:block;width:100%;min-height:42vh;background:transparent;border:0;outline:0;resize:none;color:var(--paper);font-family:var(--serif);font-size:22px;line-height:1.6;padding:0;caret-color:var(--accent)}
+textarea#page{display:block;width:100%;min-height:34vh;background:transparent;border:0;outline:0;resize:none;color:var(--paper);font-family:var(--serif);font-size:22px;line-height:1.6;padding:0;caret-color:var(--accent)}
 textarea#page::placeholder{color:var(--faint);font-style:italic}
 .interim{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--soft);min-height:0;opacity:.7}
 .moods{display:flex;flex-wrap:wrap;gap:6px 18px;margin:26px 0 0;align-items:baseline}
@@ -57,18 +63,21 @@ textarea#page::placeholder{color:var(--faint);font-style:italic}
 .more-t{margin-top:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
 .more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease)}
 .more.open{grid-template-rows:1fr}
-.more>div{overflow:hidden}
+.more>div{overflow:hidden;visibility:hidden;transition:visibility 0s .45s}
+.more.open>div{visibility:visible;transition:visibility 0s}
 .more-in{display:flex;flex-wrap:wrap;gap:22px 34px;padding-top:18px}
 .mini{display:flex;flex-direction:column;gap:8px}
 .mini label{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
-.mini input[type=date]{background:transparent;border:0;border-bottom:1px solid var(--hair);color:var(--soft);font:inherit;font-size:14px;padding:4px 0;color-scheme:dark;outline:0}
+.mini input[type=date]{background:transparent;border:0;border-bottom:1px solid var(--hair);color:var(--soft);font:inherit;font-size:16px;padding:4px 0;color-scheme:dark;outline:0;transition:border-color .3s}
+.mini input[type=date]:focus{border-color:var(--accent)}
 .dots{display:flex;gap:10px;align-items:center;height:24px}
 .dots button{width:9px;height:9px;border-radius:50%;border:1px solid var(--faint);transition:all .3s}
 .dots button.on{background:var(--accent);border-color:var(--accent)}
 .toggle{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--faint)}
 .toggle.on{color:var(--accent)}
 .actionbar{position:fixed;left:0;right:0;bottom:calc(var(--navh) + env(safe-area-inset-bottom));pointer-events:none;background:linear-gradient(to top,var(--ink) 55%,rgba(15,14,13,0))}
-.actionbar .inner{max-width:620px;margin:0 auto;padding:22px 28px 14px;display:flex;align-items:center;justify-content:space-between;pointer-events:auto}
+.actionbar .inner{max-width:620px;margin:0 auto;padding:22px 28px 14px;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+.actionbar .mic{pointer-events:auto}
 .mic{position:relative;width:54px;height:54px;border-radius:50%;border:1px solid rgba(236,229,216,.22);display:grid;place-items:center;color:var(--paper);transition:border-color .3s,background .3s}
 .mic:hover{border-color:rgba(236,229,216,.45)}
 .mic.rec{border-color:var(--accent);color:var(--accent)}
@@ -85,8 +94,8 @@ nav.tabs button{font-size:11px;letter-spacing:.24em;text-transform:uppercase;col
 nav.tabs button.on{color:var(--paper)}
 nav.tabs button.on::after{content:"";position:absolute;left:50%;bottom:2px;width:3px;height:3px;border-radius:50%;background:var(--accent);transform:translateX(-50%)}
 /* reading / meaning */
-.sheet{position:fixed;inset:0;background:var(--ink);z-index:20;overflow-y:auto;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .55s var(--ease),transform .55s var(--ease),visibility 0s .55s;-webkit-overflow-scrolling:touch}
-.sheet.open{opacity:1;visibility:visible;transform:none;transition:opacity .55s var(--ease),transform .55s var(--ease)}
+.sheet{position:fixed;inset:0;background:var(--ink);z-index:20;overflow-y:auto;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(14px);transition:opacity .55s var(--ease),transform .55s var(--ease),visibility 0s .55s;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.sheet.open{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity .55s var(--ease),transform .55s var(--ease)}
 .sheet .app{padding-bottom:calc(env(safe-area-inset-bottom) + 60px)}
 .close{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint)}
 .close:hover{color:var(--paper)}
@@ -112,7 +121,8 @@ nav.tabs button.on::after{content:"";position:absolute;left:50%;bottom:2px;width
 @keyframes breathe{0%,100%{opacity:.35}50%{opacity:1}}
 /* journal */
 h1.h{font-family:var(--serif);font-weight:400;font-size:clamp(34px,9vw,44px);margin:44px 0 26px;letter-spacing:-.01em}
-.search{width:100%;background:transparent;border:0;border-bottom:1px solid var(--hair);color:var(--paper);font:inherit;font-size:15px;padding:8px 0;outline:0;margin-bottom:12px}
+.search{width:100%;background:transparent;border:0;border-bottom:1px solid var(--hair);color:var(--paper);font:inherit;font-size:16px;padding:8px 0;outline:0;margin-bottom:12px;transition:border-color .3s}
+.search:focus{border-color:var(--accent)}
 .search::placeholder{color:var(--faint)}
 .month{margin:34px 0 4px}
 .item{display:block;width:100%;text-align:left;padding:18px 0;border-bottom:1px solid var(--hair);transition:opacity .3s}
@@ -149,8 +159,11 @@ h1.h{font-family:var(--serif);font-weight:400;font-size:clamp(34px,9vw,44px);mar
 .toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 18px);transform:translate(-50%,-8px);font-size:12px;letter-spacing:.06em;color:var(--paper);background:var(--ink2);border:1px solid var(--hair);padding:9px 16px;border-radius:999px;opacity:0;transition:all .4s var(--ease);z-index:50;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .hidden{display:none!important}
+body.kb nav.tabs{display:none}
+body.kb .actionbar{bottom:var(--kb)}
+body.kb .actionbar .inner{padding-top:16px;padding-bottom:10px}
 @media (min-width:700px){ .app{padding-top:64px} .prompt{margin-top:80px} }
-@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important} }
+@media (prefers-reduced-motion:reduce){ *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important} .view{transform:none} }
 </style>
 </head>
 <body>
@@ -168,15 +181,15 @@ h1.h{font-family:var(--serif);font-weight:400;font-size:clamp(34px,9vw,44px);mar
       </div>
     </div>
     <div class="done" id="doneNote"></div>
-    <h2 class="prompt" id="prompt"></h2>
-    <textarea id="page" placeholder="Begin anywhere…" aria-label="Your dream"></textarea>
-    <div class="interim" id="interim"></div>
-    <div class="moods" id="moods"><span class="lbl">Woke feeling</span></div>
-    <button class="more-t" id="moreT">More</button>
+    <h1 class="prompt" id="prompt"></h1>
+    <textarea id="page" placeholder="Begin anywhere…" aria-label="Your dream" aria-describedby="prompt"></textarea>
+    <div class="interim" id="interim" aria-live="polite"></div>
+    <div class="moods" id="moods" role="group" aria-labelledby="moodL"><span class="lbl" id="moodL">Woke feeling</span></div>
+    <button class="more-t" id="moreT" aria-expanded="false" aria-controls="more">More</button>
     <div class="more" id="more"><div><div class="more-in">
       <div class="mini"><label for="dDate">Date</label><input type="date" id="dDate"></div>
-      <div class="mini"><label>Vividness</label><div class="dots" id="vivid"></div></div>
-      <div class="mini"><label>Lucid</label><button class="toggle" id="lucid">not lucid</button></div>
+      <div class="mini"><label id="vividL">Vividness</label><div class="dots" id="vivid" role="group" aria-labelledby="vividL"></div></div>
+      <div class="mini"><label id="lucidL">Lucid</label><button class="toggle" id="lucid" aria-pressed="false" aria-labelledby="lucidL lucid">not lucid</button></div>
     </div></div></div>
   </section>
 
@@ -198,22 +211,22 @@ h1.h{font-family:var(--serif);font-weight:400;font-size:clamp(34px,9vw,44px);mar
 
 <div class="actionbar" id="actionbar"><div class="inner">
   <div style="display:flex;align-items:center;flex:1">
-    <button class="mic" id="mic" aria-label="Speak your dream">
+    <button class="mic" id="mic" aria-label="Speak your dream" aria-pressed="false">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>
     </button>
-    <div class="micnote" id="micNote"></div>
+    <div class="micnote" id="micNote" aria-live="polite"></div>
   </div>
   <button class="reveal" id="reveal">Receive meaning<span class="arr">→</span></button>
 </div></div>
 
-<nav class="tabs">
-  <button data-v="today" class="on">Today</button>
+<nav class="tabs" aria-label="Sections">
+  <button data-v="today" class="on" aria-current="page">Today</button>
   <button data-v="journal">Journal</button>
   <button data-v="reflect">Reflect</button>
 </nav>
 
 <!-- MEANING / READING SHEET -->
-<div class="sheet" id="meaning" aria-modal="true" role="dialog">
+<div class="sheet" id="meaning" aria-modal="true" role="dialog" aria-label="Your reading">
   <div class="app">
     <div class="topbar"><div class="eyebrow" id="mDate"></div><button class="close" id="mClose">Close</button></div>
     <div id="mBody"></div>
@@ -221,10 +234,10 @@ h1.h{font-family:var(--serif);font-weight:400;font-size:clamp(34px,9vw,44px);mar
 </div>
 
 <!-- SETTINGS SHEET -->
-<div class="sheet" id="settings" aria-modal="true" role="dialog">
+<div class="sheet" id="settings" aria-modal="true" role="dialog" aria-labelledby="sTitle">
   <div class="app">
     <div class="topbar"><div class="eyebrow">Settings</div><button class="close" id="sClose">Close</button></div>
-    <h1 class="h">Quiet settings</h1>
+    <h1 class="h" id="sTitle">Quiet settings</h1>
     <div class="section" style="margin-top:0">
       <div class="eyebrow" style="color:var(--accent)">Deeper readings · optional</div>
       <p class="note">Meaning is written by a gentle interpreter that lives inside this page and works offline. If you like, add your own OpenAI-compatible key for richer readings.</p>
@@ -238,13 +251,13 @@ h1.h{font-family:var(--serif);font-weight:400;font-size:clamp(34px,9vw,44px);mar
       <div class="eyebrow" style="color:var(--accent)">Your archive</div>
       <p class="note">Your mornings live only in this browser. Keep a backup now and then, or use one to move to another device.</p>
       <div class="row"><button class="textbtn" id="exportBtn">Export backup</button><button class="textbtn" id="importBtn">Import backup</button></div>
-      <input type="file" id="importFile" accept="application/json,.json" class="hidden">
+      <input type="file" id="importFile" accept="application/json,.json" class="hidden" aria-label="Choose a backup file">
     </div>
     <p class="note faint section" style="color:var(--faint)">Interpretations are for reflection, not diagnosis. Your dreams, your meaning.</p>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){
 "use strict";
@@ -263,7 +276,14 @@ var PROMPTS=[
 
 /* Symbols: [name, keyword pattern, theme, meaning in the reflective voice] */
 var S=[
-["Falling","\\bfall(ing|s|en)?\\b|\\bfell\\b|\\bdropp(ed|ing)\\b|\\bplummet","loss of control","To fall is to lose the ground you trusted. Perhaps something in your waking life feels less steady than it did, or perhaps some part of you is ready to stop holding on so tightly."],
+["A house from long ago","\\bchildhood home\\b|\\b(house|home) i grew up in\\b|\\bmy old (house|home|bedroom|room)\\b|\\bgrandparents'? (house|home)\\b","the past","The house you grew up in holds the first shape of you. To return there is to visit who you were, and perhaps to bring something of that self forward into now.",["A house","Rooms","Childhood"]],
+["A room you didn't know","\\b(hidden|secret|extra|undiscovered|unknown) (rooms?|door|floor|wing)\\b|\\brooms? i (had )?never (seen|knew|noticed)\\b","the self","Finding a room you didn't know was there is one of the kindest dreams. There is more space in you, more of your life, than you have been living in.",["Rooms","A house","A door"]],
+["Moving through honey","\\bslow motion\\b|\\b(couldn'?t|can'?t|could not|cannot) run\\b|\\blegs (wouldn'?t|won'?t|didn'?t) (move|work)\\b|\\bfeet (were )?(heavy|stuck)\\b","powerlessness","When your legs won't carry you, the dream is showing a place where effort and result have come apart. Be gentle; something may need a different kind of strength.",["Being chased","Stillness, unwilled"]],
+["A car without brakes","\\bno brakes\\b|\\bbrakes? (failed|didn'?t work|wouldn'?t work|stopped working)\\b|\\bcouldn'?t stop the car\\b|\\bcar (wouldn'?t|won'?t) stop\\b","loss of control","A car that won't stop is momentum without consent: something in your life may be moving faster than you have agreed to.",["A car"]],
+["In the passenger seat","\\b(back ?seat|passenger seat)\\b|\\bsomeone else (was )?driving\\b|\\bnobody (was )?driving\\b|\\bno one (was )?driving\\b","direction","To ride while another drives, or while no one does, asks a quiet question about who is steering your days.",["A car"]],
+["A call that won't connect","\\b(couldn'?t|can'?t|could not|cannot) (dial|call|reach|get through)\\b|\\bphone (wouldn'?t|won'?t|didn'?t) work\\b|\\bwrong number\\b|\\bcall (dropped|kept dropping)\\b","communication","The call that won't go through is a longing to be heard. Ask who you have been trying to reach, and whether there is another way to say it.",["A phone"]],
+["Teeth","\\bteeth (were |kept |started )?(falling|fell|crumbl|loose)|\\btooth (fell|falling|came) out\\b|\\bteeth (fall|came) out\\b","self-image","Teeth that loosen or fall are among the oldest dreams we have. They tend to come when you are thinking about how you are seen, what you said or didn't say, or a quiet fear of losing your bite.",["Falling"]],
+["Falling","\\bfall(ing|s|en)?\\b(?! (asleep|in love|apart|back asleep))|\\bfell\\b(?! (asleep|in love|apart|back asleep))|\\bdropp(ed|ing)\\b|\\bplummet","loss of control","To fall is to lose the ground you trusted. Perhaps something in your waking life feels less steady than it did, or perhaps some part of you is ready to stop holding on so tightly."],
 ["Teeth","\\bteeth\\b|\\btooth\\b","self-image","Teeth that loosen or fall are among the oldest dreams we have. They tend to come when you are thinking about how you are seen, what you said or didn't say, or a quiet fear of losing your bite."],
 ["Water","\\bwater\\b|\\bwaves?\\b|\\blake\\b|\\briver\\b","emotions","Water is feeling, moving. Notice whether it was clear or clouded, still or restless. It often tells you the true weather of your heart."],
 ["The sea","\\bocean\\b|\\bsea\\b|\\bbeach\\b","emotions","The sea holds everything too large to name. Its presence suggests depth: feelings that are vast and old, and a part of you that is wider than your days."],
@@ -280,8 +300,8 @@ var S=[
 ["An old love","\\bmy ex\\b|\\bex-?(boyfriend|girlfriend|husband|wife|partner)\\b|\\bformer partner\\b","the past","An old love in a dream is rarely about them. It is about who you were then, and what that time still has to teach you now."],
 ["A wedding","\\bwedding\\b|\\bmarr(y|ied|iage|ying)\\b|\\bbride\\b|\\bgroom\\b","commitment","A wedding is a union, two things becoming one. Perhaps you are choosing something, a path, a promise, or a deeper loyalty to yourself."],
 ["Pregnancy","\\bpregnan","new beginnings","Something is growing in you before it is ready to be seen. Trust its slow time."],
-["Running late","\\blate\\b|\\bmiss(ed|ing)? (the |a |my )?(train|bus|flight|plane)\\b","pressure","The missed train, the lateness. These come when life seems to move faster than you can, and you fear something will leave without you."],
-["Being lost","\\blost\\b|\\bcan'?t find\\b|\\bcouldn'?t find\\b","uncertainty","To be lost is to be between maps. The old way no longer fits and the new one hasn't yet been drawn. This, too, is a place."],
+["Running late","\\b(running|was|were|am|being|so|too|very|already|getting|be) late\\b(?! (at night|night|evening|afternoon|in the (day|evening|night|afternoon)))|\\blate (for|to)\\b(?! (bed|sleep))|\\bmiss(ed|ing)? (the |a |my )?(train|bus|flight|plane)\\b","pressure","The missed train, the lateness. These come when life seems to move faster than you can, and you fear something will leave without you."],
+["Being lost","\\blost\\b(?! (my|the|a|an|his|her|our|their|your)\\b)|\\bgot lost\\b|\\bcan'?t find\\b|\\bcouldn'?t find\\b","uncertainty","To be lost is to be between maps. The old way no longer fits and the new one hasn't yet been drawn. This, too, is a place."],
 ["Stairs","\\bstairs?\\b|\\bstaircase\\b|\\bsteps\\b","progress","Stairs carry you between levels of yourself. Climbing speaks of effort and ascent; descending, of going deeper. Endless stairs ask whether the climb is still yours."],
 ["A door","\\bdoors?\\b|\\bdoorway\\b","opportunity","A door is a threshold. Open, it invites. Closed, it asks whether you are ready, or whether you are waiting for permission you already have."],
 ["A key","\\bkeys?\\b","opportunity","A key is an answer you are holding before you know which lock it fits."],
@@ -318,7 +338,7 @@ var S=[
 ["Family","\\bfamily\\b|\\bsister\\b|\\bbrother\\b|\\bgrand(ma|pa|mother|father)\\b|\\bcousin\\b","belonging","Family brings the roots you grew from: belonging, inheritance, the patterns you carry."],
 ["Childhood","\\bchild(hood|ren)?\\b|\\bkids?\\b|\\bwhen i was (young|little)\\b","inner child","A child in the dream is often the child you were, still curious, still needing something simple."],
 ["School","\\bschool\\b|\\bclass(room)?\\b|\\bteacher\\b|\\buniversity\\b|\\bcollege\\b","learning","School returns when you are in the middle of a lesson, often one life is teaching without a syllabus."],
-["Work","\\bwork\\b|\\boffice\\b|\\bboss\\b|\\bjob\\b|\\bcolleague|\\bcoworker","responsibility","Work in dreams is the mind tidying the day's weight, and asking how valued you feel in what you give."],
+["Work","\\b(at|to|from|for|my|the|new|old) (work|job)\\b|\\bworkplace\\b|\\boffice\\b|\\bboss\\b|\\bjob\\b|\\bcolleague|\\bcoworker","responsibility","Work in dreams is the mind tidying the day's weight, and asking how valued you feel in what you give."],
 ["Someone famous","\\bcelebrit|\\bfamous\\b|\\bmovie star\\b","aspiration","A famous face often carries a quality you admire and are quietly growing into."],
 ["A stranger","\\bstrangers?\\b|\\bsomeone i didn'?t know\\b|\\bfaceless\\b","the unknown self","The stranger is often you, a version not yet met."],
 ["A kiss","\\bkiss(ed|ing)?\\b|\\bromance\\b|\\bin love\\b|\\bcrush\\b","intimacy","Romance in dreams is about closeness, and about drawing near to the qualities the other person holds."],
@@ -327,7 +347,7 @@ var S=[
 ["Giving birth","\\bgiv(e|ing) birth\\b|\\bgave birth\\b|\\bin labou?r\\b","new beginnings","To give birth is to bring something real into the world. Something you have carried is ready."],
 ["Treasure","\\bmoney\\b|\\bcash\\b|\\bcoins?\\b|\\bgold\\b|\\btreasure\\b|\\brich\\b","self-worth","Money and treasure speak of worth, what you value, and how you value yourself."],
 ["Something lost","\\blost my\\b|\\blosing my\\b|\\blose my\\b","loss","To lose something precious is to feel the edges of what matters to you."],
-["A phone","\\bphones?\\b|\\bcall(ed|ing)?\\b|\\btext(ed)?\\b","communication","A phone is a reaching toward someone. If the call wouldn't connect, ask where you feel unheard."],
+["A phone","\\bphones?\\b|\\bcall(ed|ing)? (me|him|her|them|you|my|someone|for help)\\b|\\btext(ed|ing)? (me|him|her|them|you)\\b|\\bvoicemail\\b","communication","A phone is a reaching toward someone. If the call wouldn't connect, ask where you feel unheard."],
 ["A mirror","\\bmirrors?\\b|\\breflection\\b","self-image","A mirror asks the simplest question: who do you see?"],
 ["Hair","\\bhair\\b|\\bbald\\b|\\bhaircut\\b","self-image","Hair is vitality and identity. Changing it is changing how you meet the world."],
 ["Blood","\\bblood\\b|\\bbleed","vitality","Blood is life force. Notice what is drawing on your energy, and what restores it."],
@@ -361,15 +381,35 @@ var S=[
 ["Time","\\bclocks?\\b|\\brunning out of time\\b|\\bdeadline\\b","pressure","Clocks speak of time pressing. You may need more spaciousness than you are allowing."],
 ["Something broken","\\bbroken\\b|\\bshatter|\\bcrack(ed|ing)?\\b","fragility","Broken things are tender things. Something wants mending, or gentleness."]
 ];
-var SYMBOLS=S.map(function(s){return {name:s[0],re:new RegExp(s[1],"i"),theme:s[2],meaning:s[3]};});
+var SYMBOLS=S.map(function(s){return {name:s[0],re:new RegExp(s[1],"gi"),theme:s[2],meaning:s[3],replaces:s[4]||[]};});
+/* negation: "there was no snake", "I didn't fall", "never flew" */
+var NEG=/\b(no|not|never|without|nor|neither|none|nothing|didn'?t|wasn'?t|weren'?t|don'?t|doesn'?t|isn'?t|aren'?t|hadn'?t|won'?t|wouldn'?t|couldn'?t|can'?t|cannot)\b/i;
+var UNNEG=/\b(couldn'?t|can'?t|could not|cannot|didn'?t|wouldn'?t) (stop|help|resist|avoid)\b|\bnot only\b|\bnever stopped\b/i;
+function prepText(t){return String(t||"").replace(/[\u2018\u2019\u02bc]/g,"'").replace(/[\u201c\u201d]/g,'"');}
+function affirmed(re,text){
+  re.lastIndex=0;var m;
+  while((m=re.exec(text))){
+    if(!m[0].length){re.lastIndex++;continue;}
+    var before=text.slice(Math.max(0,m.index-80),m.index);
+    var clause=before.split(/[.;:!?\n,]|\bbut\b|\band then\b|\bthen\b/i).pop();
+    var words=clause.trim().split(/\s+/).filter(Boolean).slice(-3).join(" ");
+    if(!NEG.test(words)||UNNEG.test(clause)){re.lastIndex=0;return true;}
+  }
+  re.lastIndex=0;return false;
+}
+function findSymbols(text){
+  var t=prepText(text),found=[],skip={};
+  SYMBOLS.forEach(function(s){if(skip[s.name]||found.some(function(f){return f.name===s.name;}))return;if(affirmed(s.re,t)){found.push(s);s.replaces.forEach(function(n){skip[n]=1;});}});
+  return found.filter(function(s){return !skip[s.name];});
+}
 var EMO={
-  fear:/\b(scared|afraid|terrified|fear|panic|horror|frighten|creepy|nightmare)/i,
-  anxiety:/\b(anxious|worried|nervous|stress|rush|unprepared)/i,
-  joy:/\b(happy|joy|laugh|fun|excited|amazing|beautiful|wonderful)/i,
-  peace:/\b(calm|peace|serene|quiet|gentle|safe|relaxed)/i,
-  sadness:/\b(sad|cry|cried|tears|grief|lonely|alone)/i,
-  anger:/\b(angry|furious|rage|mad at|yell|argue|argument)/i,
-  wonder:/\b(magic|wonder|awe|mystical|surreal|glow)/i
+  fear:/\b(scared|afraid|terrified|terror|fear(ed|ful)?|panic(ked|king)?|horror|horrified|frighten(ed|ing)?|creepy|nightmares?|dread)\b/gi,
+  anxiety:/\b(anxious|anxiety|worried|worry|nervous|stress(ed|ful)?|rushing|rushed|unprepared)\b/gi,
+  joy:/\b(happy|happiness|joy(ful)?|laugh(ed|ing|ter)?|fun|excited|amazing|beautiful|wonderful|delight(ed|ful)?)\b/gi,
+  peace:/\b(calm|peace(ful)?|serene|quiet|gentle|safe|relaxed|still)\b/gi,
+  sadness:/\b(sad|sadness|cry|cried|crying|tears|grief|griev(ed|ing)|lonely|alone|heartbroken)\b/gi,
+  anger:/\b(angry|anger|furious|rage|mad at|yell(ed|ing)?|argu(e|ed|ing)|argument)\b/gi,
+  wonder:/\b(magic(al)?|wonder(ful)?|awe|mystical|surreal|glow(ing|ed)?)\b/gi
 };
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
 function listJoin(a){if(a.length<2)return a.join("");return a.slice(0,-1).join(", ")+" and "+a[a.length-1];}
@@ -437,12 +477,14 @@ var GENERIC_Q=["Which moment of the dream stays with you, and what in your wakin
 var GENERIC_I=["Carry one image from the night with you today, and see where it appears.","Move a little slower this morning; let the dream finish speaking.","Write one line tonight about what the day showed you."];
 
 function offlineInterpret(e){
-  var text=e.text||"", seed=(e.id||"")+text.length;
-  var found=SYMBOLS.filter(function(s){return s.re.test(text);});
-  var emos=Object.keys(EMO).filter(function(k){return EMO[k].test(text);});
+  var text=e.text||"", seed=(e.id||"")+text.length, pt=prepText(text);
+  var found=findSymbols(text);
+  var emos=Object.keys(EMO).filter(function(k){return affirmed(EMO[k],pt);});
   var themes=[];found.forEach(function(s){if(themes.indexOf(s.theme)<0)themes.push(s.theme);});
   var opening;
-  if(!found.length){
+  if(!found.length&&!text.trim()){
+    opening="Even a blank morning belongs to the ritual. Sometimes the night keeps its pictures, and what remains is only a feeling. That is enough to begin with.";
+  }else if(!found.length){
     opening="This dream speaks in a private language, without many of the old shared symbols. That usually means its meaning lives close to home, in the people, places and feelings that are particular to you. Read it back slowly and notice what stirs.";
   }else{
     var names=found.slice(0,3).map(function(s){return lc(s.name);});
@@ -474,14 +516,16 @@ function aiInterpret(e,off){
     "\"question\" (one reflective question), "+
     "\"intention\" (one short, concrete, kind intention to carry into the day, under 22 words).";
   var user="This morning's dream ("+e.date+"):\n\""+e.text+"\"\n"+(e.mood?"Woke feeling: "+e.mood+".\n":"")+(e.lucid==="yes"?"It was a lucid dream.\n":"")+"Symbols a keyword scan noticed: "+(off.symbolNames.join(", ")||"none")+".";
-  return fetch(base+"/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+s.key.trim()},
+  var ctl=window.AbortController?new AbortController():null, tm=ctl?setTimeout(function(){ctl.abort();},45000):0;
+  return fetch(base+"/chat/completions",{method:"POST",signal:ctl?ctl.signal:undefined,headers:{"Content-Type":"application/json","Authorization":"Bearer "+s.key.trim()},
     body:JSON.stringify({model:model,temperature:0.85,messages:[{role:"system",content:sys},{role:"user",content:user}]})
-  }).then(function(r){ if(!r.ok) return r.text().then(function(t){throw new Error(r.status+" "+t.slice(0,120));}); return r.json(); })
+  }).then(function(r){ clearTimeout(tm); if(!r.ok) return r.text().then(function(t){throw new Error(r.status+" "+t.slice(0,120));}); return r.json(); })
   .then(function(j){
     var c=j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content;
     if(!c) throw new Error("empty reply");
     var m=c.match(/\{[\s\S]*\}/), o;
     try{ o=JSON.parse(m?m[0]:c); }catch(_){ o={opening:c.trim()}; }
+    if(!o||typeof o!=="object"||!String(o.opening||o.weave||"").trim()) throw new Error("unreadable reply");
     var syms=Array.isArray(o.symbols)?o.symbols.filter(function(x){return x&&x.name&&x.meaning;}).slice(0,6).map(function(x){return {name:String(x.name),meaning:String(x.meaning)};}):[];
     return {opening:String(o.opening||""),symbols:syms,weave:String(o.weave||""),mood:"",question:String(o.question||off.question),intention:String(o.intention||off.intention),
       symbolNames:off.symbolNames,themes:off.themes,source:"ai",model:model};
@@ -490,16 +534,17 @@ function aiInterpret(e,off){
 function interpret(e){
   var off=offlineInterpret(e);
   if(!aiReady()) return Promise.resolve(off);
-  return aiInterpret(e,off).catch(function(err){ off.note="The deeper reading couldn't be reached ("+err.message+"), so this one was written here, offline."; return off; });
+  return aiInterpret(e,off).catch(function(err){ var why=err&&err.name==="AbortError"?"it took too long":String(err&&err.message||err).slice(0,90); off.note="The deeper reading couldn't be reached ("+why+"), so this one was written here, offline."; return off; });
 }
 
 /* storage + migration from v1 */
 function readJSON(k){try{return JSON.parse(localStorage.getItem(k));}catch(_){return null;}}
 function save(){try{localStorage.setItem(K_ENTRIES,JSON.stringify(entries));return true;}catch(_){toast("Couldn't save in this browser");return false;}}
 function normalize(e){
-  if(!e||typeof e.text!=="string") return null;
-  return {id:String(e.id||Date.now().toString(36)+Math.random().toString(36).slice(2,6)),created:e.created||new Date().toISOString(),date:e.date||(e.created||"").slice(0,10),
-    text:e.text,mood:(V1_MOOD[e.mood]||(MOODS.indexOf(e.mood)>=0?e.mood:"")),vivid:+e.vivid||0,lucid:e.lucid==="yes"?"yes":"no",
+  if(!e||typeof e.text!=="string"||!e.text.trim()) return null;
+  var DR=/^\d{4}-\d{2}-\d{2}$/, dt=DR.test(e.date)?e.date:(DR.test(String(e.created||"").slice(0,10))?String(e.created).slice(0,10):today());
+  return {id:String(e.id||Date.now().toString(36)+Math.random().toString(36).slice(2,6)),created:typeof e.created==="string"?e.created:new Date().toISOString(),date:dt,
+    text:e.text,mood:(V1_MOOD[e.mood]||(MOODS.indexOf(e.mood)>=0?e.mood:"")),vivid:Math.max(0,Math.min(5,Math.round(+e.vivid||0))),lucid:e.lucid==="yes"?"yes":"no",
     interpretation:(e.interpretation&&e.interpretation.opening)?e.interpretation:null};
 }
 var entries=readJSON(K_ENTRIES);
@@ -523,7 +568,7 @@ function currentStreak(){var set=dateSet(),d=new Date();if(!set[ymd(d)])d=addDay
 function longestStreak(){var ds=Object.keys(dateSet()).sort(),best=0,run=0,prev=null;ds.forEach(function(s){var d=parseYmd(s);run=(prev&&ymd(addDays(prev,1))===s)?run+1:1;best=Math.max(best,run);prev=d;});return best;}
 function dayIndex(){var d=new Date();return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5);}
 function titleFor(e){var i=e.interpretation||{},n=(i.symbolNames&&i.symbolNames.length)?i.symbolNames:(i.symbols||[]).map(function(s){return s.name;});
-  if(n.length>1)return n[0]+", and "+lc(n[1]);if(n.length)return n[0];var w=e.text.trim().split(/\s+/).slice(0,5).join(" ");return w?w+"…":"A quiet morning";}
+  if(n.length>1)return n[0]+", and "+lc(n[1]);if(n.length)return n[0];var ws=e.text.trim().split(/\s+/),w=ws.slice(0,5).join(" ");return w?w+(ws.length>5?"…":""):"A quiet morning";}
 function firstLine(t){var l=t.trim().split(/\n/)[0];return l.length>140?l.slice(0,140)+"…":l;}
 
 /* view switching */
@@ -531,11 +576,12 @@ var curView="today";
 function show(v){
   curView=v;
   ["today","journal","reflect"].forEach(function(x){var el=$("v-"+x);if(x===v){el.classList.add("on");requestAnimationFrame(function(){requestAnimationFrame(function(){el.classList.add("in");});});}else{el.classList.remove("in","on");}});
-  document.querySelectorAll("nav.tabs button").forEach(function(b){b.classList.toggle("on",b.dataset.v===v);});
+  document.querySelectorAll("nav.tabs button").forEach(function(b){var on=b.dataset.v===v;b.classList.toggle("on",on);if(on)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
   $("actionbar").classList.toggle("hidden",v!=="today");
   if(v==="today")renderToday(); if(v==="journal")renderJournal(); if(v==="reflect")renderReflect();
   window.scrollTo(0,0);
 }
+function rerender(){if(curView==="today")renderToday();if(curView==="journal")renderJournal();if(curView==="reflect")renderReflect();}
 document.querySelectorAll("nav.tabs button").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.v);});});
 
 /* today */
@@ -548,27 +594,33 @@ function renderToday(){
   $("doneNote").textContent=wrote?"Written this morning. The page is open if more returns.":"";
   $("prompt").textContent=wrote?"Is there anything more?":PROMPTS[dayIndex()%PROMPTS.length];
 }
-MOODS.forEach(function(m){var b=document.createElement("button");b.className="mood";b.textContent=m;b.addEventListener("click",function(){form.mood=form.mood===m?"":m;syncForm();saveDraft();});$("moods").appendChild(b);});
-for(var vi=1;vi<=5;vi++)(function(n){var b=document.createElement("button");b.setAttribute("aria-label","Vividness "+n);b.addEventListener("click",function(){form.vivid=form.vivid===n?0:n;syncForm();});$("vivid").appendChild(b);})(vi);
-$("lucid").addEventListener("click",function(){form.lucid=form.lucid==="yes"?"no":"yes";syncForm();});
-$("moreT").addEventListener("click",function(){var o=$("more").classList.toggle("open");this.textContent=o?"Less":"More";});
+MOODS.forEach(function(m){var b=document.createElement("button");b.className="mood";b.textContent=m;b.setAttribute("aria-pressed","false");b.addEventListener("click",function(){form.mood=form.mood===m?"":m;syncForm();saveDraft();});$("moods").appendChild(b);});
+for(var vi=1;vi<=5;vi++)(function(n){var b=document.createElement("button");b.setAttribute("aria-label","Vividness "+n);b.setAttribute("aria-pressed","false");b.addEventListener("click",function(){form.vivid=form.vivid===n?0:n;syncForm();saveDraft();});$("vivid").appendChild(b);})(vi);
+$("lucid").addEventListener("click",function(){form.lucid=form.lucid==="yes"?"no":"yes";syncForm();saveDraft();});
+function setMore(o){$("more").classList.toggle("open",o);$("moreT").textContent=o?"Less":"More";$("moreT").setAttribute("aria-expanded",o?"true":"false");}
+$("moreT").addEventListener("click",function(){var o=!$("more").classList.contains("open");setMore(o);
+  if(o)setTimeout(function(){var r=$("more").getBoundingClientRect(),bar=$("actionbar").getBoundingClientRect().top;if(r.bottom>bar-8)window.scrollBy({top:r.bottom-bar+24,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});},470);});
+var dateTouched=false;
+$("dDate").addEventListener("change",function(){dateTouched=!!this.value&&this.value!==today();if(!this.value)this.value=today();saveDraft();});
 function syncForm(){
-  document.querySelectorAll("#moods .mood").forEach(function(b){b.classList.toggle("sel",b.textContent===form.mood);});
-  document.querySelectorAll("#vivid button").forEach(function(b,i){b.classList.toggle("on",i<form.vivid);});
-  $("lucid").textContent=form.lucid==="yes"?"lucid":"not lucid";$("lucid").classList.toggle("on",form.lucid==="yes");
+  document.querySelectorAll("#moods .mood").forEach(function(b){var s=b.textContent===form.mood;b.classList.toggle("sel",s);b.setAttribute("aria-pressed",s?"true":"false");});
+  document.querySelectorAll("#vivid button").forEach(function(b,i){b.classList.toggle("on",i<form.vivid);b.setAttribute("aria-pressed",i+1===form.vivid?"true":"false");});
+  $("lucid").textContent=form.lucid==="yes"?"lucid":"not lucid";$("lucid").classList.toggle("on",form.lucid==="yes");$("lucid").setAttribute("aria-pressed",form.lucid==="yes"?"true":"false");
 }
-function grow(){var t=$("page");t.style.height="auto";t.style.height=Math.max(t.scrollHeight,window.innerHeight*.42)+"px";}
+function grow(){var t=$("page");t.style.height="auto";t.style.height=Math.max(t.scrollHeight,window.innerHeight*.34)+"px";}
 function updateReveal(){$("reveal").classList.toggle("show",$("page").value.trim().length>0);}
-function saveDraft(){try{localStorage.setItem(K_DRAFT,JSON.stringify({text:$("page").value,mood:form.mood,day:today()}));}catch(_){}}
+function saveDraft(){try{localStorage.setItem(K_DRAFT,JSON.stringify({text:$("page").value,mood:form.mood,vivid:form.vivid,lucid:form.lucid,date:dateTouched?$("dDate").value:"",day:today()}));}catch(_){}}
 $("page").addEventListener("input",function(){grow();updateReveal();saveDraft();});
-(function(){var d=readJSON(K_DRAFT);if(d&&d.text){$("page").value=d.text;form.mood=d.mood||"";}})();
 $("dDate").value=today();
-function resetPage(){$("page").value="";form={mood:"",vivid:0,lucid:"no"};$("dDate").value=today();syncForm();grow();updateReveal();try{localStorage.removeItem(K_DRAFT);}catch(_){}}
+(function(){var d=readJSON(K_DRAFT);if(d&&(d.text||d.mood||d.vivid||d.lucid==="yes")){$("page").value=d.text||"";form.mood=MOODS.indexOf(d.mood)>=0?d.mood:"";form.vivid=Math.max(0,Math.min(5,+d.vivid||0));form.lucid=d.lucid==="yes"?"yes":"no";if(/^\d{4}-\d{2}-\d{2}$/.test(d.date||"")){$("dDate").value=d.date;dateTouched=true;}if(form.vivid||form.lucid==="yes"||dateTouched)setMore(true);}})();
+function resetPage(){$("page").value="";form={mood:"",vivid:0,lucid:"no"};dateTouched=false;$("dDate").value=today();syncForm();grow();updateReveal();try{localStorage.removeItem(K_DRAFT);}catch(_){}}
 
 /* meaning sheet */
 var reading=null;
-function openSheet(id){var s=$(id);s.scrollTop=0;s.classList.add("open");document.body.style.overflow="hidden";}
-function closeSheet(id){$(id).classList.remove("open");document.body.style.overflow="";}
+var lastFocus=null;
+function setInert(on){["main","nav.tabs","#actionbar"].forEach(function(q){var el=document.querySelector(q);if(!el)return;if(on){el.setAttribute("inert","");el.setAttribute("aria-hidden","true");}else{el.removeAttribute("inert");el.removeAttribute("aria-hidden");}});}
+function openSheet(id){var s=$(id);if(!s.classList.contains("open"))lastFocus=document.activeElement;s.scrollTop=0;s.classList.add("open");document.body.style.overflow="hidden";setInert(true);var c=s.querySelector(".close");if(c)try{c.focus({preventScroll:true});}catch(_){c.focus();}}
+function closeSheet(id){$(id).classList.remove("open");if(!document.querySelector(".sheet.open")){document.body.style.overflow="";setInert(false);if(lastFocus&&document.contains(lastFocus)&&lastFocus.offsetParent!==null)try{lastFocus.focus({preventScroll:true});}catch(_){}lastFocus=null;}}
 function renderMeaning(e,mode){
   reading=e;var i=e.interpretation||offlineInterpret(e);
   $("mDate").textContent=longDate(e.date);
@@ -589,11 +641,11 @@ function renderMeaning(e,mode){
   requestAnimationFrame(function(){if(dt.scrollHeight<=dt.clientHeight+2)$("dtx").classList.add("hidden");});
   if(mode==="new")$("mKeep").addEventListener("click",function(){closeSheet("meaning");show("today");});
   else{
-    $("mAgain").addEventListener("click",function(){var e=reading;$("mBody").innerHTML='<p class="listening">Listening again…</p>';interpret(e).then(function(r){e.interpretation=r;save();renderMeaning(e,"read");});});
-    $("mDel").addEventListener("click",function(){if(!confirm("Let this morning go? It will be deleted."))return;entries=entries.filter(function(x){return x.id!==reading.id;});save();closeSheet("meaning");toast("Deleted");show(curView);});
+    $("mAgain").addEventListener("click",function(){var e=reading;$("mBody").innerHTML='<p class="listening">Listening again…</p>';interpret(e).catch(function(){return offlineInterpret(e);}).then(function(r){e.interpretation=r;save();renderMeaning(e,"read");});});
+    $("mDel").addEventListener("click",function(){if(!confirm("Let this morning go? It will be deleted."))return;entries=entries.filter(function(x){return x.id!==reading.id;});save();closeSheet("meaning");toast("Deleted");rerender();});
   }
 }
-$("mClose").addEventListener("click",function(){closeSheet("meaning");show(curView);});
+$("mClose").addEventListener("click",function(){closeSheet("meaning");rerender();});
 function openEntry(id){var e=entries.filter(function(x){return x.id===id;})[0];if(!e)return;if(!e.interpretation){e.interpretation=offlineInterpret(e);save();}renderMeaning(e,"read");openSheet("meaning");}
 
 $("reveal").addEventListener("click",function(){
@@ -602,8 +654,9 @@ $("reveal").addEventListener("click",function(){
   var e={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),created:new Date().toISOString(),date:$("dDate").value||today(),text:text,mood:form.mood,vivid:form.vivid,lucid:form.lucid,interpretation:null};
   $("mDate").textContent=longDate(e.date);$("mBody").innerHTML='<p class="listening">Listening for meaning…</p>';openSheet("meaning");
   var started=Date.now();
-  interpret(e).then(function(r){
-    e.interpretation=r;entries.unshift(e);sortEntries();save();resetPage();
+  interpret(e).catch(function(){return offlineInterpret(e);}).then(function(r){
+    e.interpretation=r;entries.unshift(e);sortEntries();
+    if(save())resetPage();else{entries=entries.filter(function(x){return x!==e;});}
     setTimeout(function(){renderMeaning(e,"new");renderToday();},Math.max(0,900-(Date.now()-started)));
   });
 });
@@ -622,7 +675,7 @@ if(SR){
     else if(ev.error!=="no-speech"&&ev.error!=="aborted")micMsg("Voice paused ("+ev.error+").");};
   rec.onend=function(){if(recognizing){try{rec.start();}catch(_){recognizing=false;setRec(false);}}else setRec(false);};
 }
-function setRec(on){$("mic").classList.toggle("rec",on);$("mic").setAttribute("aria-label",on?"Stop listening":"Speak your dream");if(on)micMsg("Listening…");else{$("interim").textContent="";if($("micNote").textContent==="Listening…")micMsg("");}}
+function setRec(on){$("mic").classList.toggle("rec",on);$("mic").setAttribute("aria-label",on?"Stop listening":"Speak your dream");$("mic").setAttribute("aria-pressed",on?"true":"false");if(on)micMsg("Listening…");else{$("interim").textContent="";if($("micNote").textContent==="Listening…")micMsg("");}}
 function stopRec(){recognizing=false;try{rec.stop();}catch(_){}setRec(false);}
 $("mic").addEventListener("click",function(){
   if(!rec){micMsg("Voice isn't available in this browser. Try Chrome, Edge or Safari, or your keyboard's dictation.");return;}
@@ -642,8 +695,8 @@ function renderJournal(){
     if(m!==lastM){h+='<div class="eyebrow month">'+esc(m)+'</div>';lastM=m;}
     h+='<button class="item" data-id="'+esc(e.id)+'"><div class="d">'+esc(shortDate(e.date))+(e.mood?" · "+esc(e.mood):"")+'</div><div class="l">'+esc(firstLine(e.text))+'</div></button>';});
   $("list").innerHTML=h;
-  document.querySelectorAll("#list .item").forEach(function(b){b.addEventListener("click",function(){openEntry(b.dataset.id);});});
 }
+$("list").addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest(".item");if(b)openEntry(b.dataset.id);});
 $("search").addEventListener("input",renderJournal);
 
 /* reflect */
@@ -677,18 +730,34 @@ function renderReflect(){
 
 /* settings */
 $("openSettings").addEventListener("click",function(){var s=getSettings();$("apiKey").value=s.key||"";$("apiBase").value=s.base||"https://api.openai.com/v1";$("apiModel").value=s.model||"gpt-4o-mini";openSheet("settings");});
-$("sClose").addEventListener("click",function(){closeSheet("settings");});
+$("sClose").addEventListener("click",function(){closeSheet("settings");rerender();});
 $("saveSettings").addEventListener("click",function(){var s={key:$("apiKey").value.trim(),base:$("apiBase").value.trim()||"https://api.openai.com/v1",model:$("apiModel").value.trim()||"gpt-4o-mini"};try{localStorage.setItem(K_SETTINGS,JSON.stringify(s));toast(s.key?"Saved. Deeper readings are on":"Saved");}catch(_){toast("Couldn't save");}});
 $("clearKey").addEventListener("click",function(){var s=getSettings();delete s.key;try{localStorage.setItem(K_SETTINGS,JSON.stringify(s));}catch(_){}$("apiKey").value="";toast("Key removed from this device");});
 $("exportBtn").addEventListener("click",function(){var b=new Blob([JSON.stringify({app:"dream-pages",version:2,exported:new Date().toISOString(),entries:entries},null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dream-pages-"+today()+".json";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);toast("Backup saved");});
 $("importBtn").addEventListener("click",function(){$("importFile").click();});
-$("importFile").addEventListener("change",function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result),arr=Array.isArray(d)?d:d.entries;if(!Array.isArray(arr))throw 0;var ids={};entries.forEach(function(e){ids[e.id]=1;});var n=0;arr.forEach(function(e){var x=normalize(e);if(x&&!ids[x.id]){entries.push(x);ids[x.id]=1;n++;}});sortEntries();save();toast("Imported "+n+(n===1?" morning":" mornings"));renderToday();}catch(_){toast("That file isn't a Dream Pages backup");}};r.readAsText(f);this.value="";});
-document.addEventListener("keydown",function(ev){if(ev.key==="Escape"){if($("settings").classList.contains("open"))closeSheet("settings");else if($("meaning").classList.contains("open")){closeSheet("meaning");show(curView);}}});
+$("importFile").addEventListener("change",function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result),arr=Array.isArray(d)?d:d.entries;if(!Array.isArray(arr))throw 0;var ids={};entries.forEach(function(e){ids[e.id]=1;});var n=0;arr.forEach(function(e){var x=normalize(e);if(x&&!ids[x.id]){entries.push(x);ids[x.id]=1;n++;}});sortEntries();save();toast("Imported "+n+(n===1?" morning":" mornings"));rerender();}catch(_){toast("That file isn't a Dream Pages backup");}};r.readAsText(f);this.value="";});
+document.addEventListener("keydown",function(ev){if(ev.key==="Escape"){if($("settings").classList.contains("open")){closeSheet("settings");rerender();}else if($("meaning").classList.contains("open")){closeSheet("meaning");rerender();}}});
 
-syncForm();grow();updateReveal();show("today");
-window.DreamPages={offlineInterpret:offlineInterpret,symbolCount:SYMBOLS.length,promptCount:PROMPTS.length};
+/* keep the mic + "Receive meaning" bar above the on-screen keyboard */
+function vvUpdate(){var vv=window.visualViewport;if(!vv)return;var kb=Math.max(0,Math.round(window.innerHeight-(vv.height+vv.offsetTop)));var on=kb>80;document.documentElement.style.setProperty("--kb",(on?kb:0)+"px");document.body.classList.toggle("kb",on);}
+if(window.visualViewport){var vvRaf=0,vvq=function(){if(vvRaf)return;vvRaf=requestAnimationFrame(function(){vvRaf=0;vvUpdate();});};window.visualViewport.addEventListener("resize",vvq);window.visualViewport.addEventListener("scroll",vvq);}
+/* an installed app can stay open overnight: roll the page over to the new morning */
+var shownDay=today();
+function dayCheck(){if(today()===shownDay)return;shownDay=today();if(!dateTouched)$("dDate").value=today();rerender();}
+document.addEventListener("visibilitychange",function(){if(!document.hidden)dayCheck();});
+window.addEventListener("focus",dayCheck);setInterval(dayCheck,60000);
+syncForm();grow();updateReveal();show("today");vvUpdate();
+window.DreamPages={offlineInterpret:offlineInterpret,symbolCount:SYMBOLS.length,promptCount:PROMPTS.length,currentStreak:currentStreak,longestStreak:longestStreak,vvUpdate:vvUpdate};
 })();
 </script>
-<script>if("serviceWorker" in navigator && location.protocol!=="file:"){addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}</script>
+<script>
+if("serviceWorker" in navigator && /^https?:$/.test(location.protocol)){
+  addEventListener("load",function(){
+    navigator.serviceWorker.register("sw.js",{scope:"./"}).then(function(reg){
+      document.addEventListener("visibilitychange",function(){ if(!document.hidden) reg.update().catch(function(){}); });
+    }).catch(function(){});
+  });
+}
+</script>
 </body>
 </html>
