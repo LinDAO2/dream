@@ -30,7 +30,7 @@
   --P:32px; --ro:-6px; --m:44px; --padl:58px;
   --paper:#fbfaf5; --desk:#e6e4de; --ink:#23262b; --soft:#464a50; --faint:#575c63;
   --pen:#2a4b9b; --blue:rgba(112,150,205,.5); --red:rgba(222,98,98,.72); --hair:rgba(35,38,43,.25);
-  --sticky:#fcefa1;
+  --sticky:#fcefa1; --slate:#3b4047; --wash:#eeece6;
   --accent:var(--pen); --violet-ink:var(--pen);
   --hand:"Patrick Hand","Segoe Print","Bradley Hand","Chalkboard SE",ui-rounded,system-ui,sans-serif;
   --serif:var(--hand); --sans:var(--hand); --display:var(--hand);
@@ -130,8 +130,24 @@ textarea#page::placeholder{color:var(--faint)}
 .dots button.on{background:var(--pen);border-color:var(--pen)}
 .toggle{font-size:20px;color:var(--soft);height:var(--P);text-align:left}
 .toggle.on{color:var(--pen)}
-/* ---- buttons: marker-filled or pen-outlined, with wobbly hand-drawn corners ---- */
-.reveal,.m-actions .keep,.textbtn.accent{color:var(--paper);background:var(--ink);border:2px solid var(--ink);border-radius:255px 18px 225px 18px/18px 225px 18px 255px;box-shadow:0 8px 18px -10px rgba(20,20,20,.55)}
+
+/* ---- graphite doodles: faint, decorative, never in the way ---- */
+.doodle{color:#868a90;pointer-events:none;display:inline-block;vertical-align:middle;overflow:visible}
+.d-corner{position:absolute;right:-6px;top:-10px;pointer-events:none;opacity:.85}
+.d-corner .doodle{display:block}
+.orbwrap{position:relative}
+.m-title .d-title{margin-left:6px;vertical-align:-4px}
+.d-row{height:var(--P);display:flex;justify-content:center;align-items:center;margin-top:var(--P);pointer-events:none}
+.month{display:flex;align-items:center;gap:6px}
+.month .d-phase{margin-left:4px}
+.item .mp{position:absolute;left:calc(-1 * var(--padl) + 2px);top:10px;width:12px;height:12px;pointer-events:none;opacity:.9}
+.item .mp .doodle{display:block}
+.d-empty{display:block;height:calc(var(--P) * 3);pointer-events:none}
+.d-empty .doodle{display:block;margin:3px 0 0 -6px}
+.d-quiet{height:calc(var(--P) * 3);margin-top:var(--P)}
+/* ---- buttons: pencil-grey and pen-outlined, with wobbly hand-drawn corners ---- */
+.reveal,.m-actions .keep,.textbtn.accent{position:relative;color:var(--slate);background:var(--wash);border:1.6px solid var(--slate);border-radius:255px 18px 225px 18px/18px 225px 18px 255px;box-shadow:0 6px 16px -10px rgba(40,44,50,.4)}
+.reveal::after,.m-actions .keep::after,.textbtn.accent::after{content:"";position:absolute;inset:2px -3px -2px 2px;border:1px solid rgba(74,80,88,.38);border-radius:18px 225px 18px 255px/255px 18px 225px 18px;pointer-events:none}
 .close,.textbtn,.m-actions button{font-size:18px;color:var(--ink);padding:0 16px;height:var(--P);border-radius:255px 15px 225px 15px/15px 225px 15px 255px;border:1.5px solid var(--ink);background:rgba(251,250,245,.85);transition:transform .2s}
 .close:hover,.textbtn:hover,.m-actions button:hover{transform:rotate(-1deg)}
 .actionbar{position:fixed;left:0;right:0;bottom:calc(var(--navh) + env(safe-area-inset-bottom));pointer-events:none}
@@ -234,7 +250,7 @@ h1.h{font-weight:400;font-size:30px;line-height:var(--P);margin:var(--P) 0 0;col
 .textbtn.accent{font-size:18px}
 .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
 .section{margin-top:var(--P)}
-.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 16px);transform:translate(-50%,-8px);font-size:18px;color:var(--paper);background:var(--ink);border-radius:255px 15px 225px 15px/15px 225px 15px 255px;box-shadow:0 10px 24px -10px rgba(0,0,0,.5);padding:4px 20px;opacity:0;transition:all .4s var(--ease);z-index:50;pointer-events:none;white-space:nowrap}
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 16px);transform:translate(-50%,-8px);font-size:18px;color:var(--paper);background:#4a5058;border-radius:255px 15px 225px 15px/15px 225px 15px 255px;box-shadow:0 10px 24px -10px rgba(0,0,0,.4);padding:4px 20px;opacity:0;transition:all .4s var(--ease);z-index:50;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .hidden{display:none!important}
 body.kb nav.tabs{display:none}
@@ -646,6 +662,21 @@ function addDays(d,n){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate()+n)
 function today(){return ymd(new Date());}
 function longDate(s){var d=parseYmd(s);return d.toLocaleDateString(undefined,{weekday:"long"})+" · "+d.getDate()+" "+d.toLocaleDateString(undefined,{month:"long"});}
 /* keep handwriting on the ruled lines: nudge blocks so each starts on a rule */
+
+/* faint graphite doodles: decorative only (aria-hidden, never tappable) */
+var G='stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"';
+function sparkle(x,y,r){return '<path d="M'+x+' '+(y-r)+'Q'+(x+r*.12)+' '+(y-r*.12)+' '+(x+r)+' '+y+'Q'+(x+r*.12)+' '+(y+r*.12)+' '+x+' '+(y+r)+'Q'+(x-r*.12)+' '+(y+r*.12)+' '+(x-r)+' '+y+'Q'+(x-r*.12)+' '+(y-r*.12)+' '+x+' '+(y-r)+'"/>';}
+function svgD(cls,w,hh,vb,inner){return '<svg class="doodle '+cls+'" width="'+w+'" height="'+hh+'" viewBox="'+vb+'" aria-hidden="true" focusable="false"><g '+G+' stroke-width="1.15">'+inner+'</g></svg>';}
+function moonPhase(s){var d=s?parseYmd(s):new Date();var t=Date.UTC(d.getFullYear(),d.getMonth(),d.getDate(),12)-Date.UTC(2000,0,6,18,14);var f=(t/864e5/29.530588853)%1;return f<0?f+1:f;}
+function litPath(cx,cy,r,f){var rx=(r*Math.abs(Math.cos(2*Math.PI*f))).toFixed(2),o,i;if(f<.5){o=1;i=f<.25?0:1;}else{o=0;i=f>.75?1:0;}return 'M'+cx+' '+(cy-r)+'A'+r+' '+r+' 0 0 '+o+' '+cx+' '+(cy+r)+'A'+rx+' '+r+' 0 0 '+i+' '+cx+' '+(cy-r)+'Z';}
+/* a pencilled moon at phase f: shaded disc, paper-lit side, a doubled wobbly outline */
+function moonSketch(cx,cy,r,f){return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="currentColor" fill-opacity=".2" stroke="none"/>'+(f>.02&&f<.98?'<path d="'+litPath(cx,cy,r,f)+'" fill="#fbfaf5" fill-opacity=".92" stroke="none"/>':'')+
+  '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+r+'" ry="'+(r*.97).toFixed(2)+'" transform="rotate(-8 '+cx+' '+cy+')"/><path d="M'+(cx-r*.92)+' '+(cy-r*.3)+'A'+(r*1.03)+' '+r+' 0 0 1 '+(cx+r*.5)+' '+(cy-r*.88)+'" stroke-opacity=".55"/>';}
+function moonDoodle(f,size){return svgD("d-phase",size||18,size||18,"0 0 20 20",moonSketch(10,10,7.6,f));}
+var CRESCENT='<path d="M44 9C33 10 26 19 27 30s11 19 22 18C39 46 32 38 32 29s4-16 12-20z"/><path d="M43.4 10.2C34 12 28.4 20 29 30" stroke-opacity=".5"/>';
+var D_TODAY=svgD("d-today",86,70,"0 0 86 70",CRESCENT+sparkle(66,16,6)+sparkle(74,44,3.6)+sparkle(16,52,3)+'<circle cx="58" cy="58" r=".9"/><circle cx="12" cy="20" r=".8"/><circle cx="80" cy="28" r=".7"/><path d="M60 30c3 1 5 0 7-2" stroke-opacity=".5" stroke-dasharray="1.5 2.5"/>');
+function phaseRow(){var s="",fs=[0,.16,.25,.36,.5,.64,.75,.84];fs.forEach(function(f,i){s+=moonSketch(14+i*26,16,8,f);});return '<div class="d-row" aria-hidden="true">'+svgD("d-phases",210,32,"0 0 210 32",s)+'</div>';}
+function emptyDoodle(){return '<span class="d-empty" aria-hidden="true">'+svgD("d-sleep",120,90,"0 0 120 90",'<path d="M66 14C50 15 40 28 41 44s15 27 31 26C58 68 49 56 49 43s7-23 17-29z"/><path d="M64.5 15.6C52 18 44 29 44.5 43" stroke-opacity=".5"/><path d="M80 22h8l-8 9h8M92 10h5l-5 6h5" stroke-width="1"/>'+sparkle(26,26,5)+sparkle(96,58,3.5)+'<circle cx="20" cy="62" r=".9"/><circle cx="104" cy="36" r=".8"/>')+'</span>';}
 var LINE=32;
 function absTop(el){var t=0;while(el){t+=el.offsetTop;el=el.offsetParent;}return t;}
 function snap(){
@@ -689,6 +720,7 @@ function renderToday(){
   $("streak").innerHTML=s>0?"<b>"+s+"</b> "+(s===1?"morning":"mornings"):"";
   var wrote=dateSet()[today()];
   $("doneNote").textContent=wrote?"Written this morning. The page is open if more returns.":"";
+  if(!$("orbDoodle")){var od=document.createElement("span");od.id="orbDoodle";od.className="d-corner";od.setAttribute("aria-hidden","true");od.innerHTML=D_TODAY;document.querySelector(".orbwrap").prepend(od);}
   $("prompt").innerHTML='<span class="ul">'+esc(wrote?"Is there anything more?":PROMPTS[dayIndex()%PROMPTS.length])+'</span>';snapSoon();
 }
 MOODS.forEach(function(m){var b=document.createElement("button");b.className="mood";b.textContent=m;b.setAttribute("aria-pressed","false");b.addEventListener("click",function(){form.mood=form.mood===m?"":m;syncForm();saveDraft();});$("moods").appendChild(b);});
@@ -721,7 +753,7 @@ function closeSheet(id){$(id).classList.remove("open");if(!document.querySelecto
 function renderMeaning(e,mode){
   reading=e;var i=e.interpretation||offlineInterpret(e);
   $("mDate").textContent=longDate(e.date);
-  var h='<h1 class="m-title"><span class="ul">'+esc(titleFor(e))+'</span></h1><div class="m-sub">'+[e.mood?"woke feeling "+esc(e.mood):"",e.vivid?("vividness "+e.vivid+" of 5"):"",e.lucid==="yes"?"lucid":""].filter(Boolean).join(" · ")+'</div>';
+  var h='<h1 class="m-title"><span class="ul">'+esc(titleFor(e))+'</span>'+svgD("d-title",34,30,"0 0 34 30",moonSketch(12,15,7,moonPhase(e.date))+sparkle(27,7,4)+'<circle cx="28" cy="24" r=".8"/>')+'</h1><div class="m-sub">'+[e.mood?"woke feeling "+esc(e.mood):"",e.vivid?("vividness "+e.vivid+" of 5"):"",e.lucid==="yes"?"lucid":""].filter(Boolean).join(" · ")+'</div>';
   h+='<div class="epigraph"><div class="label">What I wrote</div><div class="dreamtext clamp" id="dt">'+esc(e.text)+'</div><button class="expand" id="dtx">Read the dream</button></div>';
   h+='<div class="prose">';
   if(i.note)h+='<p class="note-ai">'+esc(i.note)+'</p>';
@@ -731,7 +763,7 @@ function renderMeaning(e,mode){
   if(i.mood)h+='<p>'+esc(i.mood)+'</p>';
   h+='</div><div class="ask"><div class="eyebrow">A question to sit with</div><p class="q">'+esc(i.question)+'</p></div>';
   h+='<aside class="carry"><div class="eyebrow">Carry this into your day</div><p>'+esc(i.intention)+'</p></aside>';
-  h+='<div class="source">'+(i.source==="ai"?"A deeper reading"+(i.model?" · "+esc(i.model):""):"Written by the quiet interpreter, offline")+'</div>';
+  h+=phaseRow()+'<div class="source">'+(i.source==="ai"?"A deeper reading"+(i.model?" · "+esc(i.model):""):"Written by the quiet interpreter, offline")+'</div>';
   h+='<div class="m-actions">'+(mode==="new"?'<button class="keep" id="mKeep">Keep this morning</button>':'<button id="mAgain">Read again</button><button id="mDel">Delete</button>')+'</div>';
   $("mBody").innerHTML=h;
   var dt=$("dt");$("dtx").addEventListener("click",function(){var c=dt.classList.toggle("clamp");this.textContent=c?"Read the dream":"Fold it away";snap();});
@@ -784,14 +816,14 @@ $("mic").addEventListener("click",function(){
 function renderJournal(){
   $("jCount").textContent=entries.length?entries.length+(entries.length===1?" morning":" mornings"):"";
   var q=$("search").value.trim().toLowerCase();
-  if(!entries.length){$("list").innerHTML='<p class="empty">Your first morning is still ahead of you.</p>';snapSoon();return;}
+  if(!entries.length){$("list").innerHTML='<p class="empty">'+emptyDoodle()+'Your first morning is still ahead of you.</p>';snapSoon();return;}
   var list=entries.filter(function(e){if(!q)return true;var i=e.interpretation||{};return [e.text,e.date,e.mood,(i.symbolNames||[]).join(" "),(i.themes||[]).join(" ")].join(" ").toLowerCase().indexOf(q)>=0;});
-  if(!list.length){$("list").innerHTML='<p class="empty">Nothing here holds “'+esc(q)+'”.</p>';return;}
+  if(!list.length){$("list").innerHTML='<p class="empty">'+emptyDoodle()+'Nothing here holds “'+esc(q)+'”.</p>';snapSoon();return;}
   var h="",lastM="";
   list.forEach(function(e){var m=parseYmd(e.date).toLocaleDateString(undefined,{month:"long",year:"numeric"});
-    if(m!==lastM){h+=(lastM?'</div>':'')+'<div class="eyebrow month">'+esc(m)+'</div><div class="group">';lastM=m;}
+    if(m!==lastM){h+=(lastM?'</div>':'')+'<div class="eyebrow month">'+esc(m)+moonDoodle(moonPhase(e.date))+svgD("d-spark",12,12,"0 0 12 12",sparkle(6,6,4.6))+'</div><div class="group">';lastM=m;}
     var dd=parseYmd(e.date);
-    h+='<button class="item" data-id="'+esc(e.id)+'" aria-label="'+esc(shortDate(e.date)+(e.mood?", "+e.mood:"")+": "+firstLine(e.text))+'"><span class="l">'+esc(firstLine(e.text))+'</span><span class="lead" aria-hidden="true"></span><span class="pg" aria-hidden="true">'+dd.getDate()+'</span><span class="d" aria-hidden="true">'+(e.mood?'<span class="md">'+esc(e.mood)+'</span>':esc(dd.toLocaleDateString(undefined,{weekday:"short"})))+'</span></button>';});
+    h+='<button class="item" data-id="'+esc(e.id)+'" aria-label="'+esc(shortDate(e.date)+(e.mood?", "+e.mood:"")+": "+firstLine(e.text))+'"><span class="l">'+esc(firstLine(e.text))+'</span><span class="lead" aria-hidden="true"></span><span class="pg" aria-hidden="true">'+dd.getDate()+'</span><span class="mp" aria-hidden="true">'+moonDoodle(moonPhase(e.date),12)+'</span><span class="d" aria-hidden="true">'+(e.mood?'<span class="md">'+esc(e.mood)+'</span>':esc(dd.toLocaleDateString(undefined,{weekday:"short"})))+'</span></button>';});
   $("list").innerHTML=h+(lastM?'</div>':'');snapSoon();
 }
 $("list").addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest(".item");if(b)openEntry(b.dataset.id);});
@@ -818,7 +850,7 @@ function renderReflect(){
     if(cm.length)p.push(cm.length===1||cm[0][1]>cm[1][1]?"Mostly, you woke feeling "+esc(cm[0][0])+".":"You woke feeling "+esc(listJoin(cm.slice(0,3).map(function(x){return x[0];})))+", in turns.");
   }
   var q=(ct.length&&QUEST[ct[0][0]])||"Looking at this week's dreams together, what do you sense they are asking of you?";
-  var h='<div class="week" role="list" aria-label="Mornings written this week">'+dots+'</div><div class="entry prose"><p class="lede">'+p.join(" ")+'</p></div>';
+  var h=(days?'':'<div class="d-quiet" aria-hidden="true">'+emptyDoodle()+'</div>')+'<div class="week" role="list" aria-label="Mornings written this week">'+dots+'</div><div class="entry prose"><p class="lede">'+p.join(" ")+'</p></div>';
   var src=cs.length?cs:count(entries.reduce(function(a,e){return a.concat((e.interpretation||{}).symbolNames||[]);},[]));
   if(src.length){var max=src[0][1];h+='<div class="ledger"><div class="lh"><span>'+(cs.length?"This week's symbols":"Recurring symbols")+'</span><span>Tally</span></div><div class="lines">'+src.slice(0,5).map(function(x){return '<div class="line"><span>'+esc(x[0])+'</span><em>'+tally(x[1])+'</em><div class="bar"><b style="width:'+Math.round(x[1]/max*100)+'%"></b></div></div>';}).join("")+'</div></div>';}
   if(days)h+='<div class="ask"><div class="eyebrow">For the week ahead</div><p class="q">'+esc(q)+'</p></div>';
@@ -845,7 +877,7 @@ function dayCheck(){if(today()===shownDay)return;shownDay=today();if(!dateTouche
 document.addEventListener("visibilitychange",function(){if(!document.hidden)dayCheck();});
 window.addEventListener("focus",dayCheck);setInterval(dayCheck,60000);
 syncForm();grow();updateReveal();show("today");vvUpdate();
-window.DreamPages={offlineInterpret:offlineInterpret,symbolCount:SYMBOLS.length,promptCount:PROMPTS.length,currentStreak:currentStreak,longestStreak:longestStreak,vvUpdate:vvUpdate};
+window.DreamPages={moonPhase:moonPhase,offlineInterpret:offlineInterpret,symbolCount:SYMBOLS.length,promptCount:PROMPTS.length,currentStreak:currentStreak,longestStreak:longestStreak,vvUpdate:vvUpdate};
 })();
 </script>
 <script>
