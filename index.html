@@ -94,6 +94,37 @@ textarea#page:focus-visible,.field input:focus-visible,.search:focus-visible,.mi
 /* status line in the bar: transcribing…, the edit hint, or a kind note */
 .micnote{flex:0 0 100%;order:-1;margin:0 0 12px;text-align:center;font-style:italic;font-size:17px;line-height:22px;color:var(--soft);pointer-events:none;text-wrap:balance}
 .micnote:empty{display:none}
+.micnote .inl{pointer-events:auto;font:inherit;font-style:italic;color:var(--accent);text-decoration:underline 1px;text-underline-offset:4px;padding:0;height:auto;vertical-align:baseline}
+/* the photo ring sits beside the mic: same fine ink, a little smaller */
+.mic.photo{width:48px;height:48px}
+.mic.photo svg{width:20px;height:20px}
+.photowrap{margin-right:64px}
+#photoCap{width:auto;white-space:nowrap;letter-spacing:.08em;top:calc(100% + 13px)}
+.actionbar .inner::after{content:"";flex:none;width:112px;order:9}
+.actionbar.full .inner::after{display:none}
+.actionbar.full .photowrap{margin-right:14px}
+.actionbar.full #photoCap{visibility:hidden}
+.actionbar.full .reveal{margin-left:14px}
+@media (max-width:420px){ .actionbar.full .reveal{font-size:18px;padding:0 18px} .actionbar.full .reveal .arr{display:none} }
+/* photos of handwritten pages: a quiet strip of thumbnails above the page */
+.shots,.shots.ln{display:flex;flex-wrap:wrap;gap:0 14px;align-items:center}
+.shots:empty,.shots.ln:empty{display:none}
+.shot{position:relative;height:var(--P);height:64px;display:flex;align-items:center}
+.shot-v{display:block;width:52px;height:52px;padding:0;border:1px solid rgba(29,34,48,.28);border-radius:2px;background:var(--card);overflow:hidden;box-shadow:0 0 0 3px var(--paper),0 6px 14px -10px rgba(29,34,48,.6)}
+.shot-v img{display:block;width:100%;height:100%;object-fit:cover}
+.shot.busy .shot-v{animation:fade 2.4s ease-in-out infinite}
+.shot-x{position:absolute;top:0;right:-10px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--card);color:var(--ink);border:1px solid var(--ink);font-size:15px;line-height:1}
+.shot-x::after{content:"";position:absolute;inset:-11px}
+.shot-x:hover{background:var(--ink);color:var(--paper)}
+.m-shots{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+.m-shots:empty{display:none}
+.m-shots .shot-v{width:64px;height:64px}
+/* full-screen view of a page photo */
+.viewer{position:fixed;inset:0;z-index:30;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 20px);background:var(--grain),var(--desk)}
+.viewer.open{display:flex;animation:fadein .3s var(--ease) both}
+.viewer img{max-width:100%;max-height:calc(100% - 64px);object-fit:contain;background:var(--card);box-shadow:0 1px 2px rgba(40,32,20,.12),0 24px 60px -30px rgba(40,32,20,.5)}
+.viewer .close{height:44px;padding:0 22px}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
 .micnote.live{color:var(--accent)}
 .micnote.live::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:currentColor;margin:0 9px 0 0;vertical-align:middle;position:relative;top:-1px;animation:blink 1.6s ease-in-out infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
@@ -250,7 +281,9 @@ body.kb nav.tabs{display:none}
 body.kb .actionbar{bottom:var(--kb)}
 body.kb .actionbar .inner{padding-top:14px;padding-bottom:10px}
 body.kb .orbcap{display:none}
-@media (max-width:360px){ :root{--padl:22px} .app{padding-right:20px} nav.tabs{gap:28px} .reveal{padding:0 16px;margin-left:16px;letter-spacing:.06em} }
+@media (max-width:360px){ :root{--padl:22px} .app{padding-right:20px} nav.tabs{gap:28px} .reveal{padding:0 16px;margin-left:16px;letter-spacing:.06em} .actionbar .inner{padding-left:16px;padding-right:16px} .actionbar.full .reveal{font-size:17px;padding:0 14px;margin-left:12px} .actionbar.full .photowrap{margin-right:12px} }
+@media (max-width:374px){ .photowrap{margin-right:56px} .actionbar .inner::after{width:104px} #photoCap{width:78px;white-space:normal;line-height:15px} }
+@media (max-width:350px){ .actionbar .inner{padding-left:10px;padding-right:10px} .actionbar.full .photowrap{margin-right:8px} .actionbar.full .reveal{font-size:15px;letter-spacing:.05em;padding:0 11px;margin-left:8px} }
 @media (prefers-reduced-motion:reduce){ *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important} .view,.sheet{transform:none} }
 @media (prefers-contrast:more){ :root{--faint:#3f4250;--soft:#30343f;--rule:rgba(90,76,58,.45);--line:var(--ink)} }
 </style>
@@ -273,6 +306,7 @@ body.kb .orbcap{display:none}
     <h1 class="sr-only">This morning’s dream</h1>
     <div class="done ln" id="doneNote"></div>
     <p class="prompt ln" id="prompt" aria-live="polite"></p>
+    <div class="shots ln" id="shots" role="list" aria-label="Photos of your handwritten pages"></div>
     <div class="write ln" id="write">
       <div class="ghost" id="ghost" aria-hidden="true"><span id="gPre"></span><span class="interim" id="interim"></span><span id="gPost"></span></div>
       <textarea id="page" placeholder="Tell me the dream…&#10;Speak, or write what you remember." aria-label="Your dream" aria-describedby="prompt"></textarea>
@@ -305,6 +339,13 @@ body.kb .orbcap{display:none}
 
 <div class="actionbar" id="actionbar"><div class="inner">
   <div class="micnote" id="micNote" role="status" aria-live="polite"></div>
+  <div class="micwrap photowrap" id="photoWrap">
+    <button class="mic photo" id="photoBtn" aria-label="Add a photo of a handwritten page">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.25 8.25a1.5 1.5 0 0 1 1.5-1.5h2.6l1.4-2.25h6.5l1.4 2.25h2.6a1.5 1.5 0 0 1 1.5 1.5v9.75a1.5 1.5 0 0 1-1.5 1.5H4.75a1.5 1.5 0 0 1-1.5-1.5z"/><circle cx="12" cy="13" r="3.6"/></svg>
+    </button>
+    <div class="orbcap" id="photoCap" aria-hidden="true">Photo of a page</div>
+    <input type="file" id="photoFile" accept="image/*" multiple class="hidden" aria-label="Choose a photo of your handwritten page">
+  </div>
   <div class="micwrap" id="micWrap">
     <button class="mic" id="mic" aria-label="Speak your dream" aria-pressed="false">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2.75" width="6" height="11.5" rx="3"/><path d="M5.75 11.25a6.25 6.25 0 0 0 12.5 0M12 17.5v3.75M9.25 21.25h5.5"/></svg>
@@ -353,6 +394,7 @@ body.kb .orbcap{display:none}
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Photo of your page"><img id="vImg" alt="Photo of a handwritten dream page"><button class="close" id="vClose">Close</button></div>
 <script>
 (function(){
 "use strict";
@@ -640,7 +682,8 @@ function normalize(e){
   var DR=/^\d{4}-\d{2}-\d{2}$/, dt=DR.test(e.date)?e.date:(DR.test(String(e.created||"").slice(0,10))?String(e.created).slice(0,10):today());
   return {id:String(e.id||Date.now().toString(36)+Math.random().toString(36).slice(2,6)),created:typeof e.created==="string"?e.created:new Date().toISOString(),date:dt,
     text:e.text,mood:(V1_MOOD[e.mood]||(MOODS.indexOf(e.mood)>=0?e.mood:"")),vivid:Math.max(0,Math.min(5,Math.round(+e.vivid||0))),lucid:e.lucid==="yes"?"yes":"no",
-    interpretation:(e.interpretation&&e.interpretation.opening)?e.interpretation:null};
+    interpretation:(e.interpretation&&e.interpretation.opening)?e.interpretation:null,
+    photos:Array.isArray(e.photos)?e.photos.filter(function(x){return typeof x==="string"&&x.length<80;}).slice(0,12):undefined};
 }
 var entries=readJSON(K_ENTRIES);
 if(!Array.isArray(entries)){
@@ -735,15 +778,16 @@ function syncForm(){
   $("lucid").textContent=form.lucid==="yes"?"lucid":"not lucid";$("lucid").classList.toggle("on",form.lucid==="yes");$("lucid").setAttribute("aria-pressed",form.lucid==="yes"?"true":"false");
 }
 function grow(){var t=$("page"),g=$("ghost");t.style.height="auto";var n=Math.ceil((t.scrollHeight-1)/LINE);if($("write").classList.contains("ghosting"))n=Math.max(n,Math.ceil((g.scrollHeight-1)/LINE));t.style.height=Math.max(n,heroN)*LINE+"px";snapSoon();}
-function updateReveal(){var on=$("page").value.trim().length>0,r=$("reveal");$("write").classList.toggle("has-text",$("page").value.length>0);if(!on&&!recognizing&&!$("micNote").classList.contains("err"))micMsg("");if(r.classList.contains("show")===on)return;
-  var w=$("micWrap"),a=w.getBoundingClientRect().left;r.classList.toggle("show",on);var d=a-w.getBoundingClientRect().left;
-  if(d&&w.animate&&!matchMedia("(prefers-reduced-motion: reduce)").matches)w.animate([{transform:"translateX("+d+"px)"},{transform:"none"}],{duration:450,easing:"cubic-bezier(.2,.7,.2,1)"});}
-function saveDraft(){try{localStorage.setItem(K_DRAFT,JSON.stringify({text:$("page").value,mood:form.mood,vivid:form.vivid,lucid:form.lucid,date:dateTouched?$("dDate").value:"",day:today()}));}catch(_){}}
+function updateReveal(){var on=$("page").value.trim().length>0,r=$("reveal"),n=$("micNote");$("write").classList.toggle("has-text",$("page").value.length>0);if(!on&&!recognizing&&!txBusy&&!/\b(err|keep)\b/.test(n.className))micMsg("");if(r.classList.contains("show")===on)return;
+  var ws=[$("micWrap"),$("photoWrap")],a=ws.map(function(w){return w.getBoundingClientRect().left;});r.classList.toggle("show",on);$("actionbar").classList.toggle("full",on);
+  ws.forEach(function(w,i){var d=a[i]-w.getBoundingClientRect().left;if(d&&w.animate&&!matchMedia("(prefers-reduced-motion: reduce)").matches)w.animate([{transform:"translateX("+d+"px)"},{transform:"none"}],{duration:450,easing:"cubic-bezier(.2,.7,.2,1)"});});}
+function saveDraft(){try{localStorage.setItem(K_DRAFT,JSON.stringify({text:$("page").value,photos:draftPhotos,mood:form.mood,vivid:form.vivid,lucid:form.lucid,date:dateTouched?$("dDate").value:"",day:today()}));}catch(_){}}
 $("page").addEventListener("input",function(){track();paintGhost();grow();updateReveal();saveDraft();});
 $("page").addEventListener("focus",function(){caretKnown=true;});
 $("dDate").value=today();
-(function(){var d=readJSON(K_DRAFT);if(d&&(d.text||d.mood||d.vivid||d.lucid==="yes")){$("page").value=d.text||"";form.mood=MOODS.indexOf(d.mood)>=0?d.mood:"";form.vivid=Math.max(0,Math.min(5,+d.vivid||0));form.lucid=d.lucid==="yes"?"yes":"no";if(/^\d{4}-\d{2}-\d{2}$/.test(d.date||"")){$("dDate").value=d.date;dateTouched=true;}if(form.vivid||form.lucid==="yes"||dateTouched)setMore(true);}lastVal=$("page").value;updateReveal();})();
-function resetPage(){$("page").value="";lastVal="";anchor=0;caretKnown=false;nudgeN=0;micMsg("");form={mood:"",vivid:0,lucid:"no"};dateTouched=false;$("dDate").value=today();syncForm();grow();updateReveal();try{localStorage.removeItem(K_DRAFT);}catch(_){}}
+var draftPhotos=[];
+(function(){var d=readJSON(K_DRAFT);if(d&&(d.text||d.mood||d.vivid||d.lucid==="yes"||(d.photos&&d.photos.length))){$("page").value=d.text||"";draftPhotos=Array.isArray(d.photos)?d.photos.filter(function(x){return typeof x==="string";}).slice(0,12):[];form.mood=MOODS.indexOf(d.mood)>=0?d.mood:"";form.vivid=Math.max(0,Math.min(5,+d.vivid||0));form.lucid=d.lucid==="yes"?"yes":"no";if(/^\d{4}-\d{2}-\d{2}$/.test(d.date||"")){$("dDate").value=d.date;dateTouched=true;}if(form.vivid||form.lucid==="yes"||dateTouched)setMore(true);}lastVal=$("page").value;updateReveal();})();
+function resetPage(){$("page").value="";lastVal="";draftPhotos=[];renderShots();anchor=0;caretKnown=false;nudgeN=0;micMsg("");form={mood:"",vivid:0,lucid:"no"};dateTouched=false;$("dDate").value=today();syncForm();grow();updateReveal();try{localStorage.removeItem(K_DRAFT);}catch(_){}}
 
 /* meaning sheet */
 var reading=null;
@@ -755,7 +799,7 @@ function renderMeaning(e,mode){
   reading=e;var i=e.interpretation||offlineInterpret(e);
   $("mDate").innerHTML=moonGlyph(moonPhase(e.date),14,"m-moon")+'<span>'+esc(longDate(e.date))+'</span>';
   var h='<h1 class="m-title"><span class="ul">'+esc(titleFor(e))+'</span>'+'</h1><div class="m-sub">'+[e.mood?"woke feeling "+esc(e.mood):"",e.vivid?("vividness "+e.vivid+" of 5"):"",e.lucid==="yes"?"lucid":""].filter(Boolean).join(" · ")+'</div>';
-  h+='<div class="epigraph"><div class="label">What I wrote</div><div class="dreamtext clamp" id="dt">'+esc(e.text)+'</div><button class="expand" id="dtx">Read the dream</button></div>';
+  h+='<div class="epigraph"><div class="label">What I wrote</div><div class="dreamtext clamp" id="dt">'+esc(e.text)+'</div><button class="expand" id="dtx">Read the dream</button>'+(e.photos&&e.photos.length?'<div class="m-shots" id="mShots" role="list" aria-label="Photos of the page"></div>':'')+'</div>';
   h+='<div class="prose">';
   if(i.note)h+='<p class="note-ai">'+esc(i.note)+'</p>';
   if(i.opening)h+='<p class="lede">'+esc(i.opening)+'</p>';
@@ -766,22 +810,24 @@ function renderMeaning(e,mode){
   h+='<aside class="carry"><div class="eyebrow">Carry this into your day</div><p>'+esc(i.intention)+'</p></aside>';
   h+='<div class="source">'+(i.source==="ai"?"A deeper reading"+(i.model?" · "+esc(i.model):""):"Written by the quiet interpreter, offline")+'</div>';
   h+='<div class="m-actions">'+(mode==="new"?'<button class="keep" id="mKeep">Keep this morning</button>':'<button id="mAgain">Read again</button><button id="mDel">Delete</button>')+'</div>';
-  $("mBody").innerHTML=h;
+  $("mBody").innerHTML=h;if($("mShots"))fillShots($("mShots"),e.photos,false);
   var dt=$("dt");$("dtx").addEventListener("click",function(){var c=dt.classList.toggle("clamp");this.textContent=c?"Read the dream":"Fold it away";snap();});
   requestAnimationFrame(function(){if(dt.scrollHeight<=dt.clientHeight+2)$("dtx").classList.add("hidden");snap();});
   if(mode==="new")$("mKeep").addEventListener("click",function(){closeSheet("meaning");show("today");});
   else{
     $("mAgain").addEventListener("click",function(){var e=reading;$("mBody").innerHTML='<p class="listening">Listening again…</p>';interpret(e).catch(function(){return offlineInterpret(e);}).then(function(r){e.interpretation=r;save();renderMeaning(e,"read");});});
-    $("mDel").addEventListener("click",function(){if(!confirm("Let this morning go? It will be deleted."))return;entries=entries.filter(function(x){return x.id!==reading.id;});save();closeSheet("meaning");toast("Deleted");rerender();});
+    $("mDel").addEventListener("click",function(){if(!confirm("Let this morning go? It will be deleted."))return;var gone=reading.photos||[];entries=entries.filter(function(x){return x.id!==reading.id;});save();if(gone.length)photoDel(gone).catch(function(){});closeSheet("meaning");toast("Deleted");rerender();});
   }
 }
 $("mClose").addEventListener("click",function(){closeSheet("meaning");rerender();});
 function openEntry(id){var e=entries.filter(function(x){return x.id===id;})[0];if(!e)return;if(!e.interpretation){e.interpretation=offlineInterpret(e);save();}renderMeaning(e,"read");openSheet("meaning");}
 
 $("reveal").addEventListener("click",function(){
+  if(txBusy){toast("Still reading your handwriting…");return;}
   if(recognizing)stopRec();micMsg("");
   var text=$("page").value.trim();if(!text)return;
   var e={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),created:new Date().toISOString(),date:$("dDate").value||today(),text:text,mood:form.mood,vivid:form.vivid,lucid:form.lucid,interpretation:null};
+  if(draftPhotos.length)e.photos=draftPhotos.slice();
   $("mDate").textContent=longDate(e.date);$("mBody").innerHTML='<p class="listening">Listening for meaning…</p>';openSheet("meaning");
   var started=Date.now();
   interpret(e).catch(function(){return offlineInterpret(e);}).then(function(r){
@@ -845,6 +891,77 @@ $("mic").addEventListener("click",function(){
   try{rec.start();recognizing=true;setRec(true);}catch(err){micMsg("The microphone couldn't start.");}
 });
 
+/* photos of handwritten pages: kept in IndexedDB (not localStorage), referenced by id from the draft and the entry */
+var PDB=null,txBusy=false,thumbURL={};
+function pdb(){if(PDB)return PDB;PDB=new Promise(function(res,rej){if(!window.indexedDB)return rej(new Error("no IndexedDB"));var q;try{q=indexedDB.open("dreamPages",1);}catch(err){return rej(err);}
+  q.onupgradeneeded=function(){if(!q.result.objectStoreNames.contains("photos"))q.result.createObjectStore("photos",{keyPath:"id"});};q.onsuccess=function(){res(q.result);};q.onerror=function(){rej(q.error);};q.onblocked=function(){rej(new Error("blocked"));};});
+  PDB.catch(function(){PDB=null;});return PDB;}
+function ptx(mode,fn){return pdb().then(function(db){return new Promise(function(res,rej){var t=db.transaction("photos",mode),q=fn(t.objectStore("photos"));t.oncomplete=function(){res(q?q.result:undefined);};t.onerror=t.onabort=function(){rej(t.error||new Error("photo store"));};});});}
+function photoPut(r){return ptx("readwrite",function(st){return st.put(r);});}
+function photoGet(id){return ptx("readonly",function(st){return st.get(id);});}
+function photoDel(ids){ids.forEach(function(id){if(thumbURL[id]){URL.revokeObjectURL(thumbURL[id]);delete thumbURL[id];}});return ptx("readwrite",function(st){ids.forEach(function(id){st.delete(id);});return null;});}
+function photoKeys(){return ptx("readonly",function(st){return st.getAllKeys();});}
+function newPhotoId(){return "ph-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,7);}
+/* downscale to 1600px on the long side and re-encode as JPEG ~0.8 */
+function shrink(file){return new Promise(function(res,rej){var url=URL.createObjectURL(file),img=new Image();
+  img.onload=function(){var w=img.naturalWidth,h=img.naturalHeight,k=Math.min(1,1600/Math.max(w,h,1)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(w*k));c.height=Math.max(1,Math.round(h*k));
+    var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);
+    c.toBlob(function(b){b?res({blob:b,w:c.width,h:c.height}):rej(new Error("couldn't encode"));},"image/jpeg",0.8);};
+  img.onerror=function(){URL.revokeObjectURL(url);rej(new Error("not an image"));};img.src=url;});}
+function urlFor(id){if(thumbURL[id])return Promise.resolve(thumbURL[id]);return photoGet(id).then(function(r){if(!r||!r.blob)return null;return thumbURL[id]=URL.createObjectURL(r.blob);});}
+function fillShots(box,ids,removable){box.innerHTML="";(ids||[]).forEach(function(id,i){var d=document.createElement("div");d.className="shot";d.setAttribute("role","listitem");d.dataset.id=id;
+    d.innerHTML='<button class="shot-v" type="button" aria-label="View photo '+(i+1)+' full screen"><img alt=""></button>'+(removable?'<button class="shot-x" type="button" aria-label="Remove photo '+(i+1)+'">×</button>':'');
+    box.appendChild(d);urlFor(id).then(function(u){if(u)d.querySelector("img").src=u;else if(!removable)d.remove();}).catch(function(){});});snapSoon();}
+function renderShots(){fillShots($("shots"),draftPhotos,true);if(txBusy&&$("shots").lastChild)$("shots").lastChild.classList.add("busy");fitSoon();}
+function viewPhoto(id,from){urlFor(id).then(function(u){if(!u)return;var v=$("viewer");$("vImg").src=u;v.classList.add("open");v.dataset.back=from&&from.id||"";viewer.last=from;
+  viewer.inert=[].slice.call(document.body.children).filter(function(el){return el!==v&&!el.hasAttribute("inert");});viewer.inert.forEach(function(el){el.setAttribute("inert","");});document.body.style.overflow="hidden";try{$("vClose").focus({preventScroll:true});}catch(_){$("vClose").focus();}});}
+var viewer={inert:[],last:null};
+function closeViewer(){var v=$("viewer");if(!v.classList.contains("open"))return;v.classList.remove("open");viewer.inert.forEach(function(el){el.removeAttribute("inert");});viewer.inert=[];if(!document.querySelector(".sheet.open"))document.body.style.overflow="";
+  if(viewer.last&&document.contains(viewer.last))try{viewer.last.focus({preventScroll:true});}catch(_){}viewer.last=null;}
+$("vClose").addEventListener("click",closeViewer);
+$("viewer").addEventListener("click",function(ev){if(ev.target===this)closeViewer();});
+function shotClick(ev,removable){var b=ev.target.closest&&ev.target.closest("button");if(!b)return;var id=b.parentNode.dataset.id;
+  if(b.classList.contains("shot-v"))viewPhoto(id,b);
+  else if(removable&&b.classList.contains("shot-x")){var i=draftPhotos.indexOf(id);if(i<0)return;draftPhotos.splice(i,1);photoDel([id]).catch(function(){});renderShots();saveDraft();toast("Photo removed");
+    var nx=$("shots").querySelector(".shot-x");if(nx)nx.focus();else $("photoBtn").focus();}}
+$("shots").addEventListener("click",function(ev){shotClick(ev,true);});
+$("mBody").addEventListener("click",function(ev){if(ev.target.closest&&ev.target.closest(".m-shots"))shotClick(ev,false);});
+/* handwriting → text with the device's own AI key */
+var TX_SYS="You transcribe photographs of handwritten dream-journal pages. Reply with ONLY the words written on the page, transcribed faithfully: keep the writer's wording, spelling, order and line breaks; do not correct, summarise, translate or add anything. Write [illegible] for any word you cannot read. No commentary, no headings, no quotation marks.";
+function aiTranscribe(dataUrl){var s=getSettings(),base=(s.base||"https://api.openai.com/v1").replace(/\/+$/,""),model=s.model||"gpt-4o-mini";
+  var ctl=window.AbortController?new AbortController():null,tm=ctl?setTimeout(function(){ctl.abort();},window.__dpTxTimeout||45000):0;
+  return fetch(base+"/chat/completions",{method:"POST",signal:ctl?ctl.signal:undefined,headers:{"Content-Type":"application/json","Authorization":"Bearer "+s.key.trim()},
+    body:JSON.stringify({model:model,temperature:0,messages:[{role:"system",content:TX_SYS},{role:"user",content:[{type:"text",text:"Transcribe the handwriting on this page."},{type:"image_url",image_url:{url:dataUrl}}]}]})})
+  .then(function(r){if(!r.ok)return r.text().then(function(t){throw new Error(r.status+" "+t.slice(0,80));});return r.json();})
+  .then(function(j){clearTimeout(tm);var c=j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content;if(Array.isArray(c))c=c.map(function(x){return x&&x.text||"";}).join("");
+    c=String(c||"").replace(/^\s*```[a-z]*\s*\n?/i,"").replace(/\n?```\s*$/,"").trim();if(!c)throw new Error("nothing legible came back");return c;},function(err){clearTimeout(tm);throw err;});}
+function insertText(txt){var t=$("page"),v=t.value;track();var at=caretKnown?Math.min(t.selectionEnd,v.length):v.length,pre=v.slice(0,at),post=v.slice(at),add=txt;
+  if(pre.trim()&&!/\n\s*$/.test(pre))add="\n"+add;if(post.trim()&&!/^\s*\n/.test(post))add+="\n";
+  t.setRangeText(add,at,at,"end");track();paintGhost();grow();updateReveal();saveDraft();}
+function noKeyNote(){$("micNote").innerHTML='Add an AI key in <button class="inl" type="button" data-act="settings">settings</button> to turn handwriting into text, or type it on the page.';$("micNote").className="micnote keep";}
+var txQueue=[];
+function transcribeNext(){if(txBusy||!txQueue.length)return;var id=txQueue.shift();
+  if(!aiReady()){txQueue=[];noKeyNote();return;}
+  txBusy=true;setStatus("Reading your handwriting…","live");renderShots();
+  photoGet(id).then(function(r){if(!r)throw new Error("photo missing");return blobToData(r.blob);}).then(aiTranscribe)
+  .then(function(text){txBusy=false;insertText(text);setStatus(txQueue.length?"":"Edit your words, then receive the meaning.","hint");})
+  .catch(function(err){txBusy=false;txQueue=[];var why=err&&err.name==="AbortError"?"it took too long":String(err&&err.message||err).slice(0,70);
+    $("micNote").innerHTML="Couldn’t read the handwriting ("+esc(why)+"). Your photo is kept; type it on the page, or "+'<button class="inl" type="button" data-act="retry" data-id="'+esc(id)+'">try again</button>.';$("micNote").className="micnote err";})
+  .then(function(){renderShots();transcribeNext();});}
+$("micNote").addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("[data-act]");if(!b)return;
+  if(b.dataset.act==="settings")$("openSettings").click();
+  if(b.dataset.act==="retry"&&draftPhotos.indexOf(b.dataset.id)>=0){txQueue.push(b.dataset.id);transcribeNext();}});
+$("photoBtn").addEventListener("click",function(){if(recognizing)stopRec();$("photoFile").click();});
+$("photoFile").addEventListener("change",function(){var fs=[].slice.call(this.files||[]).filter(function(f){return /^image\//.test(f.type)||!f.type;});this.value="";if(!fs.length)return;
+  var room=12-draftPhotos.length;if(room<=0){micMsg("That's plenty of photos for one morning.");return;}fs=fs.slice(0,room);
+  setStatus("Keeping your photo…","live");
+  fs.reduce(function(p,f){return p.then(function(){return shrink(f).then(function(o){var id=newPhotoId();return photoPut({id:id,blob:o.blob,w:o.w,h:o.h}).then(function(){draftPhotos.push(id);saveDraft();renderShots();txQueue.push(id);});});});},Promise.resolve())
+  .then(function(){setStatus("","");transcribeNext();},function(err){setStatus("","");micMsg(/IndexedDB|blocked|photo store/i.test(String(err&&err.message))?"Photos can't be kept in this browser. You can still type the page in.":"That photo couldn't be opened. Try another, or type it in.");renderShots();transcribeNext();});});
+/* forget stray photos no entry or draft refers to (older than a day) */
+setTimeout(function(){var keep={};draftPhotos.forEach(function(id){keep[id]=1;});entries.forEach(function(e){(e.photos||[]).forEach(function(id){keep[id]=1;});});
+  photoKeys().then(function(ks){var old=(ks||[]).filter(function(k){var t=parseInt(String(k).split("-")[1],36);return !keep[k]&&t&&Date.now()-t>864e5;});if(old.length)photoDel(old);}).catch(function(){});},4000);
+if(draftPhotos.length)renderShots();
+
 /* journal */
 function renderJournal(){
   $("jCount").textContent=entries.length?entries.length+(entries.length===1?" morning":" mornings"):"";
@@ -896,10 +1013,29 @@ $("openSettings").addEventListener("click",function(){var s=getSettings();$("api
 $("sClose").addEventListener("click",function(){closeSheet("settings");rerender();});
 $("saveSettings").addEventListener("click",function(){var s={key:$("apiKey").value.trim(),base:$("apiBase").value.trim()||"https://api.openai.com/v1",model:$("apiModel").value.trim()||"gpt-4o-mini"};try{localStorage.setItem(K_SETTINGS,JSON.stringify(s));toast(s.key?"Saved. Deeper readings are on":"Saved");}catch(_){toast("Couldn't save");}});
 $("clearKey").addEventListener("click",function(){var s=getSettings();delete s.key;try{localStorage.setItem(K_SETTINGS,JSON.stringify(s));}catch(_){}$("apiKey").value="";toast("Key removed from this device");});
-$("exportBtn").addEventListener("click",function(){var b=new Blob([JSON.stringify({app:"dream-pages",version:2,exported:new Date().toISOString(),entries:entries},null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dream-pages-"+today()+".json";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);toast("Backup saved");});
+function blobToData(b){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result);};r.onerror=function(){rej(r.error);};r.readAsDataURL(b);});}
+function dataToBlob(d){var m=/^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=\s]+)$/.exec(d);if(!m)return null;var bin=atob(m[2].replace(/\s+/g,"")),u=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new Blob([u],{type:m[1]});}
+var PHOTO_MAX=8e6; /* a single photo larger than ~8 MB in a backup is skipped */
+$("exportBtn").addEventListener("click",function(){
+  var ids=[];entries.forEach(function(e){(e.photos||[]).forEach(function(id){ids.push(id);});});
+  var get=ids.length?Promise.all(ids.map(function(id){return photoGet(id).catch(function(){return null;});})):Promise.resolve([]);
+  get.then(function(recs){recs=recs.filter(Boolean);var bytes=recs.reduce(function(n,r){return n+(r.blob?r.blob.size:0);},0);
+    var with_=!recs.length||bytes<40e6||confirm("Your page photos add about "+Math.round(bytes*1.37/1e6)+" MB to this backup. Include them?");
+    return Promise.all((with_?recs:[]).map(function(r){return blobToData(r.blob).then(function(d){return [r.id,{type:r.blob.type,w:r.w,h:r.h,data:d}];});}));})
+  .then(function(pairs){var photos={};pairs.forEach(function(p){photos[p[0]]=p[1];});
+    var out={app:"dream-pages",version:2,exported:new Date().toISOString(),entries:entries};if(pairs.length)out.photos=photos;
+    var b=new Blob([JSON.stringify(out,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dream-pages-"+today()+".json";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);
+    toast(pairs.length?"Backup saved, with "+pairs.length+(pairs.length===1?" photo":" photos"):"Backup saved");})
+  .catch(function(){toast("Couldn't make the backup");});});
 $("importBtn").addEventListener("click",function(){$("importFile").click();});
-$("importFile").addEventListener("change",function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result),arr=Array.isArray(d)?d:d.entries;if(!Array.isArray(arr))throw 0;var ids={};entries.forEach(function(e){ids[e.id]=1;});var n=0;arr.forEach(function(e){var x=normalize(e);if(x&&!ids[x.id]){entries.push(x);ids[x.id]=1;n++;}});sortEntries();save();toast("Imported "+n+(n===1?" morning":" mornings"));rerender();}catch(_){toast("That file isn't a Dream Pages backup");}};r.readAsText(f);this.value="";});
-document.addEventListener("keydown",function(ev){if(ev.key==="Escape"){if($("settings").classList.contains("open")){closeSheet("settings");rerender();}else if($("meaning").classList.contains("open")){closeSheet("meaning");rerender();}}});
+$("importFile").addEventListener("change",function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){var d,arr;try{d=JSON.parse(r.result);arr=Array.isArray(d)?d:d.entries;if(!Array.isArray(arr))throw 0;}catch(_){toast("That file isn't a Dream Pages backup");return;}
+  var bank=(d&&!Array.isArray(d)&&d.photos&&typeof d.photos==="object")?d.photos:{};var ids={};entries.forEach(function(e){ids[e.id]=1;});var add=[];
+  arr.forEach(function(e){var x=normalize(e);if(x&&!ids[x.id]){add.push(x);ids[x.id]=1;}});
+  Promise.all(add.map(function(x){if(!x.photos||!x.photos.length)return Promise.resolve();
+    return Promise.all(x.photos.map(function(id){return photoGet(id).then(function(have){if(have)return id;var p=bank[id],bl=p&&typeof p.data==="string"&&p.data.length<PHOTO_MAX*1.4?dataToBlob(p.data):null;if(!bl)return null;return photoPut({id:id,blob:bl,w:+p.w||0,h:+p.h||0}).then(function(){return id;});}).catch(function(){return null;});}))
+      .then(function(kept){kept=kept.filter(Boolean);if(kept.length)x.photos=kept;else delete x.photos;});}))
+  .then(function(){add.forEach(function(x){entries.push(x);});var n=add.length;sortEntries();save();toast("Imported "+n+(n===1?" morning":" mornings"));rerender();});};r.readAsText(f);this.value="";});
+document.addEventListener("keydown",function(ev){if(ev.key==="Escape"){if($("viewer").classList.contains("open")){closeViewer();return;}if($("settings").classList.contains("open")){closeSheet("settings");rerender();}else if($("meaning").classList.contains("open")){closeSheet("meaning");rerender();}}});
 
 /* keep the mic + "Receive meaning" bar above the on-screen keyboard */
 function vvUpdate(){var vv=window.visualViewport;if(!vv)return;var kb=Math.max(0,Math.round(window.innerHeight-(vv.height+vv.offsetTop)));var on=kb>80;document.documentElement.style.setProperty("--kb",(on?kb:0)+"px");document.body.classList.toggle("kb",on);}
@@ -910,7 +1046,7 @@ function dayCheck(){if(today()===shownDay)return;shownDay=today();if(!dateTouche
 document.addEventListener("visibilitychange",function(){if(!document.hidden)dayCheck();});
 window.addEventListener("focus",dayCheck);setInterval(dayCheck,60000);
 syncForm();grow();updateReveal();show("today");vvUpdate();
-window.DreamPages={shape:shape,moonPhase:moonPhase,offlineInterpret:offlineInterpret,symbolCount:SYMBOLS.length,promptCount:PROMPTS.length,currentStreak:currentStreak,longestStreak:longestStreak,vvUpdate:vvUpdate};
+window.DreamPages={shape:shape,photoKeys:photoKeys,moonPhase:moonPhase,offlineInterpret:offlineInterpret,symbolCount:SYMBOLS.length,promptCount:PROMPTS.length,currentStreak:currentStreak,longestStreak:longestStreak,vvUpdate:vvUpdate};
 })();
 </script>
 <script>
