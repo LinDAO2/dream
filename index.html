@@ -54,11 +54,11 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .view{display:none;opacity:0;transform:translateY(4px);transition:opacity .5s var(--ease),transform .55s var(--ease)}
 .view.on{display:block}
 .view.in{opacity:1;transform:none}
-#v-today{padding-bottom:96px}
+#v-today{padding-bottom:128px}
 :focus{outline:none}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
 textarea#page:focus-visible,.field input:focus-visible,.search:focus-visible,.mini input:focus-visible{outline:none}
-.mic:focus-visible{outline-offset:10px;border-radius:50%}
+.mic:focus-visible{outline-offset:7px;border-radius:50%}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .ul{background:none;padding:0}
 .eyebrow{font-size:18px;color:var(--faint)}
@@ -74,24 +74,25 @@ textarea#page:focus-visible,.field input:focus-visible,.search:focus-visible,.mi
 .prompt{font-family:var(--display);font-style:italic;font-weight:500;font-size:31px;line-height:var(--P);margin:0;color:var(--ink);text-wrap:balance;letter-spacing:-.003em}
 
 /* ---- the microphone: a fine ink ring ---- */
-.orbwrap{position:relative;display:flex;flex-direction:column;align-items:center;margin:26px 0 0}
-.mic{position:relative;width:min(28vw,104px);aspect-ratio:1;display:grid;place-items:center;color:var(--ink);border-radius:50%;border:1px solid var(--ink);
-  background:var(--card);box-shadow:0 0 0 6px var(--paper),0 0 0 7px rgba(29,34,48,.12),0 14px 30px -18px rgba(29,34,48,.45);transition:background .3s,color .3s,border-color .3s,transform .4s var(--ease)}
+/* ---- the microphone: a fine ink ring by the thumb, in the bar above the tabs ---- */
+.micwrap{position:relative;flex:none;pointer-events:auto}
+.mic{position:relative;width:60px;height:60px;display:grid;place-items:center;color:var(--ink);border-radius:50%;border:1px solid var(--ink);
+  background:var(--card);box-shadow:0 0 0 4px var(--paper),0 0 0 5px rgba(29,34,48,.12),0 12px 24px -16px rgba(29,34,48,.5);transition:background .3s,color .3s,border-color .3s,transform .4s var(--ease)}
 .mic svg{position:relative}
 .mic:hover{background:#fffdf8}
-.mic:active{transform:scale(.97)}
+.mic:active{transform:scale(.96)}
 .mic.rec{color:var(--accent);border-color:var(--accent);animation:breathe 2.6s ease-in-out infinite}
 .mic.rec::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--accent);animation:ripple 2.6s var(--ease) infinite;pointer-events:none}
-@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
-@keyframes ripple{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.42);opacity:0}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+@keyframes ripple{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.5);opacity:0}}
 .mic:disabled{opacity:.45;cursor:default}
-.orbcap{margin-top:6px;font-size:17px;color:var(--faint);text-align:center;line-height:var(--P)}
+.orbcap{position:absolute;left:50%;top:calc(100% + 7px);transform:translateX(-50%);width:106px;font-size:14px;line-height:16px;letter-spacing:.1em;color:var(--faint);text-align:center;pointer-events:none}
 .mic.rec+.orbcap{color:var(--accent)}
-.micnote{font-style:italic;font-size:18px;color:var(--soft);max-width:300px;text-align:center}
+.micnote{font-style:italic;font-size:18px;color:var(--soft)}
 .micnote:empty{display:none}
 
 /* ---- writing on the ruled lines ---- */
-.write{position:relative}
+.write{position:relative;margin-top:var(--P)}
 textarea#page{display:block;width:100%;min-height:calc(var(--P) * 5);border:0;outline:0;resize:none;background:transparent;color:var(--ink);font-family:var(--serif);font-style:italic;font-size:21px;line-height:var(--P);padding:0;margin:0;caret-color:var(--accent);overflow:hidden}
 textarea#page::placeholder{color:var(--faint)}
 .interim{font-style:italic;font-size:21px;color:var(--accent);opacity:.85}
@@ -128,9 +129,10 @@ textarea#page::placeholder{color:var(--faint)}
 .close,.textbtn,.m-actions button{font-size:18px;color:var(--ink);padding:0 16px;height:var(--P);border-radius:2px;border:1px solid var(--line);background:var(--card);transition:border-color .25s,background .25s}
 .close:hover,.textbtn:hover,.m-actions button:hover{border-color:var(--ink)}
 .actionbar{position:fixed;left:0;right:0;bottom:calc(var(--navh) + env(safe-area-inset-bottom));pointer-events:none}
-.actionbar .inner{max-width:620px;margin:0 auto;padding:12px 24px 14px;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.reveal{font-size:20px;height:48px;padding:0 28px;opacity:0;transform:translateY(8px);transition:opacity .5s var(--ease),transform .5s var(--ease),background .25s;pointer-events:none;white-space:nowrap;display:inline-flex;align-items:center;gap:14px}
-.reveal.show{opacity:1;transform:none;pointer-events:auto}
+.actionbar .inner{max-width:620px;margin:0 auto;padding:22px 24px 40px;display:flex;align-items:center;justify-content:center;pointer-events:none;background:linear-gradient(180deg,rgba(248,244,235,0),rgba(248,244,235,.94) 26px,var(--paper))}
+.reveal{font-size:19px;height:48px;padding:0 22px;margin-left:22px;white-space:nowrap;display:none;align-items:center;gap:12px;pointer-events:auto}
+.reveal.show{display:inline-flex;animation:rise .5s var(--ease) both}
+@keyframes rise{from{opacity:0}to{opacity:1}}
 .reveal .arr{display:inline-block;width:24px;height:12px;transition:transform .3s var(--ease)}
 .reveal .arr svg{display:block}
 .reveal:hover .arr{transform:translateX(3px)}
@@ -230,8 +232,9 @@ h1.h{font-family:var(--display);font-style:italic;font-weight:500;font-size:34px
 .hidden{display:none!important}
 body.kb nav.tabs{display:none}
 body.kb .actionbar{bottom:var(--kb)}
-body.kb .actionbar .inner{padding-top:8px;padding-bottom:8px}
-@media (max-width:360px){ :root{--padl:22px} .app{padding-right:20px} nav.tabs{gap:28px} }
+body.kb .actionbar .inner{padding-top:14px;padding-bottom:10px}
+body.kb .orbcap{display:none}
+@media (max-width:360px){ :root{--padl:22px} .app{padding-right:20px} nav.tabs{gap:28px} .reveal{padding:0 16px;margin-left:16px;letter-spacing:.06em} }
 @media (prefers-reduced-motion:reduce){ *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important} .view,.sheet{transform:none} }
 @media (prefers-contrast:more){ :root{--faint:#3f4250;--soft:#30343f;--rule:rgba(90,76,58,.45);--line:var(--ink)} }
 </style>
@@ -253,13 +256,7 @@ body.kb .actionbar .inner{padding-top:8px;padding-bottom:8px}
     </div>
     <div class="done" id="doneNote"></div>
     <h1 class="prompt ln" id="prompt"></h1>
-    <div class="orbwrap">
-      <button class="mic" id="mic" aria-label="Speak your dream" aria-pressed="false">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2.75" width="6" height="11.5" rx="3"/><path d="M5.75 11.25a6.25 6.25 0 0 0 12.5 0M12 17.5v3.75M9.25 21.25h5.5"/></svg>
-      </button>
-      <div class="orbcap" id="orbCap" aria-hidden="true">Tap to speak</div>
-      <div class="micnote" id="micNote" aria-live="polite"></div>
-    </div>
+    <div class="micnote ln" id="micNote" aria-live="polite"></div>
     <div class="write ln">
       <textarea id="page" placeholder="Or write it down, before it fades…" aria-label="Your dream" aria-describedby="prompt"></textarea>
       <div class="interim" id="interim" aria-live="polite"></div>
@@ -290,6 +287,12 @@ body.kb .actionbar .inner{padding-top:8px;padding-bottom:8px}
 </main>
 
 <div class="actionbar" id="actionbar"><div class="inner">
+  <div class="micwrap" id="micWrap">
+    <button class="mic" id="mic" aria-label="Speak your dream" aria-pressed="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2.75" width="6" height="11.5" rx="3"/><path d="M5.75 11.25a6.25 6.25 0 0 0 12.5 0M12 17.5v3.75M9.25 21.25h5.5"/></svg>
+      </button>
+    <div class="orbcap" id="orbCap" aria-hidden="true">Tap to speak</div>
+  </div>
   <button class="reveal" id="reveal">Receive meaning<span class="arr" aria-hidden="true"><svg width="24" height="12" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6h21.5M18 1.75 22.5 6 18 10.25"/></svg></span></button>
 </div></div>
 
@@ -700,7 +703,9 @@ function syncForm(){
   $("lucid").textContent=form.lucid==="yes"?"lucid":"not lucid";$("lucid").classList.toggle("on",form.lucid==="yes");$("lucid").setAttribute("aria-pressed",form.lucid==="yes"?"true":"false");
 }
 function grow(){var t=$("page");t.style.height="auto";t.style.height=Math.max(Math.ceil((t.scrollHeight-1)/LINE),5)*LINE+"px";snapSoon();}
-function updateReveal(){$("reveal").classList.toggle("show",$("page").value.trim().length>0);}
+function updateReveal(){var on=$("page").value.trim().length>0,r=$("reveal");if(r.classList.contains("show")===on)return;
+  var w=$("micWrap"),a=w.getBoundingClientRect().left;r.classList.toggle("show",on);var d=a-w.getBoundingClientRect().left;
+  if(d&&w.animate&&!matchMedia("(prefers-reduced-motion: reduce)").matches)w.animate([{transform:"translateX("+d+"px)"},{transform:"none"}],{duration:450,easing:"cubic-bezier(.2,.7,.2,1)"});}
 function saveDraft(){try{localStorage.setItem(K_DRAFT,JSON.stringify({text:$("page").value,mood:form.mood,vivid:form.vivid,lucid:form.lucid,date:dateTouched?$("dDate").value:"",day:today()}));}catch(_){}}
 $("page").addEventListener("input",function(){grow();updateReveal();saveDraft();});
 $("dDate").value=today();
