@@ -54,7 +54,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .view{display:none;opacity:0;transform:translateY(4px);transition:opacity .5s var(--ease),transform .55s var(--ease)}
 .view.on{display:block}
 .view.in{opacity:1;transform:none}
-#v-today{padding-bottom:128px}
+#v-today{padding-bottom:168px}
 :focus{outline:none}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
 textarea#page:focus-visible,.field input:focus-visible,.search:focus-visible,.mini input:focus-visible{outline:none}
@@ -70,8 +70,11 @@ textarea#page:focus-visible,.field input:focus-visible,.search:focus-visible,.mi
 .streak b{color:var(--accent);font-weight:400}
 .iconbtn{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--soft);border:1px solid rgba(29,34,48,.35);transition:border-color .3s,color .3s}
 .iconbtn:hover{border-color:var(--ink);color:var(--ink)}
-.done{font-style:italic;font-size:18px;color:var(--faint);min-height:var(--P)}
-.prompt{font-family:var(--display);font-style:italic;font-weight:500;font-size:31px;line-height:var(--P);margin:0;color:var(--ink);text-wrap:balance;letter-spacing:-.003em}
+.done{font-style:italic;font-size:18px;color:var(--faint)}
+.done:empty{display:none}
+.prompt{font-family:var(--display);font-style:italic;font-weight:500;font-size:25px;line-height:var(--P);margin:0;color:var(--soft);text-wrap:balance;letter-spacing:-.003em}
+.prompt:empty{display:none}
+.prompt.fresh{animation:rise .5s var(--ease) both}
 
 /* ---- the microphone: a fine ink ring ---- */
 /* ---- the microphone: a fine ink ring by the thumb, in the bar above the tabs ---- */
@@ -88,15 +91,28 @@ textarea#page:focus-visible,.field input:focus-visible,.search:focus-visible,.mi
 .mic:disabled{opacity:.45;cursor:default}
 .orbcap{position:absolute;left:50%;top:calc(100% + 7px);transform:translateX(-50%);width:106px;font-size:14px;line-height:16px;letter-spacing:.1em;color:var(--faint);text-align:center;pointer-events:none}
 .mic.rec+.orbcap{color:var(--accent)}
-.micnote{font-style:italic;font-size:18px;color:var(--soft)}
+/* status line in the bar: transcribing…, the edit hint, or a kind note */
+.micnote{flex:0 0 100%;order:-1;margin:0 0 12px;text-align:center;font-style:italic;font-size:17px;line-height:22px;color:var(--soft);pointer-events:none;text-wrap:balance}
 .micnote:empty{display:none}
+.micnote.live{color:var(--accent)}
+.micnote.live::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:currentColor;margin:0 9px 0 0;vertical-align:middle;position:relative;top:-1px;animation:blink 1.6s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
 
 /* ---- writing on the ruled lines ---- */
-.write{position:relative;margin-top:var(--P)}
-textarea#page{display:block;width:100%;min-height:calc(var(--P) * 5);border:0;outline:0;resize:none;background:transparent;color:var(--ink);font-family:var(--serif);font-style:italic;font-size:21px;line-height:var(--P);padding:0;margin:0;caret-color:var(--accent);overflow:hidden}
-textarea#page::placeholder{color:var(--faint)}
-.interim{font-style:italic;font-size:21px;color:var(--accent);opacity:.85}
-.interim:empty{display:none}
+/* the page is the hero: it starts right under the date and fills the screen to the bar */
+.write{position:relative;cursor:text}
+textarea#page,.ghost{font-family:var(--serif);font-style:italic;font-size:21px;line-height:var(--P);letter-spacing:normal;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;tab-size:4}
+textarea#page{position:relative;z-index:1;display:block;width:100%;min-height:calc(var(--P) * 5);border:0;outline:0;resize:none;background:transparent;color:var(--ink);padding:0;margin:0;caret-color:var(--accent);overflow:hidden}
+textarea#page::placeholder{color:var(--faint);opacity:1}
+.write.hearing textarea#page::placeholder,.write.ghosting textarea#page::placeholder{color:transparent}
+/* live transcription: a mirror of the page shows the words still forming in a lighter ink */
+.ghost{position:absolute;left:0;top:0;right:0;margin:0;color:var(--ink);visibility:hidden;pointer-events:none}
+.write.ghosting .ghost{visibility:visible}
+.write.ghosting textarea#page{color:transparent}
+.interim{color:#5b6386}
+.nudge{position:absolute;z-index:2;left:0;top:calc(var(--P) * 3 - 6px);height:44px;padding:0;font-style:italic;font-size:18px;line-height:44px;color:var(--faint);text-decoration:underline 1px dotted;text-underline-offset:5px;transition:color .3s}
+.nudge:hover{color:var(--ink)}
+.write.has-text .nudge,.write.hearing .nudge,.write.ghosting .nudge{display:none}
 .moods{margin:0}
 .moods .lbl{display:block;font-size:17px;color:var(--faint)}
 .mood{position:relative;margin-right:18px;font-size:20px;color:var(--soft);height:var(--P);text-decoration:underline 1px transparent;text-underline-offset:6px;transition:color .3s,text-decoration-color .3s}
@@ -128,8 +144,8 @@ textarea#page::placeholder{color:var(--faint)}
 .reveal:hover,.m-actions .keep:hover,.textbtn.accent:hover{background:#2b3142;box-shadow:0 14px 30px -16px rgba(29,34,48,.7)}
 .close,.textbtn,.m-actions button{font-size:18px;color:var(--ink);padding:0 16px;height:var(--P);border-radius:2px;border:1px solid var(--line);background:var(--card);transition:border-color .25s,background .25s}
 .close:hover,.textbtn:hover,.m-actions button:hover{border-color:var(--ink)}
-.actionbar{position:fixed;left:0;right:0;bottom:calc(var(--navh) + env(safe-area-inset-bottom));pointer-events:none}
-.actionbar .inner{max-width:620px;margin:0 auto;padding:22px 24px 40px;display:flex;align-items:center;justify-content:center;pointer-events:none;background:linear-gradient(180deg,rgba(248,244,235,0),rgba(248,244,235,.94) 26px,var(--paper))}
+.actionbar{position:fixed;z-index:4;left:0;right:0;bottom:calc(var(--navh) + env(safe-area-inset-bottom));pointer-events:none}
+.actionbar .inner{max-width:620px;margin:0 auto;padding:22px 24px 40px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;pointer-events:none;background:linear-gradient(180deg,rgba(248,244,235,0),rgba(248,244,235,.94) 26px,var(--paper))}
 .reveal{font-size:19px;height:48px;padding:0 22px;margin-left:22px;white-space:nowrap;display:none;align-items:center;gap:12px;pointer-events:auto}
 .reveal.show{display:inline-flex;animation:rise .5s var(--ease) both}
 @keyframes rise{from{opacity:0}to{opacity:1}}
@@ -254,12 +270,13 @@ body.kb .orbcap{display:none}
       </div>
       <div class="eyebrow" id="todayDate"></div>
     </div>
-    <div class="done" id="doneNote"></div>
-    <h1 class="prompt ln" id="prompt"></h1>
-    <div class="micnote ln" id="micNote" aria-live="polite"></div>
-    <div class="write ln">
-      <textarea id="page" placeholder="Or write it down, before it fades…" aria-label="Your dream" aria-describedby="prompt"></textarea>
-      <div class="interim" id="interim" aria-live="polite"></div>
+    <h1 class="sr-only">This morning’s dream</h1>
+    <div class="done ln" id="doneNote"></div>
+    <p class="prompt ln" id="prompt" aria-live="polite"></p>
+    <div class="write ln" id="write">
+      <div class="ghost" id="ghost" aria-hidden="true"><span id="gPre"></span><span class="interim" id="interim"></span><span id="gPost"></span></div>
+      <textarea id="page" placeholder="Tell me the dream…&#10;Speak, or write what you remember." aria-label="Your dream" aria-describedby="prompt"></textarea>
+      <button class="nudge" id="nudge" type="button">Need a nudge?</button>
     </div>
     <div class="moods ln" id="moods" role="group" aria-labelledby="moodL"><span class="lbl" id="moodL">Woke feeling</span></div>
     <button class="more-t ln" id="moreT" aria-expanded="false" aria-controls="more">More</button>
@@ -287,6 +304,7 @@ body.kb .orbcap{display:none}
 </main>
 
 <div class="actionbar" id="actionbar"><div class="inner">
+  <div class="micnote" id="micNote" role="status" aria-live="polite"></div>
   <div class="micwrap" id="micWrap">
     <button class="mic" id="mic" aria-label="Speak your dream" aria-pressed="false">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2.75" width="6" height="11.5" rx="3"/><path d="M5.75 11.25a6.25 6.25 0 0 0 12.5 0M12 17.5v3.75M9.25 21.25h5.5"/></svg>
@@ -687,8 +705,22 @@ function renderToday(){
   $("streak").innerHTML=s>0?"<b>"+s+"</b> "+(s===1?"morning":"mornings"):"";
   var wrote=dateSet()[today()];
   $("doneNote").textContent=wrote?"Written this morning. The page is open if more returns.":"";
-  $("prompt").innerHTML='<span class="ul">'+esc(wrote?"Is there anything more?":PROMPTS[dayIndex()%PROMPTS.length])+'</span>';snapSoon();
+  $("page").placeholder=wrote?"Is there anything more?\nSpeak, or write what returns.":"Tell me the dream…\nSpeak, or write what you remember.";
+  $("prompt").textContent=nudgeN?PROMPTS[(dayIndex()+nudgeN-1)%PROMPTS.length]:"";
+  $("nudge").textContent=nudgeN?"Another nudge":"Need a nudge?";
+  snapSoon();fitSoon();
 }
+/* a prompt only on demand */
+var nudgeN=0;
+$("nudge").addEventListener("click",function(ev){ev.stopPropagation();nudgeN++;renderToday();var p=$("prompt");p.classList.remove("fresh");void p.offsetWidth;p.classList.add("fresh");});
+/* the page fills the screen down to the bar; tapping anywhere on it starts typing (never on load) */
+var heroN=5;
+function fit(){if(curView!=="today"||document.body.classList.contains("kb"))return;var t=$("page"),w=$("micWrap").getBoundingClientRect();if(!t.offsetParent||!w.height)return;
+  var barTop=w.top-22,n=Math.max(5,Math.floor((barTop-absTop(t))/LINE)-4);if(n!==heroN){heroN=n;grow();}}
+var fitRaf=0;function fitSoon(){if(fitRaf)cancelAnimationFrame(fitRaf);fitRaf=requestAnimationFrame(function(){fitRaf=requestAnimationFrame(function(){fitRaf=0;fit();});});}
+window.addEventListener("resize",fitSoon);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSoon);
+$("write").addEventListener("click",function(ev){if(ev.target===this||ev.target.closest(".ghost")){var t=$("page");t.focus();try{t.setSelectionRange(t.value.length,t.value.length);}catch(_){}}});
 MOODS.forEach(function(m){var b=document.createElement("button");b.className="mood";b.textContent=m;b.setAttribute("aria-pressed","false");b.addEventListener("click",function(){form.mood=form.mood===m?"":m;syncForm();saveDraft();});$("moods").appendChild(b);});
 for(var vi=1;vi<=5;vi++)(function(n){var b=document.createElement("button");b.setAttribute("aria-label","Vividness "+n);b.setAttribute("aria-pressed","false");b.addEventListener("click",function(){form.vivid=form.vivid===n?0:n;syncForm();saveDraft();});$("vivid").appendChild(b);})(vi);
 $("lucid").addEventListener("click",function(){form.lucid=form.lucid==="yes"?"no":"yes";syncForm();saveDraft();});
@@ -702,15 +734,16 @@ function syncForm(){
   document.querySelectorAll("#vivid button").forEach(function(b,i){b.classList.toggle("on",i<form.vivid);b.setAttribute("aria-pressed",i+1===form.vivid?"true":"false");});
   $("lucid").textContent=form.lucid==="yes"?"lucid":"not lucid";$("lucid").classList.toggle("on",form.lucid==="yes");$("lucid").setAttribute("aria-pressed",form.lucid==="yes"?"true":"false");
 }
-function grow(){var t=$("page");t.style.height="auto";t.style.height=Math.max(Math.ceil((t.scrollHeight-1)/LINE),5)*LINE+"px";snapSoon();}
-function updateReveal(){var on=$("page").value.trim().length>0,r=$("reveal");if(r.classList.contains("show")===on)return;
+function grow(){var t=$("page"),g=$("ghost");t.style.height="auto";var n=Math.ceil((t.scrollHeight-1)/LINE);if($("write").classList.contains("ghosting"))n=Math.max(n,Math.ceil((g.scrollHeight-1)/LINE));t.style.height=Math.max(n,heroN)*LINE+"px";snapSoon();}
+function updateReveal(){var on=$("page").value.trim().length>0,r=$("reveal");$("write").classList.toggle("has-text",$("page").value.length>0);if(!on&&!recognizing&&!$("micNote").classList.contains("err"))micMsg("");if(r.classList.contains("show")===on)return;
   var w=$("micWrap"),a=w.getBoundingClientRect().left;r.classList.toggle("show",on);var d=a-w.getBoundingClientRect().left;
   if(d&&w.animate&&!matchMedia("(prefers-reduced-motion: reduce)").matches)w.animate([{transform:"translateX("+d+"px)"},{transform:"none"}],{duration:450,easing:"cubic-bezier(.2,.7,.2,1)"});}
 function saveDraft(){try{localStorage.setItem(K_DRAFT,JSON.stringify({text:$("page").value,mood:form.mood,vivid:form.vivid,lucid:form.lucid,date:dateTouched?$("dDate").value:"",day:today()}));}catch(_){}}
-$("page").addEventListener("input",function(){grow();updateReveal();saveDraft();});
+$("page").addEventListener("input",function(){track();paintGhost();grow();updateReveal();saveDraft();});
+$("page").addEventListener("focus",function(){caretKnown=true;});
 $("dDate").value=today();
-(function(){var d=readJSON(K_DRAFT);if(d&&(d.text||d.mood||d.vivid||d.lucid==="yes")){$("page").value=d.text||"";form.mood=MOODS.indexOf(d.mood)>=0?d.mood:"";form.vivid=Math.max(0,Math.min(5,+d.vivid||0));form.lucid=d.lucid==="yes"?"yes":"no";if(/^\d{4}-\d{2}-\d{2}$/.test(d.date||"")){$("dDate").value=d.date;dateTouched=true;}if(form.vivid||form.lucid==="yes"||dateTouched)setMore(true);}})();
-function resetPage(){$("page").value="";form={mood:"",vivid:0,lucid:"no"};dateTouched=false;$("dDate").value=today();syncForm();grow();updateReveal();try{localStorage.removeItem(K_DRAFT);}catch(_){}}
+(function(){var d=readJSON(K_DRAFT);if(d&&(d.text||d.mood||d.vivid||d.lucid==="yes")){$("page").value=d.text||"";form.mood=MOODS.indexOf(d.mood)>=0?d.mood:"";form.vivid=Math.max(0,Math.min(5,+d.vivid||0));form.lucid=d.lucid==="yes"?"yes":"no";if(/^\d{4}-\d{2}-\d{2}$/.test(d.date||"")){$("dDate").value=d.date;dateTouched=true;}if(form.vivid||form.lucid==="yes"||dateTouched)setMore(true);}lastVal=$("page").value;updateReveal();})();
+function resetPage(){$("page").value="";lastVal="";anchor=0;caretKnown=false;nudgeN=0;micMsg("");form={mood:"",vivid:0,lucid:"no"};dateTouched=false;$("dDate").value=today();syncForm();grow();updateReveal();try{localStorage.removeItem(K_DRAFT);}catch(_){}}
 
 /* meaning sheet */
 var reading=null;
@@ -746,7 +779,7 @@ $("mClose").addEventListener("click",function(){closeSheet("meaning");rerender()
 function openEntry(id){var e=entries.filter(function(x){return x.id===id;})[0];if(!e)return;if(!e.interpretation){e.interpretation=offlineInterpret(e);save();}renderMeaning(e,"read");openSheet("meaning");}
 
 $("reveal").addEventListener("click",function(){
-  if(recognizing)stopRec();
+  if(recognizing)stopRec();micMsg("");
   var text=$("page").value.trim();if(!text)return;
   var e={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),created:new Date().toISOString(),date:$("dDate").value||today(),text:text,mood:form.mood,vivid:form.vivid,lucid:form.lucid,interpretation:null};
   $("mDate").textContent=longDate(e.date);$("mBody").innerHTML='<p class="listening">Listening for meaning…</p>';openSheet("meaning");
@@ -758,25 +791,57 @@ $("reveal").addEventListener("click",function(){
   });
 });
 
-/* voice */
+/* voice: live transcription straight onto the page */
 var SR=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null,recognizing=false;
-function micMsg(m){$("micNote").textContent=m||"";}
+var anchor=0,lastVal=$("page").value,interimTxt="",caretKnown=false,lastHeard=0,needStop=false,flushed=null;
+var EN=/^en/i.test(navigator.language||"en");
+var HINT="Edit your words, then receive the meaning.";
+function setStatus(m,cls){var n=$("micNote");n.textContent=m||"";n.className="micnote"+(cls?" "+cls:"");}
+function micMsg(m){setStatus(m,m?"err":"");}
+function norm(x){return String(x||"").toLowerCase().replace(/[^\p{L}\p{N}]+/gu," ").trim();}
+function sentenceStart(pre){return !pre.trim()||/[.!?…]["'”’)]*\s*$/.test(pre)||/\n\s*$/.test(pre);}
+/* tidy spoken words for the page: spacing, a capital at a sentence start, a lone "i" made "I" */
+function shape(words,pre,post){var w=String(words).replace(/\s+/g," ").trim();if(!w)return "";
+  if(EN)w=w.replace(/(^|[\s"“(])i(?=$|[\s'’.,!?;:])/g,"$1I");
+  if(sentenceStart(pre))w=w.charAt(0).toUpperCase()+w.slice(1);
+  if(pre&&!/\s$/.test(pre))w=" "+w;if(post&&!/^[\s.,;:!?…]/.test(post))w+=" ";return w;}
+/* keep the voice's place when the page is edited by hand (edits before it shift it; edits after it don't) */
+function track(){var v=$("page").value,o=lastVal;if(v===o)return;var p=0,n=Math.min(v.length,o.length);while(p<n&&v.charCodeAt(p)===o.charCodeAt(p))p++;
+  var e=0;while(e<n-p&&v.charCodeAt(v.length-1-e)===o.charCodeAt(o.length-1-e))e++;var oe=o.length-e;
+  if(anchor>=oe)anchor+=v.length-o.length;else if(anchor>p)anchor=v.length-e;anchor=Math.max(0,Math.min(anchor,v.length));lastVal=v;}
+function commit(words){var t=$("page"),v=t.value;track();anchor=Math.max(0,Math.min(anchor,v.length));
+  var pre=v.slice(0,anchor),post=v.slice(anchor),focused=document.activeElement===t;
+  if(needStop&&!post.trim()&&/[\p{L}\p{N}]$/u.test(pre.replace(/\s+$/,""))){var q=pre.replace(/\s+$/,"").length;t.setRangeText(".",q,q,"preserve");if(anchor>=q)anchor++;v=t.value;pre=v.slice(0,anchor);post=v.slice(anchor);}
+  needStop=false;var add=shape(words,pre,post);if(!add){lastVal=t.value;return;}
+  var atCaret=focused&&t.selectionStart===t.selectionEnd&&t.selectionStart===anchor;
+  t.setRangeText(add,anchor,anchor,atCaret?"end":"preserve");anchor+=add.length;lastVal=t.value;grow();updateReveal();saveDraft();}
+function paintGhost(){var w=$("write"),t=$("page");if(!interimTxt){if(w.classList.contains("ghosting")){w.classList.remove("ghosting");$("gPre").textContent=$("interim").textContent=$("gPost").textContent="";}return;}
+  var v=t.value,a=Math.max(0,Math.min(anchor,v.length)),pre=v.slice(0,a),post=v.slice(a);
+  $("gPre").textContent=pre;$("interim").textContent=shape(interimTxt,pre,post);$("gPost").textContent=post+"\u200b";w.classList.add("ghosting");}
 if(SR){
   rec=new SR();rec.continuous=true;rec.interimResults=true;rec.lang=navigator.language||"en-US";
-  rec.onresult=function(ev){var fin="",inter="";for(var i=ev.resultIndex;i<ev.results.length;i++){if(ev.results[i].isFinal)fin+=ev.results[i][0].transcript;else inter+=ev.results[i][0].transcript;}
-    if(fin.trim()){var t=$("page"),cur=t.value,add=fin.trim();if(!cur.trim())add=add.charAt(0).toUpperCase()+add.slice(1);t.value=cur+(cur&&!/\s$/.test(cur)?" ":"")+add;grow();updateReveal();saveDraft();}
-    snapSoon();$("interim").textContent=inter;};
+  rec.onresult=function(ev){var now=Date.now();if(lastHeard&&now-lastHeard>1800)needStop=true;lastHeard=now;
+    var fin="",inter="";for(var i=ev.resultIndex;i<ev.results.length;i++){if(ev.results[i].isFinal)fin+=ev.results[i][0].transcript;else inter+=ev.results[i][0].transcript;}
+    if(fin.trim()){
+      if(flushed){var f=norm(fin);if(f===flushed||flushed.indexOf(f)===0)fin="";else if(f.indexOf(flushed+" ")===0){var ws=fin.trim().split(/\s+/);fin=ws.slice(flushed.split(" ").length).join(" ");}flushed=null;}
+      if(fin.trim())commit(fin);}
+    interimTxt=recognizing&&inter.trim()?inter:"";paintGhost();grow();snapSoon();};
   rec.onerror=function(ev){
-    if(ev.error==="not-allowed"||ev.error==="service-not-allowed"){recognizing=false;micMsg("Microphone access is off for this page. Allow it in your browser settings, or simply write.");}
-    else if(ev.error==="network"){recognizing=false;micMsg("Voice needs a connection here. The page is still yours to write.");}
+    if(ev.error==="not-allowed"||ev.error==="service-not-allowed"){recognizing=false;setRec(false);micMsg("Microphone access is off for this page. Allow it in your browser settings, or simply write.");}
+    else if(ev.error==="network"){recognizing=false;setRec(false);micMsg("Voice needs a connection here. The page is still yours to write.");}
     else if(ev.error!=="no-speech"&&ev.error!=="aborted")micMsg("Voice paused ("+ev.error+").");};
   rec.onend=function(){if(recognizing){try{rec.start();}catch(_){recognizing=false;setRec(false);}}else setRec(false);};
 }
-function setRec(on){$("orbCap").textContent=on?"Listening · tap to finish":"Tap to speak";$("mic").classList.toggle("rec",on);$("mic").setAttribute("aria-label",on?"Stop listening":"Speak your dream");$("mic").setAttribute("aria-pressed",on?"true":"false");if(on)micMsg("");else{snapSoon();$("interim").textContent="";if($("micNote").textContent==="Listening…")micMsg("");}}
+function setRec(on){var m=$("mic"),was=m.classList.contains("rec");$("orbCap").textContent=on?"Tap to finish":"Tap to speak";m.classList.toggle("rec",on);m.setAttribute("aria-label",on?"Stop listening":"Speak your dream");m.setAttribute("aria-pressed",on?"true":"false");$("write").classList.toggle("hearing",on);
+  if(on)setStatus("Transcribing…","live");
+  else{if(interimTxt){var w=interimTxt;interimTxt="";flushed=norm(w);commit(w);}paintGhost();grow();
+    if($("micNote").classList.contains("live")||(was&&!$("micNote").textContent))setStatus($("page").value.trim()?HINT:"","hint");}}
 function stopRec(){recognizing=false;try{rec.stop();}catch(_){}setRec(false);}
 $("mic").addEventListener("click",function(){
   if(!rec){micMsg("Voice isn't available in this browser. Try Chrome, Edge or Safari, or your keyboard's dictation.");return;}
   if(recognizing){stopRec();return;}
+  var t=$("page"),v=t.value;track();anchor=caretKnown?Math.min(t.selectionEnd,v.length):v.length;lastVal=v;flushed=null;interimTxt="";
+  needStop=false;lastHeard=0;
   try{rec.start();recognizing=true;setRec(true);}catch(err){micMsg("The microphone couldn't start.");}
 });
 
@@ -845,7 +910,7 @@ function dayCheck(){if(today()===shownDay)return;shownDay=today();if(!dateTouche
 document.addEventListener("visibilitychange",function(){if(!document.hidden)dayCheck();});
 window.addEventListener("focus",dayCheck);setInterval(dayCheck,60000);
 syncForm();grow();updateReveal();show("today");vvUpdate();
-window.DreamPages={moonPhase:moonPhase,offlineInterpret:offlineInterpret,symbolCount:SYMBOLS.length,promptCount:PROMPTS.length,currentStreak:currentStreak,longestStreak:longestStreak,vvUpdate:vvUpdate};
+window.DreamPages={shape:shape,moonPhase:moonPhase,offlineInterpret:offlineInterpret,symbolCount:SYMBOLS.length,promptCount:PROMPTS.length,currentStreak:currentStreak,longestStreak:longestStreak,vvUpdate:vvUpdate};
 })();
 </script>
 <script>
