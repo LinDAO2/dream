@@ -323,6 +323,83 @@ a.textbtn{display:inline-flex;align-items:center;text-decoration:none;color:var(
 .rv-saved p{margin:8px 0 0;font-size:19px;line-height:28px}
 .rv-saved .k{display:block;color:var(--faint);font-size:17px;font-variant-caps:all-small-caps;letter-spacing:.09em}
 .rv-saved .a{font-style:italic;color:var(--accent);white-space:pre-wrap;overflow-wrap:anywhere}
+/* phase 2: rituals, nightmares, cues, letters, check-ins, first run, print */
+.cue{font-style:italic;font-size:18px;color:var(--faint);margin:0;line-height:var(--P)}
+.cue.hidden{display:none}
+#rehNote,#letterNote{margin-top:var(--P)}
+.nm-box .row{margin-top:12px}
+.nm-box p.nm-t{font-style:normal;font-size:19px;line-height:28px;color:var(--ink)}
+#rBody .h+.frame{margin-top:12px}
+.aiok{margin-top:12px;padding:10px 14px;border-left:2px solid var(--accent);background:rgba(44,58,110,.05)}
+.aiok p{margin:0 0 6px}
+.irt{list-style:none;margin:0;padding:0}
+.irt>li{margin-top:var(--P)}
+.irt .eyebrow{color:var(--accent)}
+.irt .note{margin:0}
+.pace{font-style:italic;font-size:19px;line-height:28px;color:var(--accent);margin:var(--P) 0 0;padding:10px 16px;border-left:2px solid rgba(44,58,110,.45);background:var(--card)}
+.safe{margin-top:var(--P)}
+.rh-text{font-style:italic;font-size:21px;line-height:var(--P);color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere;margin:var(--P) 0 0;padding:15px 20px;background:var(--card);border:1px solid rgba(29,34,48,.26)}
+.timer{display:flex;align-items:center;justify-content:center;flex-direction:column;margin-top:var(--P);height:calc(var(--P) * 5)}
+.timer svg{display:block}
+.timer .tr-bg{fill:none;stroke:rgba(29,34,48,.14);stroke-width:2}
+.timer .tr-fg{fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1s linear}
+.timer .t-left{position:absolute;font-family:var(--display);font-size:34px;color:var(--ink);font-variant-numeric:lining-nums tabular-nums}
+.timer .t-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+.t-msg{text-align:center;font-style:italic;font-size:19px;color:var(--soft);margin:0;min-height:var(--P);line-height:var(--P)}
+.seg{justify-content:center}
+.seg .textbtn[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+.rh-done{color:var(--accent);font-style:italic}
+.letter-p{margin-top:var(--P)}
+.letter-p .k{display:block;color:var(--faint);font-size:17px;font-variant-caps:all-small-caps;letter-spacing:.09em}
+.letter-p .a{display:block;font-style:italic;font-size:21px;line-height:var(--P);color:var(--accent);white-space:pre-wrap;overflow-wrap:anywhere}
+.letter-head{font-family:var(--display);font-style:italic;font-size:24px;line-height:var(--P);color:var(--ink);margin:var(--P) 0 0}
+.letter-sign{font-style:italic;font-size:19px;color:var(--soft);margin:var(--P) 0 0;text-align:right}
+.item.letter .l{font-style:italic;color:var(--accent)}
+.item.letter .mp svg{stroke:var(--accent)}
+.w5 fieldset{border:0;margin:var(--P) 0 0;padding:0}
+.w5 legend{font-size:20px;line-height:28px;color:var(--ink);padding:0;margin-bottom:6px}
+.w5 .opts{display:flex;flex-wrap:wrap;gap:6px 8px}
+.w5 .opts label{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border:1px solid var(--line);border-radius:2px;background:var(--card);font-size:18px;font-style:italic;font-variant-caps:normal;letter-spacing:0;text-transform:none;color:var(--soft);cursor:pointer;transition:background .2s,border-color .2s}
+.w5 .opts input{position:absolute;opacity:0;width:1px;height:1px}
+.w5 .opts input:checked+span{color:var(--accent);text-decoration:underline 1px;text-underline-offset:4px}
+.w5 .opts label:has(input:checked){border-color:var(--accent);background:rgba(44,58,110,.07)}
+.w5 .opts input:focus-visible+span{outline:2px solid var(--accent);outline-offset:4px}
+.w5-score{font-family:var(--display);font-size:40px;line-height:calc(var(--P) * 2);color:var(--ink);margin:var(--P) 0 0}
+.w5-score small{font-size:20px;color:var(--faint)}
+.signpost{margin-top:var(--P);padding:15px 20px;background:var(--card);border:1px solid rgba(44,58,110,.35);border-radius:2px}
+.signpost p{margin:0 0 10px;font-size:19px;line-height:28px;color:var(--ink)}
+.signpost a{color:var(--accent);text-decoration:underline 1px;text-underline-offset:4px}
+.sub{margin-top:var(--P)}
+.trend{font-style:italic;font-size:19px;line-height:28px;color:var(--soft);margin:8px 0 0}
+.cue-pv{font-style:italic;font-size:19px;line-height:28px;color:var(--accent);margin:8px 0 0;min-height:28px}
+.field input[type=time]{color-scheme:light;max-width:180px}
+.keepnote{margin-top:var(--P)}
+.keepnote .field{margin:0 0 8px}
+.kept p{margin:0 0 6px;font-size:19px;line-height:28px}
+.kept .k{color:var(--faint);font-variant-caps:all-small-caps;letter-spacing:.09em;font-size:17px;margin-right:8px}
+.kept .a{font-style:italic;color:var(--accent)}
+.intro-step{min-height:calc(var(--P) * 9)}
+.intro-step .lede{font-size:21px;line-height:var(--P);color:var(--ink);margin:var(--P) 0 0}
+.intro-step p{font-size:19px;line-height:28px;color:var(--soft);margin:12px 0 0}
+.intro-dots{display:flex;gap:10px;justify-content:center;margin-top:var(--P)}
+.intro-dots i{width:8px;height:8px;border-radius:50%;border:1px solid var(--soft)}
+.intro-dots i.on{background:var(--accent);border-color:var(--accent)}
+.intro-nav{justify-content:space-between}
+.printpage{display:none}
+@media print{
+  @page{margin:18mm}
+  html,body{background:#fff!important;overflow:visible!important}
+  body>*:not(.printpage){display:none!important}
+  .printpage{display:block!important;color:#1d2230;font-family:var(--serif);font-size:12pt;line-height:1.5}
+  .printpage h1{font-family:var(--display);font-style:italic;font-weight:500;font-size:26pt;margin:0}
+  .printpage .range{color:#5e6068;margin:0 0 10pt}
+  .printpage h2{font-weight:400;font-size:11pt;font-variant-caps:all-small-caps;letter-spacing:.1em;color:#5e6068;margin:14pt 0 2pt;border-bottom:.5pt solid #c9c2b4}
+  .printpage p{margin:0 0 5pt}
+  .printpage .a{font-style:italic;color:#2c3a6e;white-space:pre-wrap}
+  .printpage .k{color:#5e6068;font-variant-caps:all-small-caps;letter-spacing:.08em;margin-right:6pt}
+  .printpage .pday{display:block;break-inside:avoid;margin:0 0 6pt}
+  .printpage .foot{margin-top:18pt;font-style:italic;color:#5e6068;font-size:10pt}
+}
 @media (max-width:360px){ :root{--padl:22px} .app{padding-right:20px} nav.tabs{gap:28px} .reveal{padding:0 16px;margin-left:16px;letter-spacing:.06em} .actionbar .inner{padding-left:16px;padding-right:16px} .actionbar.full .reveal{font-size:17px;padding:0 14px;margin-left:12px} .actionbar.full .photowrap{margin-right:12px} }
 @media (max-width:374px){ .photowrap{margin-right:56px} .actionbar .inner::after{width:104px} #photoCap{width:78px;white-space:normal;line-height:15px} }
 @media (max-width:350px){ .actionbar .inner{padding-left:10px;padding-right:10px} .actionbar.full .photowrap{margin-right:8px} .actionbar.full .reveal{font-size:15px;letter-spacing:.05em;padding:0 11px;margin-left:8px} }
@@ -347,7 +424,10 @@ a.textbtn{display:inline-flex;align-items:center;text-decoration:none;color:var(
     </div>
     <h1 class="sr-only">This morning’s dream</h1>
     <div class="done ln" id="doneNote"></div>
+    <p class="cue ln hidden" id="cueLine"></p>
     <div class="plan-note ln hidden" id="planNote" role="region" aria-label="Your small experiment"></div>
+    <div class="plan-note ln hidden" id="rehNote" role="region" aria-label="Your rewritten dream"></div>
+    <div class="plan-note ln hidden" id="letterNote" role="region" aria-label="Last month’s letter"></div>
     <p class="prompt ln" id="prompt" aria-live="polite"></p>
     <div class="shots ln" id="shots" role="list" aria-label="Photos of your handwritten pages"></div>
     <div class="write ln" id="write">
@@ -361,6 +441,7 @@ a.textbtn{display:inline-flex;align-items:center;text-decoration:none;color:var(
       <div class="mini"><label for="dDate">Date</label><input type="date" id="dDate"></div>
       <div class="mini"><label id="vividL">Vividness</label><div class="dots" id="vivid" role="group" aria-labelledby="vividL"></div></div>
       <div class="mini"><label id="lucidL">Lucid</label><button class="toggle" id="lucid" aria-pressed="false" aria-labelledby="lucidL lucid">not lucid</button></div>
+      <div class="mini"><label id="nightL">Nightmare</label><button class="toggle" id="nightT" aria-pressed="false" aria-labelledby="nightL nightT">not a nightmare</button></div>
     </div></div></div>
   </section>
 
@@ -425,7 +506,8 @@ a.textbtn{display:inline-flex;align-items:center;text-decoration:none;color:var(
         <li>It is for reflection. It does not diagnose, predict or treat, and it isn't a crisis service.</li>
         <li>No scores and no counting against you. Write when it helps; rest when you need to.</li>
         <li>Change comes in small steps: a feeling named, a question sat with, a tiny experiment tried.</li>
-        <li>Your pages stay on this device. No account, no tracking. AI is used only if you add your own key.</li>
+        <li>Your writing is saved on this device only. No account, no tracking. If you turn on AI questions or handwriting reading, that dream or photo is sent to the AI service you set up, and only then.</li>
+        <li>Voice typing is handled by your browser or phone, which may use its own online speech service.</li>
       </ul>
     </div>
     <div class="glass card section ln">
@@ -433,14 +515,28 @@ a.textbtn{display:inline-flex;align-items:center;text-decoration:none;color:var(
       <p class="note">A rest day is a day with nothing asked of you. Write if you want to; rest if you don't.</p>
       <div class="field"><label for="restDay">Weekly rest day</label><select id="restDay"><option value="-1">No rest day</option><option value="0">Sunday</option><option value="1">Monday</option><option value="2">Tuesday</option><option value="3">Wednesday</option><option value="4">Thursday</option><option value="5">Friday</option><option value="6">Saturday</option></select></div>
     </div>
+    <div class="glass card section ln" id="cueCard">
+      <div class="eyebrow" style="color:var(--accent)">A cue for the morning</div>
+      <p class="note">Tie writing to something you already do. A steady cue helps a habit take root more than willpower does.</p>
+      <div class="field"><label for="cueSel">After I…</label><select id="cueSel"><option value="">choose a moment</option><option value="wake up">wake up</option><option value="turn off my alarm">turn off my alarm</option><option value="brush my teeth">brush my teeth</option><option value="make tea or coffee">make tea or coffee</option><option value="custom">something else…</option></select></div>
+      <div class="field hidden" id="cueCustomF"><label for="cueCustom">Your own moment</label><input id="cueCustom" maxlength="60" placeholder="e.g. open the curtains"></div>
+      <p class="cue-pv" id="cuePv" aria-live="polite"></p>
+      <div class="row"><button class="textbtn accent" id="cueSave">Keep this cue</button><button class="textbtn" id="cueClear">Clear</button></div>
+      <div class="eyebrow sub" style="color:var(--accent)">A gentle reminder · optional</div>
+      <p class="note">One quiet notification at a time you choose, only on days you haven't written yet. Never more than one a day, and nothing else. It stays off unless you turn it on.</p>
+      <div class="field"><label for="remTime">Time</label><input type="time" id="remTime" value="07:30"></div>
+      <div class="row"><button class="textbtn" id="remToggle" aria-pressed="false">Turn the reminder on</button></div>
+      <p class="note" id="remNote" role="status"></p>
+    </div>
     <div class="glass card section ln">
       <div class="eyebrow" style="color:var(--accent)">AI questions · optional</div>
       <p class="note">The questions are written by a small interpreter that lives inside this page and works offline. If you like, add your own OpenAI-compatible key for questions shaped more closely to your dream.</p>
-      <p class="note">Your key stays on this device. It is kept only in this browser's local storage and is sent nowhere except directly to the address below, with the dream you are exploring.</p>
+      <p class="note">Your key is kept only in this browser's storage. With AI on, the dream you explore, or a handwriting photo you add, is sent straight to the address below with your key. Nothing else is sent: your other pages, reviews, letters and check-ins stay here.</p>
       <div class="field"><label for="apiKey">API key</label><input id="apiKey" type="password" placeholder="sk-…" autocomplete="off" spellcheck="false"></div>
       <div class="field"><label for="apiBase">Base URL</label><input id="apiBase" placeholder="https://api.openai.com/v1" spellcheck="false"></div>
       <div class="field"><label for="apiModel">Model</label><input id="apiModel" placeholder="gpt-4o-mini" spellcheck="false"></div>
       <div class="row"><button class="textbtn accent" id="saveSettings">Save</button><button class="textbtn" id="clearKey">Remove key</button></div>
+      <div class="aiok hidden" id="aiConfirm" role="group" aria-labelledby="aiConfirmT"><p id="aiConfirmT"></p><div class="row"><button class="textbtn accent" id="aiYes">Turn AI on</button><button class="textbtn" id="aiNo">Not now</button></div></div>
     </div>
     <div class="glass card section ln">
       <div class="eyebrow" style="color:var(--accent)">Your archive</div>
@@ -457,9 +553,25 @@ a.textbtn{display:inline-flex;align-items:center;text-decoration:none;color:var(
         <li>If someone is hurting you: in the US, the National Domestic Violence Hotline is <a href="tel:18007997233">1-800-799-7233</a>, or text START to 88788.</li>
         <li>If you're in danger right now, call your local emergency number.</li>
       </ul>
-      <p class="note">Dream Pages can't respond to what you write. Without an AI key, nothing you write leaves this device.</p>
+      <p class="note">Dream Pages can't answer what you write the way a person can, and no one is watching over it.</p>
     </div>
     <p class="note section ln honest" style="color:var(--soft);text-align:center">Dream Pages is for reflection. It does not diagnose, predict or treat.</p>
+  </div>
+</div>
+
+<div class="sheet" id="ritual" aria-modal="true" role="dialog" aria-labelledby="rTitle">
+  <div class="app">
+    <div class="topbar"><div class="eyebrow" id="rEyebrow"></div><button class="close" id="rClose">Close</button></div>
+    <div id="rBody"></div>
+  </div>
+</div>
+
+<div class="sheet" id="intro" aria-modal="true" role="dialog" aria-labelledby="iTitle">
+  <div class="app">
+    <div class="topbar"><div class="eyebrow" id="iStep">1 of 3</div><button class="close" id="iSkip">Skip</button></div>
+    <div id="iBody"></div>
+    <div class="intro-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="row intro-nav"><button class="textbtn" id="iBack">Back</button><button class="textbtn accent" id="iNext">Next</button></div>
   </div>
 </div>
 
@@ -725,11 +837,11 @@ function distress(text){
   });
   return kinds;
 }
-function careCard(kinds){
-  var h='<aside class="care" id="care" role="note" aria-labelledby="careH"><p class="care-h" id="careH">It sounds like a lot right now.</p>'+
+function careCard(kinds,sfx){sfx=sfx||"";
+  var h='<aside class="care" id="care'+sfx+'" role="note" aria-labelledby="careH'+sfx+'"><p class="care-h" id="careH'+sfx+'">It sounds like a lot right now.</p>'+
    '<p>You don\'t have to carry it alone. In the US, you can call or text <a href="tel:988">988</a>, any time. Elsewhere, <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a> lists free, confidential helplines. If you\'re in danger, call your local emergency number.</p>';
   if(kinds.indexOf("abuse")>=0)h+='<p>If someone is hurting you: in the US, the National Domestic Violence Hotline is <a href="tel:18007997233">1-800-799-7233</a>, or text START to 88788.</p>';
-  h+='<p class="care-f">This note was shown by Dream Pages on your device. No one else is told.</p><div class="row"><a class="textbtn" href="sms:988">Text 988</a><a class="textbtn" href="tel:988">Call 988</a><button class="textbtn" id="careClose">Close this note</button></div></aside>';
+  h+='<p class="care-f">This note was shown by Dream Pages on your device. No one else is told.</p><div class="row"><a class="textbtn" href="sms:988">Text 988</a><a class="textbtn" href="tel:988">Call 988</a><button class="textbtn" id="careClose'+sfx+'">Close this note</button></div></aside>';
   return h;
 }
 var CERTAIN=/\b(this (dream )?means|it means that|which means|is a sign|a sign that|an omen|omens?|predicts?|prophe\w*|will (surely |definitely )?(come true|happen)|destin(y|ed)|manifest\w*|law of attraction|the universe|diagnos\w*|you are (clearly|definitely))\b/i;
@@ -817,8 +929,12 @@ function normalize(e){
     text:e.text,feelings:normFeelings(e.feelings,e.mood),vivid:Math.max(0,Math.min(5,Math.round(+e.vivid||0))),lucid:e.lucid==="yes"?"yes":"no",
     interpretation:(e.interpretation&&e.interpretation.opening)?e.interpretation:null,
     photos:Array.isArray(e.photos)?e.photos.filter(function(x){return typeof x==="string"&&x.length<80;}).slice(0,12):undefined,
-    experiment:normExp(e.experiment),careClosed:e.careClosed===true?true:undefined};
+    experiment:normExp(e.experiment),careClosed:e.careClosed===true?true:undefined,
+    nightmare:e.nightmare===true?true:e.nightmare===false?false:undefined,rescript:normRescript(e.rescript),good:normLine(e.good),taking:normLine(e.taking)};
 }
+function normLine(v){return typeof v==="string"&&v.trim()?v.trim().slice(0,200):undefined;}
+function normRescript(r){if(!r||typeof r!=="object"||typeof r.text!=="string"||!r.text.trim())return undefined;var D=/^\d{4}-\d{2}-\d{2}$/;
+  return {text:r.text.slice(0,4000),written:D.test(r.written||"")?r.written:today(),rehearsals:(Array.isArray(r.rehearsals)?r.rehearsals:[]).filter(function(d,i,a){return D.test(d)&&a.indexOf(d)===i;}).slice(-60),aside:r.aside===true,skip:D.test(r.skip||"")?r.skip:""};}
 function normExp(x){if(!x||typeof x!=="object")return undefined;var f=function(v){return typeof v==="string"?v.slice(0,300):"";};var o={wish:f(x.wish),outcome:f(x.outcome),obstacle:f(x.obstacle),if:f(x["if"]),then:f(x.then),planned:/^\d{4}-\d{2}-\d{2}$/.test(x.planned||"")?x.planned:"",status:["tried","not",""].indexOf(x.status)>=0?x.status:"",answered:f(x.answered)};
   return (o.then||o.wish)?o:undefined;
 }
@@ -848,7 +964,7 @@ function moonGlyph(f,size,cls){var lit=f>.02&&f<.98?'<path d="'+litPath(10,10,8.
 var LINE=32;
 function absTop(el){var t=0;while(el){t+=el.offsetTop;el=el.offsetParent;}return t;}
 function snap(){
-  var els=document.querySelectorAll(".topbar,.ln,#mBody>*,#reflect>*,#more");
+  var els=document.querySelectorAll(".topbar,.ln,#mBody>*,#reflect>*,#rBody>*,#more");
   for(var i=0;i<els.length;i++)els[i].style.marginTop="";
   for(i=0;i<els.length;i++){var el=els[i];if(!el.offsetParent)continue;var app=el.closest(".app");if(!app)continue;
     for(var k=0;k<4;k++){var r=(((absTop(el)-absTop(app))%LINE)+LINE)%LINE;if(r<0.5||LINE-r<0.5)break;el.style.marginTop=(parseFloat(getComputedStyle(el).marginTop)||0)+LINE-r+"px";}}
@@ -883,14 +999,14 @@ function rerender(){if(curView==="today")renderToday();if(curView==="journal")re
 document.querySelectorAll("nav.tabs button").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.v);});});
 
 /* today */
-var form={feelings:[],vivid:0,lucid:"no"};
+var form={feelings:[],vivid:0,lucid:"no",nightmare:false};
 function renderToday(){
   $("todayDate").textContent=longDate(today());
   var s=daysWritten();
   $("tally").innerHTML=s>0?"<b>"+s+"</b> "+(s===1?"day written":"days written"):"";
   var wrote=dateSet()[today()];
   $("doneNote").textContent=wrote?"Written this morning. The page is open if more returns.":isRest(new Date())?"Your rest day. Nothing is asked of you today; the page is here if you want it.":daysAway()>=3?"Welcome back. Nothing to catch up on. What did you dream?":"";
-  renderPlan();
+  renderPlan();renderRehearseNote();renderLetterNote();renderCueLine();
   $("page").placeholder=wrote?"Is there anything more?\nSpeak, or write what returns.":"Tell me the dream…\nSpeak, or write what you remember.";
   $("prompt").textContent=nudgeN?PROMPTS[(dayIndex()+nudgeN-1)%PROMPTS.length]:"";
   $("nudge").textContent=nudgeN?"Another nudge":"Need a nudge?";
@@ -924,6 +1040,7 @@ FEELINGS.forEach(function(g){var row=document.createElement("div");row.className
   $("moods").appendChild(row);});
 for(var vi=1;vi<=5;vi++)(function(n){var b=document.createElement("button");b.setAttribute("aria-label","Vividness "+n);b.setAttribute("aria-pressed","false");b.addEventListener("click",function(){form.vivid=form.vivid===n?0:n;syncForm();saveDraft();});$("vivid").appendChild(b);})(vi);
 $("lucid").addEventListener("click",function(){form.lucid=form.lucid==="yes"?"no":"yes";syncForm();saveDraft();});
+$("nightT").addEventListener("click",function(){form.nightmare=!form.nightmare;syncForm();saveDraft();});
 function setMore(o){$("more").classList.toggle("open",o);$("moreT").textContent=o?"Less":"More";$("moreT").setAttribute("aria-expanded",o?"true":"false");}
 $("moreT").addEventListener("click",function(){var o=!$("more").classList.contains("open");setMore(o);
   if(o)setTimeout(function(){var r=$("more").getBoundingClientRect(),bar=$("actionbar").getBoundingClientRect().top;if(r.bottom>bar-8)window.scrollBy({top:r.bottom-bar+24,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});},470);});
@@ -933,29 +1050,30 @@ function syncForm(){
   document.querySelectorAll("#moods .mood").forEach(function(b){var s=form.feelings.indexOf(b.textContent)>=0;b.classList.toggle("sel",s);b.setAttribute("aria-pressed",s?"true":"false");});
   document.querySelectorAll("#vivid button").forEach(function(b,i){b.classList.toggle("on",i<form.vivid);b.setAttribute("aria-pressed",i+1===form.vivid?"true":"false");});
   $("lucid").textContent=form.lucid==="yes"?"lucid":"not lucid";$("lucid").classList.toggle("on",form.lucid==="yes");$("lucid").setAttribute("aria-pressed",form.lucid==="yes"?"true":"false");
+  $("nightT").textContent=form.nightmare?"this was a nightmare":"not a nightmare";$("nightT").classList.toggle("on",form.nightmare);$("nightT").setAttribute("aria-pressed",form.nightmare?"true":"false");
 }
 function grow(){var t=$("page"),g=$("ghost");t.style.height="auto";var n=Math.ceil((t.scrollHeight-1)/LINE);if($("write").classList.contains("ghosting"))n=Math.max(n,Math.ceil((g.scrollHeight-1)/LINE));t.style.height=Math.max(n,heroN)*LINE+"px";snapSoon();}
 function updateReveal(){var on=$("page").value.trim().length>0,r=$("reveal"),n=$("micNote");$("write").classList.toggle("has-text",$("page").value.length>0);if(!on&&!recognizing&&!txBusy&&!/\b(err|keep)\b/.test(n.className))micMsg("");if(r.classList.contains("show")===on)return;
   var ws=[$("micWrap"),$("photoWrap")],a=ws.map(function(w){return w.getBoundingClientRect().left;});r.classList.toggle("show",on);$("actionbar").classList.toggle("full",on);
   ws.forEach(function(w,i){var d=a[i]-w.getBoundingClientRect().left;if(d&&w.animate&&!matchMedia("(prefers-reduced-motion: reduce)").matches)w.animate([{transform:"translateX("+d+"px)"},{transform:"none"}],{duration:450,easing:"cubic-bezier(.2,.7,.2,1)"});});}
-function saveDraft(){try{localStorage.setItem(K_DRAFT,JSON.stringify({text:$("page").value,photos:draftPhotos,feelings:form.feelings,vivid:form.vivid,lucid:form.lucid,date:dateTouched?$("dDate").value:"",day:today()}));}catch(_){}}
+function saveDraft(){try{localStorage.setItem(K_DRAFT,JSON.stringify({text:$("page").value,photos:draftPhotos,feelings:form.feelings,vivid:form.vivid,lucid:form.lucid,nightmare:form.nightmare,date:dateTouched?$("dDate").value:"",day:today()}));}catch(_){}}
 $("page").addEventListener("input",function(){track();paintGhost();grow();updateReveal();saveDraft();});
 $("page").addEventListener("focus",function(){caretKnown=true;});
 $("dDate").value=today();
 var draftPhotos=[];
-(function(){var d=readJSON(K_DRAFT);if(d&&(d.text||d.mood||(d.feelings&&d.feelings.length)||d.vivid||d.lucid==="yes"||(d.photos&&d.photos.length))){$("page").value=d.text||"";draftPhotos=Array.isArray(d.photos)?d.photos.filter(function(x){return typeof x==="string";}).slice(0,12):[];form.feelings=normFeelings(d.feelings,d.mood);form.vivid=Math.max(0,Math.min(5,+d.vivid||0));form.lucid=d.lucid==="yes"?"yes":"no";if(/^\d{4}-\d{2}-\d{2}$/.test(d.date||"")){$("dDate").value=d.date;dateTouched=true;}if(form.vivid||form.lucid==="yes"||dateTouched)setMore(true);}lastVal=$("page").value;updateReveal();})();
-function resetPage(){$("page").value="";lastVal="";draftPhotos=[];renderShots();anchor=0;caretKnown=false;nudgeN=0;micMsg("");form={feelings:[],vivid:0,lucid:"no"};dateTouched=false;$("dDate").value=today();syncForm();grow();updateReveal();try{localStorage.removeItem(K_DRAFT);}catch(_){}}
+(function(){var d=readJSON(K_DRAFT);if(d&&(d.text||d.mood||(d.feelings&&d.feelings.length)||d.vivid||d.lucid==="yes"||d.nightmare===true||(d.photos&&d.photos.length))){$("page").value=d.text||"";draftPhotos=Array.isArray(d.photos)?d.photos.filter(function(x){return typeof x==="string";}).slice(0,12):[];form.feelings=normFeelings(d.feelings,d.mood);form.vivid=Math.max(0,Math.min(5,+d.vivid||0));form.lucid=d.lucid==="yes"?"yes":"no";form.nightmare=d.nightmare===true;if(/^\d{4}-\d{2}-\d{2}$/.test(d.date||"")){$("dDate").value=d.date;dateTouched=true;}if(form.vivid||form.lucid==="yes"||form.nightmare||dateTouched)setMore(true);}lastVal=$("page").value;updateReveal();})();
+function resetPage(){$("page").value="";lastVal="";draftPhotos=[];renderShots();anchor=0;caretKnown=false;nudgeN=0;micMsg("");form={feelings:[],vivid:0,lucid:"no",nightmare:false};dateTouched=false;$("dDate").value=today();syncForm();grow();updateReveal();try{localStorage.removeItem(K_DRAFT);}catch(_){}}
 
 /* meaning sheet */
-var reading=null;
+var reading=null,readingMode="read";
 var lastFocus=null;
 function setInert(on){["main","nav.tabs","#actionbar"].forEach(function(q){var el=document.querySelector(q);if(!el)return;if(on){el.setAttribute("inert","");el.setAttribute("aria-hidden","true");}else{el.removeAttribute("inert");el.removeAttribute("aria-hidden");}});}
 function openSheet(id){var s=$(id);snapSoon();if(!s.classList.contains("open"))lastFocus=document.activeElement;s.scrollTop=0;s.classList.add("open");document.body.style.overflow="hidden";setInert(true);var c=s.querySelector(".close");if(c)try{c.focus({preventScroll:true});}catch(_){c.focus();}}
 function closeSheet(id){$(id).classList.remove("open");if(!document.querySelector(".sheet.open")){document.body.style.overflow="";setInert(false);if(lastFocus&&document.contains(lastFocus)&&lastFocus.offsetParent!==null)try{lastFocus.focus({preventScroll:true});}catch(_){}lastFocus=null;}}
 function renderMeaning(e,mode,planOpen){
-  reading=e;var i=e.interpretation||offlineInterpret(e),feels=normFeelings(e.feelings,e.mood),care=distress(e.text);
+  reading=e;readingMode=mode;var i=e.interpretation||offlineInterpret(e),feels=normFeelings(e.feelings,e.mood),care=distress(e.text);
   $("mDate").innerHTML=moonGlyph(moonPhase(e.date),14,"m-moon")+'<span>'+esc(longDate(e.date))+'</span>';
-  var h='<h1 class="m-title"><span class="ul">'+esc(titleFor(e))+'</span>'+'</h1><div class="m-sub">'+[feels.length?"woke feeling "+esc(listJoin(feels)):"",e.vivid?("vividness "+e.vivid+" of 5"):"",e.lucid==="yes"?"lucid":""].filter(Boolean).join(" · ")+'</div>';
+  var h='<h1 class="m-title"><span class="ul">'+esc(titleFor(e))+'</span>'+'</h1><div class="m-sub">'+[feels.length?"woke feeling "+esc(listJoin(feels)):"",e.vivid?("vividness "+e.vivid+" of 5"):"",e.lucid==="yes"?"lucid":"",e.nightmare===true?"a nightmare":""].filter(Boolean).join(" · ")+'</div>';
   if(care.length&&!e.careClosed)h+=careCard(care);
   h+='<div class="epigraph"><div class="label">What I wrote</div><div class="dreamtext clamp" id="dt">'+esc(e.text)+'</div><button class="expand" id="dtx">Read the dream</button>'+(e.photos&&e.photos.length?'<div class="m-shots" id="mShots" role="list" aria-label="Photos of the page"></div>':'')+'</div>';
   h+='<p class="frame">A few questions to sit with. Only you know what this dream means.</p>';
@@ -971,6 +1089,7 @@ function renderMeaning(e,mode,planOpen){
     h+='<p class="assoc">These are common associations, not meanings. Dreams aren\'t predictions; what an image means is yours to decide.</p></div>';}
   var connect=i.connect||(i.question?[i.question]:[]);
   h+='<div class="ask step"><div class="eyebrow">Connect · where might this echo your waking life?</div>'+connect.map(function(q){return '<p class="q">'+esc(q)+'</p>';}).join("")+'</div>';
+  h+=nmBox(e);
   var x=e.experiment;
   h+='<aside class="carry" id="tryBox"><div class="eyebrow">Act · one thing you could try</div><p>'+esc(i.act||i.intention)+'</p>'+
     (x?'<div class="plan" id="planShow"><div class="eyebrow">Your small experiment</div><p class="plan-t">'+esc(planLine(x))+'</p>'+(x.status?'<p class="note">'+(x.status==="tried"?"You tried it.":"Not this time, and that's fine.")+'</p>':'')+'<div class="row"><button class="textbtn" id="xEdit">Change it</button></div></div>'
@@ -982,6 +1101,8 @@ function renderMeaning(e,mode,planOpen){
     '<div class="field"><label for="wIf">Plan · if…</label><input id="wIf" maxlength="200" placeholder="e.g. I reach for my phone"></div>'+
     '<div class="field"><label for="wThen">…then I will</label><input id="wThen" maxlength="200" placeholder="e.g. take three slow breaths first"></div>'+
     '<div class="row"><button type="submit" class="textbtn accent" id="wSave">Keep this experiment</button><button type="button" class="textbtn" id="wCancel">Not now</button></div></form></aside>';
+  if(mode==="new")h+='<div class="keepnote" id="keepNote"><div class="field"><label for="kGood">One good thing · optional</label><input id="kGood" maxlength="200" placeholder="e.g. the light through the curtains"></div><div class="field"><label for="kTake">Something I’m taking into the day · optional</label><input id="kTake" maxlength="200" placeholder="e.g. go gently; listen more than I talk"></div></div>';
+  else if(e.good||e.taking)h+='<div class="kept" id="kept">'+(e.good?'<p><span class="k">One good thing</span><span class="a">'+esc(e.good)+'</span></p>':'')+(e.taking?'<p><span class="k">Into the day</span><span class="a">'+esc(e.taking)+'</span></p>':'')+'</div>';
   h+='<p class="honest">Dream Pages is for reflection. It does not diagnose, predict or treat.</p>';
   h+='<div class="source">'+(i.source==="ai"?"Questions shaped with AI"+(i.model?" · "+esc(i.model):""):"Written by the quiet interpreter, offline")+'</div>';
   h+='<div class="m-actions">'+(mode==="new"?'<button class="keep" id="mKeep">Keep this morning</button>':'<button id="mAgain">New questions</button><button id="mDel">Delete</button>')+'</div>';
@@ -989,6 +1110,7 @@ function renderMeaning(e,mode,planOpen){
   var dt=$("dt");$("dtx").addEventListener("click",function(){var c=dt.classList.toggle("clamp");this.textContent=c?"Read the dream":"Fold it away";snap();});
   requestAnimationFrame(function(){if(dt.scrollHeight<=dt.clientHeight+2)$("dtx").classList.add("hidden");snap();});
   if($("careClose"))$("careClose").addEventListener("click",function(){e.careClosed=true;save();var c=$("care");if(c)c.remove();toast("Support is always in settings");snap();try{$("mClose").focus({preventScroll:true});}catch(_){}});
+  wireNmBox(e);
   var woop=$("woop");
   function openWoop(){woop.classList.remove("hidden");var r=$("xRow")||$("planShow");if(r)r.classList.add("hidden");var x=e.experiment||{};
     $("wWish").value=x.wish||"";$("wOut").value=x.outcome||"";$("wObs").value=x.obstacle||"";$("wIf").value=x["if"]||"";$("wThen").value=x.then||"";snap();
@@ -1002,7 +1124,7 @@ function renderMeaning(e,mode,planOpen){
     e.experiment={wish:v("wWish"),outcome:v("wOut"),obstacle:v("wObs"),"if":v("wIf"),then:v("wThen"),planned:today(),status:"",answered:""};
     save();renderMeaning(e,mode);toast("Kept. See how it goes.");var p=$("planShow");if(p)setTimeout(function(){p.scrollIntoView({block:"nearest"});},60);});
   if(planOpen)setTimeout(openWoop,80);
-  if(mode==="new")$("mKeep").addEventListener("click",function(){closeSheet("meaning");show("today");});
+  if(mode==="new"){$("kGood").value=e.good||"";$("kTake").value=e.taking||"";$("mKeep").addEventListener("click",function(){var g=normLine($("kGood").value),t=normLine($("kTake").value);if(g!==e.good||t!==e.taking){e.good=g;e.taking=t;save();}closeSheet("meaning");show("today");});}
   else{
     $("mAgain").addEventListener("click",function(){var e=reading;$("mBody").innerHTML='<p class="listening">Gathering questions…</p>';interpret(e).catch(function(){return offlineInterpret(e);}).then(function(r){e.interpretation=r;save();renderMeaning(e,"read");});});
     $("mDel").addEventListener("click",function(){if(!confirm("Let this morning go? It will be deleted."))return;var gone=reading.photos||[];entries=entries.filter(function(x){return x.id!==reading.id;});save();if(gone.length)photoDel(gone).catch(function(){});closeSheet("meaning");toast("Deleted");rerender();});
@@ -1018,7 +1140,7 @@ $("reveal").addEventListener("click",function(){
   if(txBusy){toast("Still reading your handwriting…");return;}
   if(recognizing)stopRec();micMsg("");
   var text=$("page").value.trim();if(!text)return;
-  var e={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),created:new Date().toISOString(),date:$("dDate").value||today(),text:text,feelings:form.feelings.slice(),vivid:form.vivid,lucid:form.lucid,interpretation:null};
+  var e={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),created:new Date().toISOString(),date:$("dDate").value||today(),text:text,feelings:form.feelings.slice(),vivid:form.vivid,lucid:form.lucid,interpretation:null};if(form.nightmare)e.nightmare=true;
   if(draftPhotos.length)e.photos=draftPhotos.slice();
   $("mDate").textContent=longDate(e.date);$("mBody").innerHTML='<p class="listening">Gathering questions…</p>';openSheet("meaning");
   var started=Date.now();
@@ -1134,6 +1256,8 @@ function noKeyNote(){$("micNote").innerHTML='Add an AI key in <button class="inl
 var txQueue=[];
 function transcribeNext(){if(txBusy||!txQueue.length)return;var id=txQueue.shift();
   if(!aiReady()){txQueue=[];noKeyNote();return;}
+  var cs=getSettings(),h=aiHost(cs.base||"https://api.openai.com/v1");
+  if(cs.txOk!==h){txQueue.unshift(id);$("micNote").innerHTML='Reading handwriting sends this photo to '+esc(h)+'. <button class="inl" type="button" data-act="txok">Send it</button> or <button class="inl" type="button" data-act="txno">type it instead</button>.';$("micNote").className="micnote keep";return;}
   txBusy=true;setStatus("Reading your handwriting…","live");renderShots();
   photoGet(id).then(function(r){if(!r)throw new Error("photo missing");return blobToData(r.blob);}).then(aiTranscribe)
   .then(function(text){txBusy=false;insertText(text);setStatus(txQueue.length?"":HINT,"hint");})
@@ -1142,6 +1266,8 @@ function transcribeNext(){if(txBusy||!txQueue.length)return;var id=txQueue.shift
   .then(function(){renderShots();transcribeNext();});}
 $("micNote").addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("[data-act]");if(!b)return;
   if(b.dataset.act==="settings")$("openSettings").click();
+  if(b.dataset.act==="txok"){var s=getSettings();s.txOk=aiHost(s.base||"https://api.openai.com/v1");setSettings(s);micMsg("");transcribeNext();}
+  if(b.dataset.act==="txno"){txQueue=[];$("micNote").textContent="Your photo is kept here. Type the words on the page.";$("micNote").className="micnote keep";}
   if(b.dataset.act==="retry"&&draftPhotos.indexOf(b.dataset.id)>=0){txQueue.push(b.dataset.id);transcribeNext();}});
 $("photoBtn").addEventListener("click",function(){if(recognizing)stopRec();$("photoFile").click();});
 $("photoFile").addEventListener("change",function(){var fs=[].slice.call(this.files||[]).filter(function(f){return /^image\//.test(f.type)||!f.type;});this.value="";if(!fs.length)return;
@@ -1157,18 +1283,21 @@ if(draftPhotos.length)renderShots();
 /* journal */
 function renderJournal(){
   $("jCount").textContent=entries.length?entries.length+(entries.length===1?" morning":" mornings"):"";
-  var q=$("search").value.trim().toLowerCase();
-  if(!entries.length){$("list").innerHTML='<p class="empty">Your first morning is still ahead of you.</p>';snapSoon();return;}
-  var list=entries.filter(function(e){if(!q)return true;var i=e.interpretation||{};return [e.text,e.date,(e.feelings||[]).join(" "),(i.symbolNames||[]).join(" "),(i.themes||[]).join(" ")].join(" ").toLowerCase().indexOf(q)>=0;});
+  var q=$("search").value.trim().toLowerCase(),LT=getLetters(),letters=Object.keys(LT).filter(function(k){return /^\d{4}-\d{2}$/.test(k)&&hasLetter(LT[k]);}).map(function(k){var L=LT[k],d=/^\d{4}-\d{2}-\d{2}/.test(L.saved||"")?L.saved.slice(0,10):k+"-28";return {letter:k,date:d,created:"~",text:LQ.map(function(x){return L[x[0]]||"";}).join(" ")};});
+  if(!entries.length&&!letters.length){$("list").innerHTML='<p class="empty">Your first morning is still ahead of you.</p>';snapSoon();return;}
+  var list=entries.filter(function(e){if(!q)return true;var i=e.interpretation||{};return [e.text,e.date,(e.feelings||[]).join(" "),(i.symbolNames||[]).join(" "),(i.themes||[]).join(" "),e.good||""].join(" ").toLowerCase().indexOf(q)>=0;});
+  letters.forEach(function(l){if(!q||("a letter to myself "+monthName(l.letter)+" "+l.text).toLowerCase().indexOf(q)>=0)list.push(l);});
+  list.sort(function(a,b){return ((b.date||"")+(b.created||"")).localeCompare((a.date||"")+(a.created||""));});
   if(!list.length){$("list").innerHTML='<p class="empty">Nothing here holds “'+esc(q)+'”.</p>';snapSoon();return;}
   var h="",lastM="";
   list.forEach(function(e){var m=parseYmd(e.date).toLocaleDateString(undefined,{month:"long",year:"numeric"});
     if(m!==lastM){h+=(lastM?'</div>':'')+'<div class="eyebrow month">'+esc(m)+'</div><div class="group">';lastM=m;}
     var dd=parseYmd(e.date);
+    if(e.letter){h+='<button class="item letter" data-letter="'+esc(e.letter)+'" aria-label="'+esc("A letter to myself, "+monthName(e.letter))+'"><span class="l">A letter to myself · '+esc(monthName(e.letter,false))+'</span><span class="lead" aria-hidden="true"></span><span class="pg" aria-hidden="true">'+dd.getDate()+'</span><span class="mp" aria-hidden="true"><svg width="12" height="10" viewBox="0 0 12 10" fill="none" stroke-width="1"><rect x=".5" y=".5" width="11" height="9" rx="1"/><path d="M.8 1l5.2 4.2L11.2 1"/></svg></span><span class="d" aria-hidden="true"><span class="md">letter</span></span></button>';return;}
     h+='<button class="item" data-id="'+esc(e.id)+'" aria-label="'+esc(shortDate(e.date)+(e.feelings&&e.feelings.length?", "+e.feelings.join(", "):"")+": "+firstLine(e.text))+'"><span class="l">'+esc(firstLine(e.text))+'</span><span class="lead" aria-hidden="true"></span><span class="pg" aria-hidden="true">'+dd.getDate()+'</span><span class="mp" aria-hidden="true">'+moonGlyph(moonPhase(e.date),10,"mp-g")+'</span><span class="d" aria-hidden="true">'+(e.feelings&&e.feelings.length?'<span class="md">'+esc(e.feelings[0])+'</span>':esc(dd.toLocaleDateString(undefined,{weekday:"short"})))+'</span></button>';});
   $("list").innerHTML=h+(lastM?'</div>':'');snapSoon();
 }
-$("list").addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest(".item");if(b)openEntry(b.dataset.id);});
+$("list").addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest(".item");if(!b)return;if(b.dataset.letter)openLetter(b.dataset.letter,false);else openEntry(b.dataset.id);});
 $("search").addEventListener("input",renderJournal);
 
 /* reflect */
@@ -1205,32 +1334,307 @@ function renderReflect(){
   if(src.length){h+='<div class="ledger"><div class="lh"><span>'+(cs.length?"This week's images":"Images that return")+'</span><span>Times</span></div><div class="lines">'+src.slice(0,5).map(function(x){return '<div class="line"><span>'+esc(x[0])+'</span><i class="lead" aria-hidden="true"></i><em>'+x[1]+'</em></div>';}).join("")+'</div></div>';}
   if(days)h+='<div class="ask"><div class="eyebrow">A question for the week ahead</div><p class="q">'+esc(q)+'</p></div>';
   h+=reviewHTML(N);
+  h+=nightmareHTML()+wellHTML()+letterHTML();
   var tried=entries.filter(function(e){return e.experiment&&e.experiment.status==="tried";}).length;
   h+='<div class="stats"><div class="stat"><div class="v">'+daysWritten()+'</div><div class="k">Days written</div></div><div class="stat"><div class="v">'+daysThisMonth()+'</div><div class="k">This month</div></div><div class="stat"><div class="v">'+tried+'</div><div class="k">Experiments tried</div></div></div>';
-  $("reflect").innerHTML=h;wireReview();snapSoon();
+  $("reflect").innerHTML=h;wireReview();wireWell();wireLetter();snapSoon();
 }
 var RQ=[["noticed","What did you notice most?"],["grateful","What are you grateful for?"],["carry","What do you want to carry into next week?"]];
-function reviewHTML(N){var r=getReviews()[weekKey()],li=function(k,arr,none){return '<li><b>'+k+'</b> '+(arr.length?esc(listJoin(arr.slice(0,4).map(function(x,j){return (j?lc(x[0]):x[0])+(x[1]>1?" ("+times(x[1])+")":"");}))):'<i>'+none+'</i>')+'</li>';};
+var RQ_ALL=RQ.concat([["good","One good thing from this week · optional"]]);
+function reviewHTML(N){var goods=entries.filter(function(e){return e.good&&e.date>=ymd(addDays(new Date(),-6));}).map(function(e){return e.good;}),r=getReviews()[weekKey()],li=function(k,arr,none){return '<li><b>'+k+'</b> '+(arr.length?esc(listJoin(arr.slice(0,4).map(function(x,j){return (j?lc(x[0]):x[0])+(x[1]>1?" ("+times(x[1])+")":"");}))):'<i>'+none+'</i>')+'</li>';};
   var h='<section class="review glass card" id="review" aria-labelledby="rvH"><div class="eyebrow" id="rvH" style="color:var(--accent)">Weekly review · a small ritual</div>'+
     '<p class="note">Once a week, read back over your pages. Notice what returns, find one thing to be grateful for, and choose what to carry forward. Ten quiet minutes is plenty.</p>'+
-    '<ul class="rv-sum" aria-label="From your pages this week">'+li("Images",N.syms,"none this week")+li("People",N.people,"none named")+li("Feelings",N.feels.length?N.feels:N.emos,"none named")+'</ul>';
-  if(r&&RQ.some(function(q){return r[q[0]];}))h+='<div class="rv-saved" id="rvSaved">'+RQ.map(function(q){return r[q[0]]?'<p><span class="k">'+q[1]+'</span><span class="a">'+esc(r[q[0]])+'</span></p>':'';}).join("")+'<div class="row"><button class="textbtn" id="rvEdit">Edit this review</button></div></div>';
+    '<ul class="rv-sum" aria-label="From your pages this week">'+li("Images",N.syms,"none this week")+li("People",N.people,"none named")+li("Feelings",N.feels.length?N.feels:N.emos,"none named")+(goods.length?'<li><b>Good things</b> '+esc(listJoin(goods.slice(0,4)))+'</li>':'')+'</ul>';
+  if(r&&RQ_ALL.some(function(q){return r[q[0]];}))h+='<div class="rv-saved" id="rvSaved">'+RQ_ALL.map(function(q){return r[q[0]]?'<p><span class="k">'+q[1]+'</span><span class="a">'+esc(r[q[0]])+'</span></p>':'';}).join("")+'<div class="row"><button class="textbtn" id="rvEdit">Edit this review</button></div></div>';
   else h+='<div class="row" id="rvStart"><button class="textbtn accent" id="rvOpen">Begin this week’s review</button></div>';
   h+='<form class="hidden" id="rvForm" novalidate>'+RQ.map(function(q){return '<div class="field"><label for="rv_'+q[0]+'">'+q[1]+'</label><textarea id="rv_'+q[0]+'" rows="2" maxlength="1200"></textarea></div>';}).join("")+
-    '<div class="row"><button type="submit" class="textbtn accent" id="rvSave">Keep this review</button><button type="button" class="textbtn" id="rvCancel">Not now</button></div></form></section>';
+    '<div class="field"><label for="rv_good">One good thing from this week · optional</label><input id="rv_good" maxlength="200" placeholder="one line is plenty"></div>'+
+    '<div class="row"><button type="submit" class="textbtn accent" id="rvSave">Keep this review</button><button type="button" class="textbtn" id="rvCancel">Not now</button></div></form>'+
+    '<div class="row" id="rvExport"><button class="textbtn" id="rvPrint">Save my week as a page</button><button class="textbtn" id="rvText">Download as text</button></div><p class="note" style="margin:8px 0 0">Private: it’s made on this device, and only for you.</p></section>';
   return h;}
 function wireReview(){var f=$("rvForm");if(!f)return;
-  function open_(){var r=getReviews()[weekKey()]||{};RQ.forEach(function(q){$("rv_"+q[0]).value=r[q[0]]||"";});f.classList.remove("hidden");["rvStart","rvSaved"].forEach(function(id){if($(id))$(id).classList.add("hidden");});snap();try{$("rv_noticed").focus({preventScroll:true});}catch(_){}}
+  function open_(){var r=getReviews()[weekKey()]||{};RQ_ALL.forEach(function(q){$("rv_"+q[0]).value=r[q[0]]||"";});f.classList.remove("hidden");["rvStart","rvSaved"].forEach(function(id){if($(id))$(id).classList.add("hidden");});snap();try{$("rv_noticed").focus({preventScroll:true});}catch(_){}}
   if($("rvOpen"))$("rvOpen").addEventListener("click",open_);if($("rvEdit"))$("rvEdit").addEventListener("click",open_);
   $("rvCancel").addEventListener("click",function(){renderReflect();});
-  f.addEventListener("submit",function(ev){ev.preventDefault();var all=getReviews(),o={saved:new Date().toISOString()};RQ.forEach(function(q){o[q[0]]=$("rv_"+q[0]).value.trim();});
-    if(!RQ.some(function(q){return o[q[0]];})){toast("Write a line or two first");return;}
+  $("rvPrint").addEventListener("click",printWeek);$("rvText").addEventListener("click",downloadWeek);
+  f.addEventListener("submit",function(ev){ev.preventDefault();var all=getReviews(),o={saved:new Date().toISOString()};RQ_ALL.forEach(function(q){o[q[0]]=$("rv_"+q[0]).value.trim();});
+    if(!RQ_ALL.some(function(q){return o[q[0]];})){toast("Write a line or two first");return;}
     all[weekKey()]=o;try{localStorage.setItem(K_REVIEWS,JSON.stringify(all));}catch(_){toast("Couldn't save in this browser");return;}renderReflect();toast("Review kept");var sv=$("rvSaved");if(sv)sv.scrollIntoView({block:"nearest"});});}
 
+/* ===== phase 2: nightmares, a morning cue, letters, check-ins, a printable week, first run ===== */
+var K_LETTERS="dreamPages.letters.v1",K_WELL="dreamPages.wellbeing.v1",K_INTRO="dreamPages.intro.v1";
+function objStore(k){var r=readJSON(k);return r&&typeof r==="object"&&!Array.isArray(r)?r:{};}
+function putStore(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(_){toast("Couldn't save in this browser");return false;}}
+function motion(){return matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth";}
+function daysBetween(a,b){return Math.round((parseYmd(b)-parseYmd(a))/864e5);}
+function monthKey(d){d=d||new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");}
+function prevMonthKey(d){d=d||new Date();return monthKey(new Date(d.getFullYear(),d.getMonth()-1,1));}
+function monthName(k,withYear){var p=k.split("-");return new Date(+p[0],+p[1]-1,1).toLocaleDateString(undefined,withYear===false?{month:"long"}:{month:"long",year:"numeric"});}
+function byId(id){return entries.filter(function(x){return x.id===id;})[0];}
+
+/* the ritual sheet: one quiet page for guides, the timer, letters and check-ins */
+function openRitual(eyebrow,html){$("rEyebrow").textContent=eyebrow;$("rBody").innerHTML=html;var s=$("ritual");openSheet("ritual");s.scrollTop=0;snapSoon();}
+function closeRitual(){stopTimer();closeSheet("ritual");
+  if($("meaning").classList.contains("open")&&reading){renderMeaning(reading,readingMode);try{$("mClose").focus({preventScroll:true});}catch(_){}}
+  rerender();}
+$("rClose").addEventListener("click",closeRitual);
+
+/* ---- nightmares: imagery rehearsal, as self-help ---- */
+var NM_FEEL_STRONG=["scared","powerless"],NM_FEEL_SOFT=["anxious","unsettled"];
+var NM_RE=/\b(nightmares?|bad dream|terrified|terrifying|horrifying|chased|chasing me|being chased|attacked|attacking me|hunted|trapped|monsters?|woke (up )?(screaming|crying|sweating|shaking|in a panic|panicking|terrified|scared|afraid))\b/gi;
+var TRAUMA_RE=/\b(assault(ed)?|rap(e|ed)|abus(e|ed|ive)|combat|shooting|shot at|bomb(s|ing)?|the crash|car crash|accident again|flashbacks?|ptsd|trauma(tic)?|like it really happened|the night it happened|what happened to me)\b/gi;
+function nightmareLikely(e){if(!e)return false;if(e.nightmare===true)return true;if(e.nightmare===false)return false;
+  var t=prepText(e.text),f=normFeelings(e.feelings,e.mood);
+  if(affirmed(NM_RE,t))return true;
+  if(f.some(function(x){return NM_FEEL_STRONG.indexOf(x)>=0;}))return true;
+  return f.some(function(x){return NM_FEEL_SOFT.indexOf(x)>=0;})&&affirmed(EMO.fear,t);}
+function traumaLinked(e){return affirmed(TRAUMA_RE,prepText(e.text))||distress(e.text).length>0;}
+function rsDay(r,t){return daysBetween(r.written,t||today())+1;}
+function activeRescript(){var t=today();for(var i=0;i<entries.length;i++){var r=entries[i].rescript;if(r&&r.text&&!r.aside&&r.written&&rsDay(r,t)>=1&&rsDay(r,t)<=14)return entries[i];}return null;}
+function nmBox(e){var r=e.rescript;
+  if(r&&r.text)return '<aside class="carry nm-box" id="nmBox"><div class="eyebrow">Your rewritten dream</div><p class="nm-t">'+esc(firstLine(r.text))+'</p><p class="note">'+(r.rehearsals.length?"Rehearsed "+times(r.rehearsals.length)+".":"Not rehearsed yet. Whenever you're ready.")+'</p><div class="row"><button class="textbtn" id="nmRehearse">Rehearse</button><button class="textbtn" id="nmEdit">Read or change it</button></div></aside>';
+  if(!nightmareLikely(e))return "";
+  return '<aside class="carry nm-box" id="nmBox"><div class="eyebrow">If this was a nightmare</div><p class="nm-t">You can change how it goes. Many people find that rewriting a bad dream, then picturing the new version for a few minutes each day, makes nightmares less frequent. It\'s called imagery rehearsal.</p>'+
+    '<div class="row"><button class="textbtn" id="nmStart">Rewrite this dream</button>'+(e.nightmare===undefined?'<button class="textbtn" id="nmNo">It wasn\'t a nightmare</button>':'')+'</div></aside>';}
+function wireNmBox(e){
+  if($("nmStart"))$("nmStart").addEventListener("click",function(){openGuide(e);});
+  if($("nmEdit"))$("nmEdit").addEventListener("click",function(){openGuide(e);});
+  if($("nmRehearse"))$("nmRehearse").addEventListener("click",function(){openRehearse(e);});
+  if($("nmNo"))$("nmNo").addEventListener("click",function(){e.nightmare=false;save();var b=$("nmBox");if(b)b.remove();toast("Noted");snap();});}
+var NM_SAFE='<p class="note safe" id="nmSafe">If nightmares come often, keep you from sleeping, or are tied to something that happened to you, it may help to talk with a doctor or a sleep clinician; they can guide this kind of rehearsal with you. Dream Pages is for reflection and can\'t treat nightmares. Support is always in settings.</p>';
+var PACE_STRONG='<p class="pace" id="paceNote">This dream may touch something painful. Go at your own pace, and stop any time. You don\'t have to rewrite it today, or at all. If it stirs up a lot, set it aside and be gentle with yourself.</p>';
+function openGuide(e){var care=distress(e.text),r=e.rescript||{};
+  var h='<h1 class="h ln" id="rTitle"><span class="ul">Rewrite the dream</span></h1><p class="frame ln">Three small steps. Go at your own pace, and stop any time.</p>';
+  if(care.length)h+=careCard(care,"R");
+  if(traumaLinked(e))h+=PACE_STRONG;
+  h+='<ol class="irt"><li><div class="eyebrow">1 · Write the nightmare</div><p class="note">You\'ve already written it down. You don\'t need to go over the worst parts again; a few lines is enough.</p></li>'+
+    '<li><div class="eyebrow">2 · Change it, any way you like</div><p class="note">Change any part: the ending, the place, who is there, what you can do. The new version can be ordinary, kind, funny or strange. There\'s no right way.</p>'+
+    '<div class="field"><label for="nmText">The new version</label><textarea id="nmText" rows="5" maxlength="4000" placeholder="e.g. The door opens onto a quiet garden, and I walk out slowly."></textarea></div></li>'+
+    '<li><div class="eyebrow">3 · Rehearse the new version</div><p class="note">Once a day for about two weeks, spend 5 to 10 minutes picturing the new version in as much detail as you can. Just the new one, not the old. A quiet card on Today will hold it for you.</p></li></ol>'+
+    '<div class="row"><button class="textbtn accent" id="nmSave">Keep the new version</button><button class="textbtn" id="nmLater">Not now</button></div>'+NM_SAFE;
+  openRitual("Nightmare · a gentle guide",h);
+  $("nmText").value=r.text||"";
+  if($("careCloseR"))$("careCloseR").addEventListener("click",function(){var c=$("careR");if(c)c.remove();toast("Support is always in settings");snap();});
+  $("nmLater").addEventListener("click",closeRitual);
+  $("nmSave").addEventListener("click",function(){var v=$("nmText").value.trim();if(!v){toast("Write the new version first");try{$("nmText").focus();}catch(_){}return;}
+    var old=e.rescript;e.nightmare=true;e.rescript={text:v.slice(0,4000),written:old&&old.written?old.written:today(),rehearsals:old?old.rehearsals.slice():[],aside:false,skip:""};
+    if(save()){toast("Kept. Rehearse when ready");openRehearse(e);}});}
+/* a calm timer: no sounds, no pressure */
+var tm={id:0,end:0,left:300,total:300,run:false};
+function fmt(s){s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+":"+String(s%60).padStart(2,"0");}
+function stopTimer(){if(tm.id)clearInterval(tm.id);tm.id=0;tm.run=false;}
+function paintTimer(){var l=$("tLeft"),fg=$("trFg");if(!l)return;l.textContent=fmt(tm.left);if(fg){var C=2*Math.PI*62;fg.style.strokeDasharray=C;fg.style.strokeDashoffset=C*(1-tm.left/tm.total);}}
+function tick(){tm.left=Math.max(0,(tm.end-Date.now())/1000);paintTimer();if(tm.left<=0){stopTimer();if($("tStart"))$("tStart").textContent="Begin again";if($("tMsg"))$("tMsg").textContent="Time. Take a slow breath before you open your eyes.";}}
+function openRehearse(e){var r=e.rescript;if(!r)return;stopTimer();tm.total=tm.left=300;var t=today(),did=r.rehearsals.indexOf(t)>=0,d=rsDay(r,t);
+  var h='<h1 class="h ln" id="rTitle"><span class="ul">Rehearse the new version</span></h1>'+
+    '<p class="frame ln">'+(d<=14?"Day "+d+" of about 14. ":"")+'Settle somewhere comfortable. Read the new version, then close your eyes and picture it slowly, in as much detail as you can.</p>'+
+    '<div class="rh-text" id="rhText">'+esc(r.text)+'</div>'+
+    '<div class="timer" role="timer" aria-label="Rehearsal timer"><div class="t-wrap"><svg width="140" height="140" viewBox="0 0 140 140" aria-hidden="true"><circle class="tr-bg" cx="70" cy="70" r="62"/><circle class="tr-fg" id="trFg" cx="70" cy="70" r="62"/></svg><span class="t-left" id="tLeft">5:00</span></div></div>'+
+    '<p class="t-msg" id="tMsg" aria-live="polite"></p>'+
+    '<div class="row seg" role="group" aria-label="Timer length"><button class="textbtn" data-min="5" aria-pressed="true">5 minutes</button><button class="textbtn" data-min="10" aria-pressed="false">10 minutes</button></div>'+
+    '<div class="row seg"><button class="textbtn accent" id="tStart">Begin</button><button class="textbtn" id="rhDone" aria-pressed="'+(did?"true":"false")+'">'+(did?"✓ Rehearsed today":"I rehearsed it")+'</button></div>'+
+    '<p class="pace">Go at your own pace, and stop any time. If the old dream crowds in, open your eyes, breathe, and come back to the new version, or leave it for today.</p>'+
+    '<p class="note" id="rhCount">'+(r.rehearsals.length?"Rehearsed "+times(r.rehearsals.length)+" so far.":"Your first rehearsal can be now, or later today.")+'</p>'+
+    '<div class="row"><button class="textbtn" id="rhEdit">Change the new version</button><button class="textbtn" id="rhAside">'+(r.aside?"Bring it back":"Set this aside")+'</button></div>'+NM_SAFE;
+  openRitual("Your rewritten dream",h);paintTimer();
+  document.querySelectorAll("#rBody .seg [data-min]").forEach(function(b){b.addEventListener("click",function(){if(tm.run)return;tm.total=tm.left=+b.dataset.min*60;document.querySelectorAll("#rBody .seg [data-min]").forEach(function(o){o.setAttribute("aria-pressed",o===b?"true":"false");});$("tMsg").textContent="";$("tStart").textContent="Begin";paintTimer();});});
+  $("tStart").addEventListener("click",function(){if(tm.run){stopTimer();this.textContent="Carry on";$("tMsg").textContent="Paused.";return;}
+    if(tm.left<=0)tm.left=tm.total;tm.end=Date.now()+tm.left*1000;tm.run=true;this.textContent="Pause";$("tMsg").textContent="Eyes closed, if you like. Picture the new version.";tm.id=setInterval(tick,250);});
+  $("rhDone").addEventListener("click",function(){var t=today();if(r.rehearsals.indexOf(t)<0)r.rehearsals.push(t);save();this.textContent="✓ Rehearsed today";this.setAttribute("aria-pressed","true");
+    $("rhCount").textContent="Rehearsed "+times(r.rehearsals.length)+" so far.";toast("Rehearsed today. Thank you");renderToday();});
+  $("rhEdit").addEventListener("click",function(){openGuide(e);});
+  $("rhAside").addEventListener("click",function(){r.aside=!r.aside;save();toast(r.aside?"Set aside. It's here if you want it":"Back on Today");closeRitual();});}
+function renderRehearseNote(){var n=$("rehNote"),e=activeRescript(),t=today();
+  if(!e||e.rescript.rehearsals.indexOf(t)>=0||e.rescript.skip===t){n.classList.add("hidden");n.innerHTML="";return;}
+  n.innerHTML='<p class="pn-h">Your rewritten dream · day '+rsDay(e.rescript,t)+' of about 14</p><p class="pn-t">'+esc(firstLine(e.rescript.text))+'</p><div class="row"><button class="textbtn" data-r="go">Rehearse now</button><button class="textbtn" data-r="skip">Not today</button></div>';
+  n.dataset.id=e.id;n.classList.remove("hidden");}
+$("rehNote").addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("button[data-r]");if(!b)return;var e=byId(this.dataset.id);if(!e||!e.rescript)return;
+  if(b.dataset.r==="go"){openRehearse(e);return;}e.rescript.skip=today();save();renderToday();toast("That's all right");});
+/* a gentle count per week, for the last four weeks */
+function nightmareWeeks(n){n=n||4;var now=new Date(),out=[];for(var i=n-1;i>=0;i--){var wk=weekKey(addDays(now,-7*i));out.push({week:wk,count:entries.filter(function(e){return e.nightmare===true&&weekKey(parseYmd(e.date))===wk;}).length});}return out;}
+function nightmareTrend(w){var a=w[w.length-1].count,b=w[w.length-2].count,earlier=w.slice(0,-2).reduce(function(s,x){return s+x.count;},0);
+  if(!a&&!b)return earlier?"None these last two weeks.":"None these last few weeks.";
+  if(a<b)return "Fewer than last week so far.";
+  if(a===b)return "About the same as last week.";
+  return "More than last week. Nightmares come and go; this is a count, not a verdict.";}
+function nightmareHTML(){if(!entries.some(function(e){return e.nightmare===true;}))return "";
+  var w=nightmareWeeks(4),lab=["3 weeks ago","2 weeks ago","Last week","This week"],reh=entries.reduce(function(s,e){return s+(e.rescript?e.rescript.rehearsals.length:0);},0);
+  var h='<section class="glass card" id="nmCard" aria-labelledby="nmH"><div class="eyebrow" id="nmH" style="color:var(--accent)">Nightmares · a gentle count</div>'+
+    '<div class="ledger" style="margin-top:8px"><div class="lines">'+w.map(function(x,i){return '<div class="line"><span>'+lab[i]+'</span><i class="lead" aria-hidden="true"></i><em>'+x.count+'</em></div>';}).join("")+'</div></div>'+
+    '<p class="trend" id="nmTrend">'+esc(nightmareTrend(w))+(reh?" You've rehearsed a new version "+times(reh)+".":"")+'</p>';
+  if(w[3].count>=3||w[2].count>=3)h+='<p class="note">When nightmares come most nights, a doctor or sleep clinician can help.</p>';
+  return h+'</section>';}
+
+/* ---- a cue for the morning, and one optional reminder ---- */
+var CUES=["wake up","turn off my alarm","brush my teeth","make tea or coffee"];
+function cueClean(c){return String(c||"").trim().replace(/^(after|when|once)\s+i\s+/i,"").replace(/[.,;:!]+\s*$/,"").slice(0,60);}
+function cueText(c){c=cueClean(c);return c?"After I "+c+", I will write down my dream.":"";}
+function cueFrom(sel,custom){return sel==="custom"?cueClean(custom):sel;}
+function fillCue(sel,custom,f,cue){cue=cueClean(cue);var known=CUES.indexOf(cue)>=0;sel.value=!cue?"":known?cue:"custom";custom.value=known?"":cue;f.classList.toggle("hidden",sel.value!=="custom");}
+function renderCueLine(){var c=getSettings().cue,l=$("cueLine"),wrote=dateSet()[today()];var t=cueText(c);l.textContent=t;l.classList.toggle("hidden",!t||!!wrote);}
+function cuePreview(){$("cuePv").textContent=cueText(cueFrom($("cueSel").value,$("cueCustom").value));}
+$("cueSel").addEventListener("change",function(){$("cueCustomF").classList.toggle("hidden",this.value!=="custom");cuePreview();if(this.value==="custom")try{$("cueCustom").focus();}catch(_){}});
+$("cueCustom").addEventListener("input",cuePreview);
+$("cueSave").addEventListener("click",function(){var c=cueFrom($("cueSel").value,$("cueCustom").value);if(!c){toast("Choose a moment first");return;}var s=getSettings();s.cue=c;toast(setSettings(s)?"Cue kept":"Couldn't save");renderCueLine();remSync();});
+$("cueClear").addEventListener("click",function(){var s=getSettings();delete s.cue;setSettings(s);fillCue($("cueSel"),$("cueCustom"),$("cueCustomF"),"");cuePreview();renderCueLine();toast("Cue cleared");remSync();});
+function notifOK(){return typeof window.Notification==="function"||typeof window.Notification==="object"&&!!window.Notification;}
+function alarmTip(){var c=cueClean(getSettings().cue);return " A phone alarm works just as well: label it “"+(c?"After I "+c+", write down my dream":"Write down my dream")+"”.";}
+function isIOS(){return /iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);}
+function remSync(msg){var r=getSettings().rem||{},on=!!r.on&&notifOK()&&Notification.permission==="granted",b=$("remToggle");
+  b.textContent=on?"Turn the reminder off":"Turn the reminder on";b.setAttribute("aria-pressed",on?"true":"false");$("remTime").value=r.time||"07:30";
+  $("remNote").textContent=msg!==undefined?msg:on?remOnText(r.time||"07:30"):!notifOK()?unsupportedText():"";}
+function remOnText(t){return "On. One reminder at "+t+", only on days you haven't written yet. Browsers can deliver it only while Dream Pages is open or resting in the background, so a phone alarm is the surest way.";}
+function unsupportedText(){return (isIOS()?"On iPhone and iPad, reminders only work once Dream Pages is added to the Home Screen (Share, then Add to Home Screen), and then opened from there.":"This browser can't show reminders.")+alarmTip();}
+function setRem(o){var s=getSettings();s.rem=Object.assign({on:false,time:"07:30",last:""},s.rem||{},o);setSettings(s);return s.rem;}
+$("remToggle").addEventListener("click",function(){var r=getSettings().rem||{};
+  if(r.on){setRem({on:false});remSync("Off. No reminders will come.");toast("Reminder off");return;}
+  if(!notifOK()){remSync(unsupportedText());return;}
+  if(Notification.permission==="denied"){remSync("Notifications are blocked for this site, so no reminder can come. You can allow them in your browser's site settings."+alarmTip());return;}
+  var ask;try{ask=Notification.permission==="granted"?"granted":Notification.requestPermission();}catch(_){ask="default";}
+  Promise.resolve(ask).then(function(p){if(p!=="granted"){remSync((p==="denied"?"Notifications weren't allowed, so no reminder will come.":"No permission yet, so the reminder stays off.")+alarmTip());return;}
+    var x=setRem({on:true,time:$("remTime").value||"07:30"});remSync(remOnText(x.time));toast("Reminder on");}).catch(function(){remSync("This browser couldn't turn on reminders."+alarmTip());});});
+$("remTime").addEventListener("change",function(){var r=getSettings().rem;if(r&&r.on){var x=setRem({time:this.value||"07:30",last:""});remSync(remOnText(x.time));}});
+function reminderDue(now){now=now||new Date();var r=getSettings().rem;if(!r||!r.on||!notifOK()||Notification.permission!=="granted")return false;
+  var t=ymd(now);if(r.last===t||dateSet()[t])return false;
+  var hm=String(r.time||"07:30").split(":"),at=new Date(now.getFullYear(),now.getMonth(),now.getDate(),+hm[0]||0,+hm[1]||0);
+  return now>=at&&now-at<3*3600e3;}
+function reminderCheck(now){now=now||new Date();if(!reminderDue(now))return false;setRem({last:ymd(now)});
+  if(!document.hidden)return false; /* already here: the quiet line on Today is enough */
+  var title="Dream Pages",opt={body:cueText(getSettings().cue)||"If you'd like, a quiet moment to write down your dream.",tag:"dream-pages-morning",icon:"icons/icon-192.png"};
+  function direct(){try{new Notification(title,opt);}catch(_){}}
+  if(navigator.serviceWorker&&navigator.serviceWorker.getRegistration)navigator.serviceWorker.getRegistration().then(function(reg){if(reg&&reg.showNotification)return reg.showNotification(title,opt);direct();}).catch(direct);else direct();
+  return true;}
+
+/* ---- a letter to myself, once a month ---- */
+var LQ=[["noticed","What I noticed this month"],["grateful","What I'm grateful for"],["kinder","What I want to be kinder to myself about, or carry forward"]];
+function getLetters(){return objStore(K_LETTERS);}
+function hasLetter(L){return !!L&&LQ.some(function(q){return L[q[0]];});}
+function monthSummary(k){var me=entries.filter(function(e){return e.date.slice(0,7)===k;}),days=Object.keys(me.reduce(function(o,e){o[e.date]=1;return o;},{})).length,N=weekNotice(me),p=[];
+  p.push(days?"You came to the page on "+days+(days===1?" morning":" mornings")+" in "+monthName(k,false)+".":"The page was quiet in "+monthName(k,false)+". That's all right.");
+  if(N.syms.length)p.push("Images that returned: "+listJoin(N.syms.slice(0,3).map(function(x,j){return j?lc(x[0]):x[0];}))+".");
+  if(N.feels.length)p.push("Feelings you named: "+listJoin(N.feels.slice(0,3).map(function(x){return x[0];}))+".");
+  var good=me.filter(function(e){return e.good;}).length;if(good)p.push("You wrote down "+(good===1?"one good thing":good+" good things")+".");
+  return p.join(" ");}
+function openLetter(k,edit){var all=getLetters(),L=all[k]||{};
+  if(!edit&&hasLetter(L)){
+    var h='<h1 class="h ln" id="rTitle"><span class="ul">A letter to myself</span></h1><p class="frame ln">'+esc(monthName(k))+(L.saved?" · written "+esc(shortDate(L.saved.slice(0,10))):"")+'</p><p class="letter-head">Dear me,</p>'+
+      LQ.map(function(q){return L[q[0]]?'<p class="letter-p"><span class="k">'+q[1]+'</span><span class="a">'+esc(L[q[0]])+'</span></p>':'';}).join("")+
+      '<p class="letter-sign">with care, me</p><div class="row"><button class="textbtn" id="lEdit">Edit this letter</button><button class="textbtn" id="lDone">Close</button></div>';
+    openRitual("A letter to myself",h);
+    if(k!==monthKey()&&!L.opened){L.opened=today();all[k]=L;putStore(K_LETTERS,all);}
+    $("lEdit").addEventListener("click",function(){openLetter(k,true);});$("lDone").addEventListener("click",closeRitual);return;}
+  var h2='<h1 class="h ln" id="rTitle"><span class="ul">A letter to myself</span></h1><p class="frame ln">'+esc(monthName(k))+'. A few honest lines to the person you\'ll be next month. Write as much or as little as you like.</p>'+
+    '<p class="note ln" id="lSum">'+esc(monthSummary(k))+'</p><form id="lForm" novalidate>'+
+    LQ.map(function(q){return '<div class="field"><label for="l_'+q[0]+'">'+q[1]+'</label><textarea id="l_'+q[0]+'" rows="3" maxlength="2000"></textarea></div>';}).join("")+
+    '<div class="row"><button type="submit" class="textbtn accent" id="lSave">Keep this letter</button><button type="button" class="textbtn" id="lLater">Not now</button></div></form>';
+  openRitual("A monthly ritual",h2);
+  LQ.forEach(function(q){$("l_"+q[0]).value=L[q[0]]||"";});
+  $("lLater").addEventListener("click",closeRitual);
+  $("lForm").addEventListener("submit",function(ev){ev.preventDefault();var o={saved:L.saved||new Date().toISOString(),opened:L.opened||""};LQ.forEach(function(q){o[q[0]]=$("l_"+q[0]).value.trim();});
+    if(!hasLetter(o)){toast("Write a line or two first");return;}var a=getLetters();a[k]=o;if(putStore(K_LETTERS,a)){toast("Letter kept");openLetter(k,false);}});}
+function letterHTML(){var k=monthKey(),all=getLetters(),L=all[k],pk=prevMonthKey(),P=all[pk],now=new Date(),last=new Date(now.getFullYear(),now.getMonth()+1,0).getDate(),closing=now.getDate()>=last-2;
+  var h='<section class="glass card" id="letterCard" aria-labelledby="lH"><div class="eyebrow" id="lH" style="color:var(--accent)">A letter to myself · a monthly ritual</div>';
+  if(hasLetter(L))h+='<p class="note">You wrote '+esc(monthName(k,false))+'’s letter on '+esc(shortDate(L.saved.slice(0,10)))+'.</p><div class="row"><button class="textbtn" id="lRead">Read it</button></div>';
+  else h+='<p class="note">'+(closing?"The month is closing. If you'd like, write yourself a short letter about it.":"Each month, a short letter to yourself: what you noticed, what you're grateful for, and what to be kinder to yourself about. Write it whenever it feels right.")+'</p><div class="row"><button class="textbtn accent" id="lWrite">Write '+esc(monthName(k,false))+'’s letter</button></div>';
+  if(hasLetter(P))h+='<div class="row"><button class="textbtn" id="lPrev">'+(P.opened?"Read":"Open")+' the letter from '+esc(monthName(pk,false))+'</button></div>';
+  return h+'</section>';}
+function wireLetter(){var k=monthKey();if($("lRead"))$("lRead").addEventListener("click",function(){openLetter(k,false);});if($("lWrite"))$("lWrite").addEventListener("click",function(){openLetter(k,true);});if($("lPrev"))$("lPrev").addEventListener("click",function(){openLetter(prevMonthKey(),false);});}
+function renderLetterNote(){var n=$("letterNote"),pk=prevMonthKey(),P=getLetters()[pk],now=new Date();
+  if(now.getDate()>7||!hasLetter(P)||P.opened||P.later===today()){n.classList.add("hidden");n.innerHTML="";return;}
+  n.innerHTML='<p class="pn-h">A letter from last month</p><p class="pn-t">In '+esc(monthName(pk,false))+' you wrote yourself a letter. Open it whenever you\'re ready.</p><div class="row"><button class="textbtn" data-l="open">Open the letter</button><button class="textbtn" data-l="later">Later</button></div>';
+  n.classList.remove("hidden");}
+$("letterNote").addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("button[data-l]");if(!b)return;var pk=prevMonthKey();
+  if(b.dataset.l==="open"){openLetter(pk,false);return;}var a=getLetters();if(a[pk]){a[pk].later=today();putStore(K_LETTERS,a);}renderToday();});
+
+/* ---- an optional wellbeing check-in (WHO-5), every two weeks at most ---- */
+var W5=["I have felt cheerful and in good spirits","I have felt calm and relaxed","I have felt active and vigorous","I woke up feeling fresh and rested","My daily life has been filled with things that interest me"];
+var W5A=[[5,"All of the time"],[4,"Most of the time"],[3,"More than half of the time"],[2,"Less than half of the time"],[1,"Some of the time"],[0,"At no time"]];
+function who5Score(items){if(!Array.isArray(items)||items.length!==5||items.some(function(v){return typeof v!=="number"||v<0||v>5||v!==Math.round(v);}))return null;var raw=items.reduce(function(a,b){return a+b;},0);return {raw:raw,pct:raw*4,low:raw<13};}
+function getChecks(){var a=readJSON(K_WELL);return Array.isArray(a)?a.filter(function(c){return c&&/^\d{4}-\d{2}-\d{2}$/.test(c.date)&&who5Score(c.items);}).map(function(c){var s=who5Score(c.items);return {date:c.date,items:c.items.slice(),raw:s.raw,pct:s.pct};}).sort(function(a,b){return a.date.localeCompare(b.date);}):[];}
+function checkNext(){var c=getChecks();return c.length?ymd(addDays(parseYmd(c[c.length-1].date),14)):today();}
+function checkDue(){return checkNext()<=today();}
+function who5Trend(c){if(!c||c.length<2)return "";var d=c[c.length-1].pct-c[c.length-2].pct;if(Math.abs(d)<10)return "About the same as last time.";return d>0?"Higher than last time.":"Lower than last time.";}
+var W5_HONEST="This is a snapshot of the last two weeks, not a diagnosis. Scores move with sleep, stress and seasons. It stays on this device.";
+var W5_CITE="Questions from the WHO-5 Well-Being Index (World Health Organization, 1998).";
+function signpost(){return '<div class="signpost" id="signpost" role="note"><p>Your answers suggest the last two weeks have been hard. That\'s worth taking seriously, and gently.</p><p>It might help to talk with someone you trust, or with a doctor or counsellor. If things feel like too much, you can call or text <a href="tel:988">988</a> in the US, or find a free helpline at <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a>.</p><div class="row"><button class="textbtn" id="spSupport">Support in settings</button></div></div>';}
+function wellHTML(){var c=getChecks(),due=checkDue(),last=c[c.length-1];
+  var h='<section class="glass card" id="wellCard" aria-labelledby="wH"><div class="eyebrow" id="wH" style="color:var(--accent)">Wellbeing check-in · optional</div>';
+  h+='<p class="note">Five questions about the last two weeks. It takes about a minute. '+W5_HONEST+'</p>';
+  if(c.length){h+='<div class="ledger" style="margin-top:8px"><div class="lh"><span>Check-ins</span><span>out of 100</span></div><div class="lines">'+c.slice(-4).map(function(x){return '<div class="line"><span>'+esc(shortDate(x.date))+'</span><i class="lead" aria-hidden="true"></i><em>'+x.pct+'</em></div>';}).join("")+'</div></div>';
+    var tr=who5Trend(c);if(tr)h+='<p class="trend" id="wTrend">'+tr+'</p>';
+    if(last.raw<13)h+=signpost();}
+  h+=due?'<div class="row"><button class="textbtn'+(c.length?"":" accent")+'" id="wBegin">'+(c.length?"Two weeks have passed. Check in again":"Begin a check-in")+'</button></div>':'<p class="note" id="wNext">The next check-in is offered from '+esc(longDate(checkNext()))+'.</p>';
+  if(c.length)h+='<div class="row"><button class="textbtn" id="wClear">Delete my check-ins</button></div>';
+  return h+'</section>';}
+function wireWell(){if($("wBegin"))$("wBegin").addEventListener("click",openCheck);
+  if($("wClear"))$("wClear").addEventListener("click",function(){if(!confirm("Delete all wellbeing check-ins from this device?"))return;try{localStorage.removeItem(K_WELL);}catch(_){}toast("Check-ins deleted");renderReflect();});
+  if($("spSupport"))$("spSupport").addEventListener("click",openSupport);}
+function openSupport(){closeRitual();$("openSettings").click();setTimeout(function(){var s=$("support");if(s)s.scrollIntoView({block:"start",behavior:motion()});},120);}
+function openCheck(){var h='<h1 class="h ln" id="rTitle"><span class="ul">How have the last two weeks been?</span></h1><p class="frame ln">For each line, choose what has been closest to how you felt over the last two weeks. Skip it any time.</p><form class="w5" id="w5" novalidate>'+
+  W5.map(function(q,i){return '<fieldset><legend>'+esc(q)+'</legend><div class="opts">'+W5A.map(function(a){return '<label><input type="radio" name="w'+i+'" value="'+a[0]+'"><span>'+a[1]+'</span></label>';}).join("")+'</div></fieldset>';}).join("")+
+  '<div class="row"><button type="submit" class="textbtn accent" id="wSave">See my snapshot</button><button type="button" class="textbtn" id="wLater">Not now</button></div><p class="note">'+W5_CITE+'</p></form>';
+  openRitual("Wellbeing check-in",h);
+  $("wLater").addEventListener("click",closeRitual);
+  $("w5").addEventListener("submit",function(ev){ev.preventDefault();var items=W5.map(function(_,i){var r=document.querySelector('#w5 input[name="w'+i+'"]:checked');return r?+r.value:null;});
+    if(items.some(function(v){return v===null;})){toast("Answer all five, or close to leave it");return;}
+    var s=who5Score(items),all=getChecks().filter(function(c){return c.date!==today();});all.push({date:today(),items:items,raw:s.raw,pct:s.pct});
+    if(!putStore(K_WELL,all))return;var c=getChecks(),tr=who5Trend(c);
+    var r='<h1 class="h ln" id="rTitle"><span class="ul">Your snapshot</span></h1><p class="w5-score" id="wScore">'+s.pct+' <small>out of 100</small></p><p class="frame">'+W5_HONEST+'</p>'+(tr?'<p class="trend">'+tr+'</p>':'')+(s.low?signpost():'')+
+      '<div class="row"><button class="textbtn" id="wDone">Close</button></div><p class="note">'+W5_CITE+'</p>';
+    openRitual("Wellbeing check-in",r);$("wDone").addEventListener("click",closeRitual);if($("spSupport"))$("spSupport").addEventListener("click",openSupport);});}
+
+/* ---- save my week as a page ---- */
+function weekData(){var end=new Date(),start=addDays(end,-6),wk=entries.filter(function(e){return e.date>=ymd(start)&&e.date<=ymd(end);}).slice().reverse(),N=weekNotice(wk),r=getReviews()[weekKey()]||{},
+  days=Object.keys(wk.reduce(function(o,e){o[e.date]=1;return o;},{})).length,j=function(arr){return listJoin(arr.slice(0,5).map(function(x,i){return i?lc(x[0]):x[0];}));};
+  return {range:start.toLocaleDateString(undefined,{day:"numeric",month:"long"})+" – "+end.toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"}),days:days,wk:wk,r:r,
+    sum:[["Images",j(N.syms)],["People",j(N.people)],["Feelings",N.feels.length?listJoin(N.feels.slice(0,5).map(function(x){return x[0];})):listJoin(N.emos.slice(0,5).map(function(x){return x[0];}))],["Good things",listJoin(wk.filter(function(e){return e.good;}).map(function(e){return e.good;}).slice(0,5))]].filter(function(x){return x[1];})};}
+function weekText(){var d=weekData(),L=["A week of mornings",d.range,"","Written on "+d.days+" of the last seven mornings.",""];
+  d.sum.forEach(function(x){L.push(x[0]+": "+x[1]);});
+  var rq=RQ.concat([["good","One good thing"]]).filter(function(q){return d.r[q[0]];});if(rq.length){L.push("","Weekly review");rq.forEach(function(q){L.push(q[1],"  "+d.r[q[0]]);});}
+  if(d.wk.length){L.push("","The mornings");d.wk.forEach(function(e){L.push(shortDate(e.date)+" · "+titleFor(e)+(e.feelings.length?" ("+e.feelings.join(", ")+")":""));if(e.good)L.push("  One good thing: "+e.good);});}
+  L.push("","Made with Dream Pages, on this device. For reflection; it does not diagnose, predict or treat.");return L.join("\n");}
+function weekPageHTML(){var d=weekData(),h='<h1>A week of mornings</h1><p class="range">'+esc(d.range)+'</p><p>Written on '+d.days+' of the last seven mornings.</p>';
+  if(d.sum.length)h+='<h2>From my pages</h2>'+d.sum.map(function(x){return '<p><span class="k">'+x[0]+'</span>'+esc(x[1])+'</p>';}).join("");
+  var rq=RQ.concat([["good","One good thing"]]).filter(function(q){return d.r[q[0]];});if(rq.length)h+='<h2>Weekly review</h2>'+rq.map(function(q){return '<p><span class="k">'+q[1]+'</span><br><span class="a">'+esc(d.r[q[0]])+'</span></p>';}).join("");
+  if(d.wk.length)h+='<h2>The mornings</h2>'+d.wk.map(function(e){return '<p class="pday"><span class="k">'+esc(shortDate(e.date))+'</span>'+esc(titleFor(e))+(e.feelings.length?' <i>('+esc(e.feelings.join(", "))+')</i>':'')+(e.good?'<br><span class="k">One good thing</span><span class="a">'+esc(e.good)+'</span>':'')+'</p>';}).join("");
+  return h+'<p class="foot">Made with Dream Pages, on this device. For reflection; it does not diagnose, predict or treat.</p>';}
+function printWeek(){$("printPage").innerHTML=weekPageHTML();try{window.print();}catch(_){toast("Printing isn't available here");}}
+function downloadWeek(){var b=new Blob([weekText()],{type:"text/plain;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dream-pages-week-"+weekKey()+".txt";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);toast("Week saved as text");}
+
+/* ---- first run: three quiet pages, skippable ---- */
+function introDone(){var s=readJSON(K_INTRO);return !!s;}
+function markIntro(){putStore(K_INTRO,{done:today()});}
+var introN=0;
+var INTRO=[
+  ["Welcome","A quiet place for your dreams","Dream Pages is a journal for the first few minutes of the morning.","Your writing is saved on this device only. No account, nothing to sign up for, no tracking. If you turn on AI questions or handwriting reading, that dream or photo is sent to the AI service you set up, and only then."],
+  ["Reflection, not prophecy","Only you know what a dream means","It won't tell you what a dream means or what will happen. It asks a few good questions, and you decide what fits.","It's for reflection. It does not diagnose, predict or treat."],
+  ["Catch it before it fades","Speak it, type it, or snap it","Dreams fade fast, so capture what you can: speak it aloud, type a few lines, or take a photo of a page you wrote by hand.","If you like, tie it to something you already do:","Voice typing is handled by your browser or phone, which may use its own online speech service. Reading handwriting needs AI, which you can turn on in settings."]];
+function renderIntro(){var s=INTRO[introN];$("iStep").textContent=(introN+1)+" of 3";
+  var h='<div class="intro-step"><div class="eyebrow" style="color:var(--accent)">'+esc(s[0])+'</div><h1 class="h ln" id="iTitle"><span class="ul">'+esc(s[1])+'</span></h1><p class="lede">'+esc(s[2])+'</p>'+(s[4]?'<p class="note">'+esc(s[4])+'</p>':'')+'<p>'+esc(s[3])+'</p>';
+  if(introN===2)h+='<div class="field"><label for="iCueSel">After I…</label><select id="iCueSel"><option value="">choose a moment · optional</option>'+CUES.map(function(c){return '<option value="'+c+'">'+c+'</option>';}).join("")+'<option value="custom">something else…</option></select></div><div class="field hidden" id="iCueF"><label for="iCue">Your own moment</label><input id="iCue" maxlength="60" placeholder="e.g. open the curtains"></div><p class="cue-pv" id="iCuePv" aria-live="polite"></p><p class="note">You can change this, or add a gentle reminder, in settings.</p>';
+  $("iBody").innerHTML=h+'</div>';
+  document.querySelectorAll("#intro .intro-dots i").forEach(function(d,i){d.classList.toggle("on",i===introN);});
+  $("iBack").style.visibility=introN?"visible":"hidden";$("iNext").textContent=introN===2?"Begin":"Next";
+  if(introN===2){fillCue($("iCueSel"),$("iCue"),$("iCueF"),getSettings().cue);var pv=function(){$("iCuePv").textContent=cueText(cueFrom($("iCueSel").value,$("iCue").value));};pv();
+    $("iCueSel").addEventListener("change",function(){$("iCueF").classList.toggle("hidden",this.value!=="custom");pv();});$("iCue").addEventListener("input",pv);}
+  snapSoon();}
+function finishIntro(keepCue){if(keepCue&&$("iCueSel")){var c=cueFrom($("iCueSel").value,$("iCue").value);if(c){var s=getSettings();s.cue=c;setSettings(s);}}markIntro();closeSheet("intro");rerender();}
+$("iNext").addEventListener("click",function(){if(introN<2){introN++;renderIntro();try{$("iNext").focus({preventScroll:true});}catch(_){}return;}finishIntro(true);});
+$("iBack").addEventListener("click",function(){if(introN>0){introN--;renderIntro();}});
+$("iSkip").addEventListener("click",function(){finishIntro(false);});
+function maybeIntro(){if(introDone())return;if(entries.length){markIntro();return;}introN=0;renderIntro();openSheet("intro");}
+
 /* settings */
-$("openSettings").addEventListener("click",function(){var s=getSettings();$("restDay").value=String(restDay());$("apiKey").value=s.key||"";$("apiBase").value=s.base||"https://api.openai.com/v1";$("apiModel").value=s.model||"gpt-4o-mini";openSheet("settings");});
+$("openSettings").addEventListener("click",function(){var s=getSettings();$("restDay").value=String(restDay());$("apiKey").value=s.key||"";$("apiBase").value=s.base||"https://api.openai.com/v1";$("apiModel").value=s.model||"gpt-4o-mini";fillCue($("cueSel"),$("cueCustom"),$("cueCustomF"),s.cue);cuePreview();remSync();$("aiConfirm").classList.add("hidden");openSheet("settings");});
 $("sClose").addEventListener("click",function(){closeSheet("settings");rerender();});
-$("saveSettings").addEventListener("click",function(){var s=getSettings();s.key=$("apiKey").value.trim();s.base=$("apiBase").value.trim()||"https://api.openai.com/v1";s.model=$("apiModel").value.trim()||"gpt-4o-mini";toast(setSettings(s)?(s.key?"Saved. AI questions are on":"Saved"):"Couldn't save");});
+function aiHost(b){try{return new URL(b).host||b;}catch(_){return String(b||"");}}
+function aiSaveNow(ok){var s=getSettings();s.key=$("apiKey").value.trim();s.base=$("apiBase").value.trim()||"https://api.openai.com/v1";s.model=$("apiModel").value.trim()||"gpt-4o-mini";if(ok)s.aiOk=aiHost(s.base);$("aiConfirm").classList.add("hidden");toast(setSettings(s)?(s.key?"Saved. AI questions are on":"Saved"):"Couldn't save");}
+$("saveSettings").addEventListener("click",function(){var k=$("apiKey").value.trim(),h=aiHost($("apiBase").value.trim()||"https://api.openai.com/v1");
+  if(!k||getSettings().aiOk===h){aiSaveNow(false);return;}
+  $("aiConfirmT").textContent="With AI on, each dream you explore, and any handwriting photo you add, is sent to "+h+" to write questions or read the writing. Everything else stays on this device.";
+  $("aiConfirm").classList.remove("hidden");snapSoon();try{$("aiYes").focus({preventScroll:true});}catch(_){}});
+$("aiYes").addEventListener("click",function(){aiSaveNow(true);});
+$("aiNo").addEventListener("click",function(){$("aiConfirm").classList.add("hidden");toast("AI stays off");});
 $("restDay").addEventListener("change",function(){var s=getSettings();s.rest=+this.value;toast(setSettings(s)?(s.rest<0?"No rest day":"Rest day saved"):"Couldn't save");});
 $("clearKey").addEventListener("click",function(){var s=getSettings();delete s.key;try{localStorage.setItem(K_SETTINGS,JSON.stringify(s));}catch(_){}$("apiKey").value="";toast("Key removed from this device");});
 function blobToData(b){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result);};r.onerror=function(){rej(r.error);};r.readAsDataURL(b);});}
@@ -1243,7 +1647,7 @@ $("exportBtn").addEventListener("click",function(){
     var with_=!recs.length||bytes<40e6||confirm("Your page photos add about "+Math.round(bytes*1.37/1e6)+" MB to this backup. Include them?");
     return Promise.all((with_?recs:[]).map(function(r){return blobToData(r.blob).then(function(d){return [r.id,{type:r.blob.type,w:r.w,h:r.h,data:d}];});}));})
   .then(function(pairs){var photos={};pairs.forEach(function(p){photos[p[0]]=p[1];});
-    var out={app:"dream-pages",version:2,exported:new Date().toISOString(),entries:entries,reviews:getReviews()};if(pairs.length)out.photos=photos;
+    var out={app:"dream-pages",version:2,exported:new Date().toISOString(),entries:entries,reviews:getReviews(),letters:getLetters(),wellbeing:getChecks()};if(pairs.length)out.photos=photos;
     var b=new Blob([JSON.stringify(out,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dream-pages-"+today()+".json";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);
     toast(pairs.length?"Backup saved, with "+pairs.length+(pairs.length===1?" photo":" photos"):"Backup saved");})
   .catch(function(){toast("Couldn't make the backup");});});
@@ -1255,8 +1659,10 @@ $("importFile").addEventListener("change",function(){var f=this.files[0];if(!f)r
     return Promise.all(x.photos.map(function(id){return photoGet(id).then(function(have){if(have)return id;var p=bank[id],bl=p&&typeof p.data==="string"&&p.data.length<PHOTO_MAX*1.4?dataToBlob(p.data):null;if(!bl)return null;return photoPut({id:id,blob:bl,w:+p.w||0,h:+p.h||0}).then(function(){return id;});}).catch(function(){return null;});}))
       .then(function(kept){kept=kept.filter(Boolean);if(kept.length)x.photos=kept;else delete x.photos;});}))
   .then(function(){add.forEach(function(x){entries.push(x);});var n=add.length;
-    if(d&&d.reviews&&typeof d.reviews==="object"&&!Array.isArray(d.reviews)){var rv=getReviews();Object.keys(d.reviews).forEach(function(k){var o=d.reviews[k];if(/^\d{4}-\d{2}-\d{2}$/.test(k)&&!rv[k]&&o&&typeof o==="object"){rv[k]={saved:String(o.saved||"")};RQ.forEach(function(q){rv[k][q[0]]=typeof o[q[0]]==="string"?o[q[0]].slice(0,1200):"";});}});try{localStorage.setItem(K_REVIEWS,JSON.stringify(rv));}catch(_){}}sortEntries();save();toast("Imported "+n+(n===1?" morning":" mornings"));rerender();});};r.readAsText(f);this.value="";});
-document.addEventListener("keydown",function(ev){if(ev.key==="Escape"){if($("viewer").classList.contains("open")){closeViewer();return;}if($("settings").classList.contains("open")){closeSheet("settings");rerender();}else if($("meaning").classList.contains("open")){closeSheet("meaning");rerender();}}});
+    if(d&&d.reviews&&typeof d.reviews==="object"&&!Array.isArray(d.reviews)){var rv=getReviews();Object.keys(d.reviews).forEach(function(k){var o=d.reviews[k];if(/^\d{4}-\d{2}-\d{2}$/.test(k)&&!rv[k]&&o&&typeof o==="object"){rv[k]={saved:String(o.saved||"")};RQ_ALL.forEach(function(q){rv[k][q[0]]=typeof o[q[0]]==="string"?o[q[0]].slice(0,1200):"";});}});try{localStorage.setItem(K_REVIEWS,JSON.stringify(rv));}catch(_){}}
+    if(d&&d.letters&&typeof d.letters==="object"&&!Array.isArray(d.letters)){var lt=getLetters();Object.keys(d.letters).forEach(function(k){var o=d.letters[k];if(/^\d{4}-\d{2}$/.test(k)&&!hasLetter(lt[k])&&o&&typeof o==="object"){var n={saved:String(o.saved||"").slice(0,40),opened:String(o.opened||"").slice(0,10)};LQ.forEach(function(q){n[q[0]]=typeof o[q[0]]==="string"?o[q[0]].slice(0,2000):"";});if(hasLetter(n))lt[k]=n;}});putStore(K_LETTERS,lt);}
+    if(d&&Array.isArray(d.wellbeing)){var have=getChecks(),dates={};have.forEach(function(c){dates[c.date]=1;});d.wellbeing.forEach(function(c){if(c&&/^\d{4}-\d{2}-\d{2}$/.test(c.date)&&!dates[c.date]&&who5Score(c.items)){have.push({date:c.date,items:c.items.slice(0,5)});dates[c.date]=1;}});putStore(K_WELL,have);}sortEntries();save();toast("Imported "+n+(n===1?" morning":" mornings"));rerender();});};r.readAsText(f);this.value="";});
+document.addEventListener("keydown",function(ev){if(ev.key==="Escape"){if($("viewer").classList.contains("open")){closeViewer();return;}if($("intro").classList.contains("open")){finishIntro(false);return;}if($("ritual").classList.contains("open")){closeRitual();return;}if($("settings").classList.contains("open")){closeSheet("settings");rerender();}else if($("meaning").classList.contains("open")){closeSheet("meaning");rerender();}}});
 
 /* keep the mic + "Explore the dream" bar above the on-screen keyboard */
 function vvUpdate(){var vv=window.visualViewport;if(!vv)return;var kb=Math.max(0,Math.round(window.innerHeight-(vv.height+vv.offsetTop)));var on=kb>80;document.documentElement.style.setProperty("--kb",(on?kb:0)+"px");document.body.classList.toggle("kb",on);}
@@ -1265,11 +1671,14 @@ if(window.visualViewport){var vvRaf=0,vvq=function(){if(vvRaf)return;vvRaf=reque
 var shownDay=today();
 function dayCheck(){if(today()===shownDay)return;shownDay=today();if(!dateTouched)$("dDate").value=today();rerender();}
 document.addEventListener("visibilitychange",function(){if(!document.hidden)dayCheck();});
-window.addEventListener("focus",dayCheck);setInterval(dayCheck,60000);
-syncForm();grow();updateReveal();show("today");vvUpdate();
-window.DreamPages={shape:shape,photoKeys:photoKeys,moonPhase:moonPhase,offlineInterpret:offlineInterpret,symbolCount:SYMBOLS.length,promptCount:PROMPTS.length,daysWritten:daysWritten,distress:distress,soften:soften,normFeelings:normFeelings,feelings:FEEL_WORDS,weekKey:weekKey,vvUpdate:vvUpdate};
+window.addEventListener("focus",dayCheck);setInterval(function(){dayCheck();reminderCheck();},60000);
+document.addEventListener("visibilitychange",function(){if(document.hidden)reminderCheck();});
+syncForm();grow();updateReveal();show("today");vvUpdate();maybeIntro();
+window.DreamPages={shape:shape,photoKeys:photoKeys,moonPhase:moonPhase,offlineInterpret:offlineInterpret,symbolCount:SYMBOLS.length,promptCount:PROMPTS.length,daysWritten:daysWritten,distress:distress,soften:soften,normFeelings:normFeelings,feelings:FEEL_WORDS,weekKey:weekKey,vvUpdate:vvUpdate,
+  nightmareLikely:nightmareLikely,nightmareWeeks:nightmareWeeks,nightmareTrend:nightmareTrend,cueText:cueText,reminderDue:reminderDue,reminderCheck:reminderCheck,who5Score:who5Score,who5Trend:who5Trend,monthKey:monthKey,weekText:weekText};
 })();
 </script>
+<div class="printpage" id="printPage" aria-hidden="true"></div>
 <script>
 if("serviceWorker" in navigator && /^https?:$/.test(location.protocol)){
   addEventListener("load",function(){
