@@ -330,6 +330,13 @@ a.textbtn{display:inline-flex;align-items:center;text-decoration:none;color:var(
 .nm-box .row{margin-top:12px}
 .nm-box p.nm-t{font-style:normal;font-size:19px;line-height:28px;color:var(--ink)}
 #rBody .h+.frame{margin-top:12px}
+.gist{margin:4px 0 8px}
+.gist .eyebrow{color:var(--accent)}
+.gist-p{font-size:19px;line-height:32px;margin:0;color:var(--ink)}
+.gist-f{font-style:italic;color:var(--soft);font-size:16px;line-height:32px;margin:0}
+.imgs .sym{font-size:17px;margin:0 0 8px}
+.imgs .sym .n{display:inline;font-size:18px;margin-right:.35em}
+#wrote{margin-top:24px}
 .aiok{margin-top:12px;padding:10px 14px;border-left:2px solid var(--accent);background:rgba(44,58,110,.05)}
 .aiok p{margin:0 0 6px}
 .irt{list-style:none;margin:0;padding:0}
@@ -846,6 +853,31 @@ function careCard(kinds,sfx){sfx=sfx||"";
 }
 var CERTAIN=/\b(this (dream )?means|it means that|which means|is a sign|a sign that|an omen|omens?|predicts?|prophe\w*|will (surely |definitely )?(come true|happen)|destin(y|ed)|manifest\w*|law of attraction|the universe|diagnos\w*|you are (clearly|definitely))\b/i;
 function soften(s){return String(s||"").split(/(?<=[.!?])\s+/).filter(function(x){return x.trim()&&!CERTAIN.test(x);}).join(" ").trim();}
+/* "What this dream may be about": a short, warm summary, framed as possibility. Never a verdict. */
+var THEME_N={"emotions":"your feelings","the self":"who you are","self-image":"how you're seen","avoidance":"something you've been putting off","powerlessness":"feeling stuck","loss of control":"feeling out of control","the past":"your past","inner child":"the younger you","the unknown self":"a less familiar side of you","the unconscious":"what sits below the surface","identity":"how you show yourself"};
+var FEEL_TONE={heavy:/^(scared|anxious|sad|angry|powerless|unsettled|lonely|confused|ashamed|guilty|jealous|grieving)$/,light:/^(peaceful|safe|tender|relieved|joyful|hopeful|free|amazed|curious|loved|playful|calm)$/};
+function meaningSummary(e,found,feels,emos,kinds){
+  var text=e.text||"",heavyCare=kinds.length>0;
+  if(!text.trim()&&!found.length)return "Even a blank morning belongs to the ritual, and that's all right. A dream that left only a mood may still be about what you carried into the night. Noticing how you feel this morning is enough.";
+  if(heavyCare)return "This dream held some heavy things. It may simply reflect how much you're carrying right now, more than any hidden message. There's no need to work it out today; being gentle with yourself comes first.";
+  var out=[];
+  if(found.length){var a=found[0],b=found[1];
+    out.push("Dreams of "+lc(a.name)+" often touch on "+(ASSOC[a.theme]||a.theme)+(b?"; "+lc(b.name)+", on "+(ASSOC[b.theme]||b.theme):"")+".");
+    var th=THEME_N[a.theme]||a.theme;
+    if(feels.length){var heavy=feels.filter(function(f){return FEEL_TONE.heavy.test(f);}).length,light=feels.length-heavy;if(e.nightmare===true||emos.indexOf("fear")>=0){heavy+=light+1;}else if(heavy&&light){heavy=light;}
+      out.push("You woke feeling "+listJoin(feels)+", so it could point to "+(heavy>light?"something around "+th+" that has felt heavy lately":light>heavy?"something good stirring around "+th:"something around "+th+" that feels both good and unsettled right now")+".");}
+    else if(emos.indexOf("fear")>=0||emos.indexOf("anxiety")>=0)out.push("There was fear or worry in it, which often shows up when something in waking life feels uncertain or heavy.");
+    else if(emos.indexOf("sadness")>=0)out.push("There was sadness in it, which can be a way of making room for something you miss or are carrying.");
+    else if(emos.indexOf("joy")>=0||emos.indexOf("peace")>=0||emos.indexOf("wonder")>=0)out.push("There was something good in it too, which may be worth holding onto today.");
+    else out.push("It may be about something in your life that touches "+th+" right now, even in a small way.");
+  }else{
+    out.push("This dream speaks in your own images rather than common ones, so its meaning is likely close to home: the people, places and moments it borrowed from your life.");
+    if(feels.length)out.push("You woke feeling "+listJoin(feels)+", which may be the clearest clue to what it's about.");
+    else if(emos.indexOf("fear")>=0||emos.indexOf("anxiety")>=0)out.push("There was fear or worry in it, which often shows up when something feels uncertain.");
+  }
+  if(e.nightmare===true||emos.indexOf("fear")>=0)out.push("Frightening dreams are common in stressful stretches and don't foretell anything.");
+  return out.slice(0,4).join(" ");
+}
 function offlineInterpret(e){
   var text=e.text||"", seed=(e.id||"")+text.length, pt=prepText(text);
   var kinds=distress(text), care=kinds.length>0;
@@ -874,7 +906,8 @@ function offlineInterpret(e){
   if(!it&&emos.indexOf("fear")>=0)it=ACT.fear;
   if(care)it=CARE_ACT;
   var connect=[q||seedPick(GENERIC_Q,seed),DISTANCE];
-  return {v:2,opening:opening,explore:explore,symbols:syms,connect:connect,act:it||seedPick(GENERIC_I,seed),
+  var meaning=meaningSummary(e,found,feels,emos,kinds);
+  return {v:3,meaning:meaning,opening:meaning,explore:explore,symbols:syms,connect:connect,act:it||seedPick(GENERIC_I,seed),
     question:connect[0],intention:it||seedPick(GENERIC_I,seed),
     symbolNames:found.map(function(s){return s.name;}),themes:themes,source:"offline"};
 }
@@ -884,12 +917,12 @@ function getSettings(){try{return JSON.parse(localStorage.getItem(K_SETTINGS))||
 function setSettings(s){try{localStorage.setItem(K_SETTINGS,JSON.stringify(s));return true;}catch(_){return false;}}
 function aiReady(){var s=getSettings();return !!(s.key&&s.key.trim());}
 var AI_SYS="You help someone reflect on a dream they wrote down this morning. Be warm, curious and non-directive, like a good listener, following three steps: explore (what stood out, what they felt), connect (where it might echo waking life), act (one small thing they could try). "+
-  "Only the dreamer knows what their dream means. Never say what the dream means, never predict the future, never diagnose, never give medical or psychological advice, never promise outcomes, and never use words like destiny, manifest, sign, omen or the universe. Prefer questions to statements; use 'might' and 'perhaps'. Plain, kind, second person. "+
+  "Only the dreamer knows what their dream means. Never say what the dream means as a fact (offer possibilities only), never predict the future, never diagnose, never give medical or psychological advice, never promise outcomes, and never use words like destiny, manifest, sign, omen or the universe. Prefer questions to statements; use 'might' and 'perhaps'. Plain, kind, second person. "+
   "If the dream mentions wanting to die, self-harm or abuse, do not analyse that part; keep every question especially gentle. "+
-  "Reply ONLY with a JSON object with these keys: "+
-  "\"opening\" (1-2 sentences reflecting back, neutrally, what the dream held, without interpreting), "+
+  "Reply ONLY with a JSON object with these keys, in this order: "+
+  "\"meaning\" (FIRST: 2-4 short, warm, plain sentences on what this dream may be about, specific to its main images and the feelings named; offered as possibility, using 'may', 'often', 'could point to', 'perhaps'; never a verdict, never a prediction, never a diagnosis; no closing disclaimer, the app adds one), "+
   "\"explore\" (array of 2 short open questions about what stood out and what they felt), "+
-  "\"symbols\" (array of up to 4 objects {\"name\": a short name for an image from the dream, \"note\": one sentence saying what the image is often associated with for some people, then a short question asking what it means to them}), "+
+  "\"symbols\" (array of up to 4 objects {\"name\": a short name for an image from the dream, \"note\": under 25 words: what the image is often associated with for some people, then a short question asking what it means to them}), "+
   "\"connect\" (array of 1-2 gentle questions about where this might echo their waking life, without assuming), "+
   "\"act\" (one small, optional, concrete thing they could try today, under 22 words, phrased as an invitation).";
 function aiInterpret(e,off){
@@ -905,11 +938,12 @@ function aiInterpret(e,off){
     if(!c) throw new Error("empty reply");
     var m=c.match(/\{[\s\S]*\}/), o;
     try{ o=JSON.parse(m?m[0]:c); }catch(_){ o={opening:c.trim()}; }
-    if(!o||typeof o!=="object"||!String(o.opening||o.weave||"").trim()) throw new Error("unreadable reply");
+    if(!o||typeof o!=="object"||!String(o.meaning||o.opening||o.weave||"").trim()) throw new Error("unreadable reply");
     var arr=function(x,alt){var a=(Array.isArray(x)?x:(x?[x]:[])).map(function(q){return soften(q);}).filter(Boolean).slice(0,3);return a.length?a:alt;};
     var syms=Array.isArray(o.symbols)?o.symbols.filter(function(x){return x&&x.name&&(x.note||x.meaning);}).map(function(x){return {name:String(x.name).slice(0,60),note:soften(x.note||x.meaning)};}).filter(function(x){return x.note;}).slice(0,5):[];
     var act=soften(o.act||o.intention)||off.act, connect=arr(o.connect||o.question,off.connect);
-    return {v:2,opening:soften(o.opening)||off.opening,explore:arr(o.explore,off.explore),symbols:syms,connect:connect,act:distress(e.text).length?CARE_ACT:act,
+    var meaning=distress(e.text).length?off.meaning:(soften(o.meaning)||off.meaning);
+    return {v:3,meaning:meaning,opening:soften(o.opening)||(o.meaning?meaning:""),explore:arr(o.explore,off.explore),symbols:syms,connect:connect,act:distress(e.text).length?CARE_ACT:act,
       question:connect[0],intention:act,symbolNames:off.symbolNames,themes:off.themes,source:"ai",model:model};
   });
 }
@@ -927,7 +961,7 @@ function normalize(e){
   var DR=/^\d{4}-\d{2}-\d{2}$/, dt=DR.test(e.date)?e.date:(DR.test(String(e.created||"").slice(0,10))?String(e.created).slice(0,10):today());
   return {id:String(e.id||Date.now().toString(36)+Math.random().toString(36).slice(2,6)),created:typeof e.created==="string"?e.created:new Date().toISOString(),date:dt,
     text:e.text,feelings:normFeelings(e.feelings,e.mood),vivid:Math.max(0,Math.min(5,Math.round(+e.vivid||0))),lucid:e.lucid==="yes"?"yes":"no",
-    interpretation:(e.interpretation&&e.interpretation.opening)?e.interpretation:null,
+    interpretation:(e.interpretation&&(e.interpretation.opening||e.interpretation.meaning))?e.interpretation:null,
     photos:Array.isArray(e.photos)?e.photos.filter(function(x){return typeof x==="string"&&x.length<80;}).slice(0,12):undefined,
     experiment:normExp(e.experiment),careClosed:e.careClosed===true?true:undefined,
     nightmare:e.nightmare===true?true:e.nightmare===false?false:undefined,rescript:normRescript(e.rescript),good:normLine(e.good),taking:normLine(e.taking)};
@@ -1075,18 +1109,17 @@ function renderMeaning(e,mode,planOpen){
   $("mDate").innerHTML=moonGlyph(moonPhase(e.date),14,"m-moon")+'<span>'+esc(longDate(e.date))+'</span>';
   var h='<h1 class="m-title"><span class="ul">'+esc(titleFor(e))+'</span>'+'</h1><div class="m-sub">'+[feels.length?"woke feeling "+esc(listJoin(feels)):"",e.vivid?("vividness "+e.vivid+" of 5"):"",e.lucid==="yes"?"lucid":"",e.nightmare===true?"a nightmare":""].filter(Boolean).join(" · ")+'</div>';
   if(care.length&&!e.careClosed)h+=careCard(care);
-  h+='<div class="epigraph"><div class="label">What I wrote</div><div class="dreamtext clamp" id="dt">'+esc(e.text)+'</div><button class="expand" id="dtx">Read the dream</button>'+(e.photos&&e.photos.length?'<div class="m-shots" id="mShots" role="list" aria-label="Photos of the page"></div>':'')+'</div>';
-  h+='<p class="frame">A few questions to sit with. Only you know what this dream means.</p>';
-  h+='<div class="prose step">';
+  /* the meaning first: older readings (saved before summaries) get one written here, on the device */
+  var meaning=i.meaning||offlineInterpret(e).meaning;
+  h+='<section class="gist" id="gist" aria-labelledby="gistH"><div class="eyebrow" id="gistH">What this dream may be about</div><p class="gist-p">'+esc(meaning)+'</p><p class="gist-f">A possibility, not a verdict. Only you know what fits.</p></section>';
   if(i.note)h+='<p class="note-ai">'+esc(i.note)+'</p>';
-  if(i.opening)h+='<p class="lede">'+esc(i.opening)+'</p>';
-  if(i.weave)h+='<p>'+esc(i.weave)+'</p>'; /* readings saved before questions came in */
-  h+='</div>';
+  var syms=i.symbols||[];
+  if(syms.length){h+='<div class="prose step imgs" id="mImages"><div class="eyebrow">The images</div>';syms.forEach(function(x){var n=String(x.note||x.meaning||""),pre=x.name+" is often associated with ";if(n.indexOf(pre)===0)n="Often associated with "+n.slice(pre.length);h+='<div class="sym"><span class="n ul">'+esc(x.name)+'</span> '+esc(n)+'</div>';});
+    h+='<p class="assoc">These are common associations, not meanings. Dreams aren\'t predictions; what an image means is yours to decide.</p></div>';}
+  h+='<p class="frame">A few questions to sit with. Only you know what this dream means.</p>';
+  if((i.opening&&i.opening!==meaning)||i.weave){h+='<div class="prose step">';if(i.opening)h+='<p class="lede">'+esc(i.opening)+'</p>';if(i.weave)h+='<p>'+esc(i.weave)+'</p>';h+='</div>';} /* readings saved before summaries came in */
   var explore=i.explore||[];
   if(explore.length)h+='<div class="ask step"><div class="eyebrow">Explore · what stood out?</div>'+explore.map(function(q){return '<p class="q">'+esc(q)+'</p>';}).join("")+'</div>';
-  var syms=i.symbols||[];
-  if(syms.length){h+='<div class="prose step"><div class="eyebrow">Images in your dream</div>';syms.forEach(function(x){h+='<div class="sym"><span class="n ul">'+esc(x.name)+'</span>'+esc(x.note||x.meaning)+'</div>';});
-    h+='<p class="assoc">These are common associations, not meanings. Dreams aren\'t predictions; what an image means is yours to decide.</p></div>';}
   var connect=i.connect||(i.question?[i.question]:[]);
   h+='<div class="ask step"><div class="eyebrow">Connect · where might this echo your waking life?</div>'+connect.map(function(q){return '<p class="q">'+esc(q)+'</p>';}).join("")+'</div>';
   h+=nmBox(e);
@@ -1104,10 +1137,11 @@ function renderMeaning(e,mode,planOpen){
   if(mode==="new")h+='<div class="keepnote" id="keepNote"><div class="field"><label for="kGood">One good thing · optional</label><input id="kGood" maxlength="200" placeholder="e.g. the light through the curtains"></div><div class="field"><label for="kTake">Something I’m taking into the day · optional</label><input id="kTake" maxlength="200" placeholder="e.g. go gently; listen more than I talk"></div></div>';
   else if(e.good||e.taking)h+='<div class="kept" id="kept">'+(e.good?'<p><span class="k">One good thing</span><span class="a">'+esc(e.good)+'</span></p>':'')+(e.taking?'<p><span class="k">Into the day</span><span class="a">'+esc(e.taking)+'</span></p>':'')+'</div>';
   h+='<p class="honest">Dream Pages is for reflection. It does not diagnose, predict or treat.</p>';
+  h+='<div class="epigraph" id="wrote"><div class="label">What I wrote</div><div class="dreamtext clamp" id="dt">'+esc(e.text)+'</div><button class="expand" id="dtx" aria-controls="dt" aria-expanded="false">Show what I wrote</button>'+(e.photos&&e.photos.length?'<div class="m-shots" id="mShots" role="list" aria-label="Photos of the page"></div>':'')+'</div>';
   h+='<div class="source">'+(i.source==="ai"?"Questions shaped with AI"+(i.model?" · "+esc(i.model):""):"Written by the quiet interpreter, offline")+'</div>';
   h+='<div class="m-actions">'+(mode==="new"?'<button class="keep" id="mKeep">Keep this morning</button>':'<button id="mAgain">New questions</button><button id="mDel">Delete</button>')+'</div>';
   $("mBody").innerHTML=h;if($("mShots"))fillShots($("mShots"),e.photos,false);
-  var dt=$("dt");$("dtx").addEventListener("click",function(){var c=dt.classList.toggle("clamp");this.textContent=c?"Read the dream":"Fold it away";snap();});
+  var dt=$("dt");$("dtx").addEventListener("click",function(){var c=dt.classList.toggle("clamp");this.textContent=c?"Show what I wrote":"Fold it away";this.setAttribute("aria-expanded",c?"false":"true");snap();});
   requestAnimationFrame(function(){if(dt.scrollHeight<=dt.clientHeight+2)$("dtx").classList.add("hidden");snap();});
   if($("careClose"))$("careClose").addEventListener("click",function(){e.careClosed=true;save();var c=$("care");if(c)c.remove();toast("Support is always in settings");snap();try{$("mClose").focus({preventScroll:true});}catch(_){}});
   wireNmBox(e);
